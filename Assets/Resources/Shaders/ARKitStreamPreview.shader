@@ -4,7 +4,8 @@
     {
         _textureY ("TextureY", 2D) = "white" {}
         _textureCbCr ("TextureCbCr", 2D) = "black" {}
-        _textureStencil ("Texture Stencil", 2D) = "whtie" {}
+        _textureStencil ("Texture Stencil", 2D) = "black" {}
+        _textureDepth ("Texture Depth", 2D) = "black" {}
     }
     SubShader
     {
@@ -53,6 +54,7 @@
             sampler2D _textureY;
             sampler2D _textureCbCr;
             sampler2D _textureStencil;
+            sampler2D _textureDepth;
 
             fixed4 frag (TexCoordInOut i) : SV_Target
             {
@@ -76,8 +78,10 @@
 #endif // !UNITY_COLORSPACE_GAMMA
 
                 float stencil = tex2D(_textureStencil, texcoord).r;
-                result = lerp(result, float4(0.64, 0.64, 0.64, 1.0), stencil);
+                float depth = tex2D(_textureDepth, texcoord).r;
 
+                result = lerp(result, float4(stencil, depth, 0.64, 1.0), stencil);
+                
                 return result;
             }
             ENDCG

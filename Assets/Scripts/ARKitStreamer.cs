@@ -1,36 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
 
 public class ARKitStreamer : MonoBehaviour
 {
+    [SerializeField] ARCameraManager cameraManager = null;
     [SerializeField] ARHumanBodyManager humanBodyManager = null;
     [SerializeField] Material material = null;
 
-    enum Mode
-    {
-        Stencil,
-        Depth,
-    }
-    [SerializeField] Mode mode;
-
     static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
+    static readonly int _textureDepth = Shader.PropertyToID("_textureDepth");
 
     void Start()
     {
-        return;
-        switch (mode)
-        {
-            case Mode.Stencil:
-                OnToggleStencil();
-                break;
-            case Mode.Depth:
-                OnToggleDepth();
-                break;
-        }
+        cameraManager.frameReceived += OnCameraFarameReceived;
+    }
+
+    void OnDestroy()
+    {
+        cameraManager.frameReceived -= OnCameraFarameReceived;
     }
 
     void Update()
@@ -41,29 +30,19 @@ public class ARKitStreamer : MonoBehaviour
             return;
         }
 
-        Texture2D texture = null;
-        switch (mode)
-        {
-            case Mode.Stencil:
-                texture = humanBodyManager.humanStencilTexture;
-                break;
-            case Mode.Depth:
-                texture = humanBodyManager.humanDepthTexture;
-                break;
-        }
-        material.SetTexture(_textureStencil, texture);
+        material.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
+        material.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
     }
 
-    public void OnToggleStencil()
+    void OnCameraFarameReceived(ARCameraFrameEventArgs args)
     {
-        mode = Mode.Stencil;
-        humanBodyManager.humanSegmentationDepthMode = HumanSegmentationMode.Disabled;
-        humanBodyManager.humanSegmentationStencilMode = HumanSegmentationMode.FullScreenResolution;
+        Debug.Log(args);
+        var sb = new System.Text.StringBuilder();
+        foreach (var tex in args.textures)
+        {
+            sb.AppendLine(tex.name);
+        }
+        Debug.Log(sb);
     }
-    public void OnToggleDepth()
-    {
-        mode = Mode.Depth;
-        humanBodyManager.humanSegmentationStencilMode = HumanSegmentationMode.Disabled;
-        humanBodyManager.humanSegmentationDepthMode = HumanSegmentationMode.FullScreenResolution;
-    }
+
 }
