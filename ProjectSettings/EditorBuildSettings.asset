@@ -8,4 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StreamScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.arkit.PlayerSettings: {fileID: 11400000, guid: 956daf3d93eeb4ff58ff128837fe4f46,
+      type: 2}
+    com.unity.xr.management.arkit_loader: {fileID: 11400000, guid: 27f5a994a0bfd494c82b5520772ff9fc,
+      type: 2}
