@@ -21,6 +21,7 @@ public class ARKitStreamer : MonoBehaviour
 
     void Start()
     {
+        return;
         switch (mode)
         {
             case Mode.Stencil:
@@ -55,11 +56,13 @@ public class ARKitStreamer : MonoBehaviour
 
     public void OnToggleStencil()
     {
-        humanBodyManager.humanSegmentationStencilMode = HumanSegmentationMode.FullScreenResolution;
+        mode = Mode.Stencil;
         humanBodyManager.humanSegmentationDepthMode = HumanSegmentationMode.Disabled;
+        humanBodyManager.humanSegmentationStencilMode = HumanSegmentationMode.FullScreenResolution;
     }
     public void OnToggleDepth()
     {
+        mode = Mode.Depth;
         humanBodyManager.humanSegmentationStencilMode = HumanSegmentationMode.Disabled;
         humanBodyManager.humanSegmentationDepthMode = HumanSegmentationMode.FullScreenResolution;
     }
