@@ -52,6 +52,10 @@
             {
                 float2 texcoord = i.texcoord;
 
+                // 0.0 < uv.y < 0.5
+                // R: Y
+                // G: Cb
+                // B: Cr
                 if(i.texcoord.y < 0.5)
                 {
                     // sample the texture
@@ -61,16 +65,22 @@
                     float2 cbcr = tex2D(_textureCbCr, texcoord).rg;
                     float4 ycbcr = float4(y, cbcr, 1.0);
 
-                    const float4x4 ycbcrToRGBTransform = float4x4(
-                        float4(1.0, +0.0000, +1.4020, -0.7010),
-                        float4(1.0, -0.3441, -0.7141, +0.5291),
-                        float4(1.0, +1.7720, +0.0000, -0.8860),
-                        float4(0.0, +0.0000, +0.0000, +1.0000)
-                    );
+                    return float4(y, cbcr.x, cbcr.y, 1.0);
 
-                    return mul(ycbcrToRGBTransform, ycbcr);
+                    // const float4x4 ycbcrToRGBTransform = float4x4(
+                    //     float4(1.0, +0.0000, +1.4020, -0.7010),
+                    //     float4(1.0, -0.3441, -0.7141, +0.5291),
+                    //     float4(1.0, +1.7720, +0.0000, -0.8860),
+                    //     float4(0.0, +0.0000, +0.0000, +1.0000)
+                    // );
+
+                    // return mul(ycbcrToRGBTransform, ycbcr);
                 }
-                // else 
+                // else
+                // 0.5 < uv.y < 1.0
+                // R: Stencil
+                // G: Depth
+                // B: Not Used
                 texcoord.y = (texcoord.y - 0.5) * 2.0;
                
                 float stencil = tex2D(_textureStencil, texcoord).r;
