@@ -1,5 +1,6 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
@@ -12,6 +13,7 @@ namespace ARKitStream
     {
         [SerializeField] ARCameraManager cameraManager = null;
         [SerializeField] ARHumanBodyManager humanBodyManager = null;
+        [SerializeField] bool isDrawGUI = false;
 
         NdiReceiver ndiReceiver = null;
         Vector2Int ndiSourceSize = Vector2Int.zero;
@@ -26,6 +28,12 @@ namespace ARKitStream
 
         void Start()
         {
+            if (!Application.isEditor)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             ndiReceiver = GetComponent<NdiReceiver>();
 
             commandBuffer = new CommandBuffer();
@@ -36,18 +44,25 @@ namespace ARKitStream
 
         void OnDestroy()
         {
-            commandBuffer.Dispose();
-            commandBuffer = null;
-
-            foreach (var rt in renderTextures)
+            if (commandBuffer != null)
             {
-                Release(rt);
+                commandBuffer.Dispose();
+                commandBuffer = null;
             }
-            foreach (var tex in texture2Ds)
+            if (renderTextures != null)
             {
-                Release(tex);
+                foreach (var rt in renderTextures)
+                {
+                    Release(rt);
+                }
             }
-
+            if (texture2Ds != null)
+            {
+                foreach (var tex in texture2Ds)
+                {
+                    Release(tex);
+                }
+            }
         }
 
         void Update()
@@ -63,6 +78,7 @@ namespace ARKitStream
                 ndiSourceSize = new Vector2Int(rt.width, rt.height);
             }
 
+            // Decode Textures
             commandBuffer.Clear();
             for (int i = 0; i < renderTextures.Length; i++)
             {
@@ -71,12 +87,22 @@ namespace ARKitStream
 
             Graphics.ExecuteCommandBuffer(commandBuffer);
 
-            // Graphics.CopyTexture(cameraYRT, cameraYT);
-            // Graphics.CopyTexture(cameraCbCrRT, cameraCbCrT);
+            for (int i = 0; i < renderTextures.Length; i++)
+            {
+                Graphics.CopyTexture(renderTextures[i], texture2Ds[i]);
+            }
+
+            InvokeTextures();
+
+
         }
 
         void OnGUI()
         {
+            if (!isDrawGUI)
+            {
+                return;
+            }
             if (ndiSourceSize == Vector2Int.zero)
             {
                 // Wait for connect
@@ -85,10 +111,10 @@ namespace ARKitStream
             var w = Screen.width / 2;
             var h = Screen.height / 2;
 
-            GUI.DrawTexture(new Rect(0, 0, w, h), renderTextures[0]);
-            GUI.DrawTexture(new Rect(w, 0, w, h), renderTextures[1]);
-            GUI.DrawTexture(new Rect(0, h, w, h), renderTextures[2]);
-            GUI.DrawTexture(new Rect(w, h, w, h), renderTextures[3]);
+            GUI.DrawTexture(new Rect(0, 0, w, h), texture2Ds[0]);
+            GUI.DrawTexture(new Rect(w, 0, w, h), texture2Ds[1]);
+            GUI.DrawTexture(new Rect(0, h, w, h), texture2Ds[2]);
+            GUI.DrawTexture(new Rect(w, h, w, h), texture2Ds[3]);
         }
 
         void Release(RenderTexture tex)
@@ -135,6 +161,35 @@ namespace ARKitStream
             {
                 renderTextures[i] = new RenderTexture(width, height, 0, rformat[i]);
                 texture2Ds[i] = new Texture2D(width, height, tformat[i], 1, false);
+            }
+        }
+
+        void InvokeTextures()
+        {
+            // HACK: Invoke another class's event from refrection
+            // https://stackoverflow.com/questions/198543/how-do-i-raise-an-event-via-reflection-in-net-c
+            // cameraManager.frameReceived(args);
+
+            var args = new ARCameraFrameEventArgs();
+            args.textures = new List<Texture2D>() {
+                texture2Ds[0],
+                texture2Ds[1],
+            };
+            args.propertyNameIds = new List<int>() {
+                Shader.PropertyToID("_textureY"),
+                Shader.PropertyToID("_textureCbCr")
+            };
+            args.displayMatrix = Matrix4x4.identity;
+
+            var eventDelegate = (MulticastDelegate)cameraManager.GetType().GetField("frameReceived", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(cameraManager);
+            if (eventDelegate != null)
+            {
+                foreach (var handler in eventDelegate.GetInvocationList())
+                {
+                    handler.Method.Invoke(handler.Target, new object[] { args });
+
+                    Debug.Log("invoikinggg");
+                }
             }
         }
 

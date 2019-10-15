@@ -559,8 +559,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de82a7adff9864b74b4760c2ae53f06a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraManager: {fileID: 0}
-  humanBodyManager: {fileID: 0}
+  cameraManager: {fileID: 906813953}
+  humanBodyManager: {fileID: 1358651962}
+  isDrawGUI: 0
 --- !u!4 &2014463253
 Transform:
   m_ObjectHideFlags: 0
