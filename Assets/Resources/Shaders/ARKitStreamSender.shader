@@ -22,31 +22,23 @@
 
             #include "UnityCG.cginc"
 
-            float4x4 _UnityDisplayTransform;
-
-            struct Vertex
+            struct appdata
             {
                 float4 position : POSITION;
                 float2 texcoord : TEXCOORD0;
             };
 
-            struct TexCoordInOut
+            struct v2f
             {
                 float4 position : SV_POSITION;
                 float2 texcoord : TEXCOORD0;
             };
 
-            TexCoordInOut vert (Vertex vertex)
+            v2f vert (appdata v)
             {
-                TexCoordInOut o;
-                o.position = UnityObjectToClipPos(vertex.position);
-
-                float texX = vertex.texcoord.x;
-                float texY = vertex.texcoord.y;
-
-                o.texcoord.x = (_UnityDisplayTransform[0].x * texX + _UnityDisplayTransform[1].x * (texY) + _UnityDisplayTransform[2].x);
-                o.texcoord.y = (_UnityDisplayTransform[0].y * texX + _UnityDisplayTransform[1].y * (texY) + (_UnityDisplayTransform[2].y));
-
+                v2f o;
+                o.position = UnityObjectToClipPos(v.position);
+                o.texcoord = v.texcoord;
                 return o;
             }
 
@@ -56,33 +48,35 @@
             sampler2D _textureStencil;
             sampler2D _textureDepth;
 
-            fixed4 frag (TexCoordInOut i) : SV_Target
+            half4 frag (v2f i) : SV_Target
             {
-                // sample the texture
                 float2 texcoord = i.texcoord;
-                float y = tex2D(_textureY, texcoord).r;
-                float4 ycbcr = float4(y, tex2D(_textureCbCr, texcoord).rg, 1.0);
 
-                const float4x4 ycbcrToRGBTransform = float4x4(
+                if(i.texcoord.y < 0.5)
+                {
+                    // sample the texture
+                    texcoord.y *= 2.0;
+
+                    float y = tex2D(_textureY, texcoord).r;
+                    float2 cbcr = tex2D(_textureCbCr, texcoord).rg;
+                    float4 ycbcr = float4(y, cbcr, 1.0);
+
+                    const float4x4 ycbcrToRGBTransform = float4x4(
                         float4(1.0, +0.0000, +1.4020, -0.7010),
                         float4(1.0, -0.3441, -0.7141, +0.5291),
                         float4(1.0, +1.7720, +0.0000, -0.8860),
                         float4(0.0, +0.0000, +0.0000, +1.0000)
                     );
 
-                float4 result = mul(ycbcrToRGBTransform, ycbcr);
-
-#if !UNITY_COLORSPACE_GAMMA
-                // Incoming video texture is in sRGB color space. If we are rendering in linear color space, we need to convert.
-                result = float4(GammaToLinearSpace(result.xyz), result.w);
-#endif // !UNITY_COLORSPACE_GAMMA
-
+                    return mul(ycbcrToRGBTransform, ycbcr);
+                }
+                // else 
+                texcoord.y = (texcoord.y - 0.5) * 2.0;
+               
                 float stencil = tex2D(_textureStencil, texcoord).r;
                 float depth = tex2D(_textureDepth, texcoord).r;
 
-                result = lerp(result, float4(stencil, depth, 0.64, 1.0), stencil);
-                
-                return result;
+                return float4(stencil, depth, 0.0, 1.0);
             }
             ENDCG
         }

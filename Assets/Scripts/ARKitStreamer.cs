@@ -12,7 +12,7 @@ public class ARKitStreamer : MonoBehaviour
 {
     [SerializeField] ARCameraManager cameraManager = null;
     [SerializeField] ARHumanBodyManager humanBodyManager = null;
-    [SerializeField] Material material = null;
+    [SerializeField] Material previewMaterial = null;
     [SerializeField] RawImage debugImage = null;
 
     static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
@@ -43,11 +43,14 @@ public class ARKitStreamer : MonoBehaviour
         var subsystem = humanBodyManager.subsystem;
         if (subsystem == null)
         {
+            // ARKit is not supported on this device
             return;
         }
 
-        material.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
-        material.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
+        ShowTextureInfo(ref args);
+
+        previewMaterial.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
+        previewMaterial.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
 
 
         if (renderTexture == null)
@@ -57,23 +60,35 @@ public class ARKitStreamer : MonoBehaviour
             InitNDI(width, height);
         }
 
+        // Set texture
         var count = args.textures.Count;
         for (int i = 0; i < count; i++)
         {
             bufferMaterial.SetTexture(args.propertyNameIds[i], args.textures[i]);
         }
-        if (args.displayMatrix.HasValue)
-        {
-            bufferMaterial.SetMatrix(k_DisplayTransformId, args.displayMatrix.Value);
-        }
+        bufferMaterial.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
+        bufferMaterial.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
         Graphics.Blit(null, renderTexture, bufferMaterial);
+    }
+
+    void ShowTextureInfo(ref ARCameraFrameEventArgs args)
+    {
+        var sb = new System.Text.StringBuilder();
+        foreach (var t in args.textures)
+        {
+            sb.AppendFormat("Texture {0}: ({1} , {2}) format: {3}\n", t.name, t.width, t.height, t.format);
+        }
+        var tex = humanBodyManager.humanStencilTexture;
+        sb.AppendFormat("Stencil {0}: ({1} , {2}) format: {3}\n", tex.name, tex.width, tex.height, tex.format);
+        tex = humanBodyManager.humanDepthTexture;
+        sb.AppendFormat("Depth {0}: ({1} , {2}) format: {3}\n", tex.name, tex.width, tex.height, tex.format);
+
+        Debug.Log(sb);
     }
 
     void InitNDI(int width, int height)
     {
-        Debug.LogFormat("Init NDI: {0} x {1}", width, height);
-
-        renderTexture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+        renderTexture = new RenderTexture(width, height * 2, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
         var name = string.Format("ARKit Stream {0:0000}", Random.Range(100, 9999));
         var go = new GameObject(name);
         go.transform.SetParent(transform, false);

@@ -376,7 +376,7 @@ MonoBehaviour:
   m_HumanBodyPose3DEstimationEnabled: 0
   m_HumanBodyPose3DScaleEstimationEnabled: 0
   m_HumanSegmentationStencilMode: 3
-  m_HumanSegmentationDepthMode: 1
+  m_HumanSegmentationDepthMode: 2
   m_HumanBodyPrefab: {fileID: 0}
 --- !u!114 &1358651963
 MonoBehaviour:
@@ -645,5 +645,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 906813953}
   humanBodyManager: {fileID: 1358651962}
-  material: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
+  previewMaterial: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
   debugImage: {fileID: 1995634016}
