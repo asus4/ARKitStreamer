@@ -19,17 +19,17 @@ namespace ARKitStream
         CommandBuffer commandBuffer;
         Material bufferMaterial;
 
-        RenderTexture cameraYTex;
-        RenderTexture cameraCbCrTex;
-        RenderTexture stencilTex;
-        RenderTexture depthTex;
+
+        RenderTexture[] renderTextures;
+        Texture2D[] texture2Ds;
+
 
         void Start()
         {
             ndiReceiver = GetComponent<NdiReceiver>();
 
             commandBuffer = new CommandBuffer();
-            commandBuffer.name ="ARKitStreamReceiver";
+            commandBuffer.name = "ARKitStreamReceiver";
 
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamReceiver"));
         }
@@ -39,17 +39,15 @@ namespace ARKitStream
             commandBuffer.Dispose();
             commandBuffer = null;
 
-            Release(cameraYTex);
-            cameraYTex = null;
+            foreach (var rt in renderTextures)
+            {
+                Release(rt);
+            }
+            foreach (var tex in texture2Ds)
+            {
+                Release(tex);
+            }
 
-            Release(cameraCbCrTex);
-            cameraCbCrTex = null;
-
-            Release(stencilTex);
-            stencilTex = null;
-
-            Release(depthTex);
-            depthTex = null;
         }
 
         void Update()
@@ -65,15 +63,16 @@ namespace ARKitStream
                 ndiSourceSize = new Vector2Int(rt.width, rt.height);
             }
 
-            Debug.LogFormat("recevie rt: {0},{1}", rt.width, rt.height);
-
             commandBuffer.Clear();
-            commandBuffer.Blit(rt, cameraYTex, bufferMaterial, 0);
-            commandBuffer.Blit(rt, cameraCbCrTex, bufferMaterial, 1);
-            commandBuffer.Blit(rt, stencilTex, bufferMaterial, 2);
-            commandBuffer.Blit(rt, depthTex, bufferMaterial, 3);
+            for (int i = 0; i < renderTextures.Length; i++)
+            {
+                commandBuffer.Blit(rt, renderTextures[i], bufferMaterial, i);
+            }
 
             Graphics.ExecuteCommandBuffer(commandBuffer);
+
+            // Graphics.CopyTexture(cameraYRT, cameraYT);
+            // Graphics.CopyTexture(cameraCbCrRT, cameraCbCrT);
         }
 
         void OnGUI()
@@ -86,10 +85,10 @@ namespace ARKitStream
             var w = Screen.width / 2;
             var h = Screen.height / 2;
 
-            GUI.DrawTexture(new Rect(0, 0, w, h), cameraYTex);
-            GUI.DrawTexture(new Rect(w, 0, w, h), cameraCbCrTex);
-            GUI.DrawTexture(new Rect(0, h, w, h), stencilTex);
-            GUI.DrawTexture(new Rect(w, h, w, h), depthTex);
+            GUI.DrawTexture(new Rect(0, 0, w, h), renderTextures[0]);
+            GUI.DrawTexture(new Rect(w, 0, w, h), renderTextures[1]);
+            GUI.DrawTexture(new Rect(0, h, w, h), renderTextures[2]);
+            GUI.DrawTexture(new Rect(w, h, w, h), renderTextures[3]);
         }
 
         void Release(RenderTexture tex)
@@ -102,15 +101,41 @@ namespace ARKitStream
             Destroy(tex);
         }
 
+        void Release(Texture tex)
+        {
+            if (tex == null)
+            {
+                return;
+            }
+            Destroy(tex);
+        }
+
         void InitTexture(Texture source)
         {
             int width = source.width;
             int height = source.height / 2;
 
-            cameraYTex = new RenderTexture(width, height, 0, RenderTextureFormat.R8);
-            cameraCbCrTex = new RenderTexture(width, height, 0, RenderTextureFormat.RG16);
-            stencilTex = new RenderTexture(width, height, 0, RenderTextureFormat.R8);
-            depthTex = new RenderTexture(width, height, 0, RenderTextureFormat.RHalf);
+            var rformat = new RenderTextureFormat[] {
+                RenderTextureFormat.R8, // Camera Y
+                RenderTextureFormat.RG16, // Camera CbCr
+                RenderTextureFormat.R8, // Stencil
+                RenderTextureFormat.RHalf, // Depth
+            };
+            var tformat = new TextureFormat[] {
+                TextureFormat.R8,
+                TextureFormat.RG16,
+                TextureFormat.R8,
+                TextureFormat.RHalf,
+            };
+
+            renderTextures = new RenderTexture[rformat.Length];
+            texture2Ds = new Texture2D[rformat.Length];
+
+            for (int i = 0; i < rformat.Length; i++)
+            {
+                renderTextures[i] = new RenderTexture(width, height, 0, rformat[i]);
+                texture2Ds[i] = new Texture2D(width, height, tformat[i], 1, false);
+            }
         }
 
     }
