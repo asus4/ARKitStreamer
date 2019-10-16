@@ -167,7 +167,6 @@ namespace ARKitStream
 
         void InvokeTextures()
         {
-
             // HACK: Invoke another class's event from refrection
             // https://stackoverflow.com/questions/198543/how-do-i-raise-an-event-via-reflection-in-net-c
             // cameraManager.frameReceived(args);
