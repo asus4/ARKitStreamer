@@ -117,6 +117,9 @@ namespace ARKitStream
             }
 
             InvokeEvents();
+
+            testMaterial.SetTexture("_textureStencil", texture2Ds[2]);
+            testMaterial.SetTexture("_textureDepth", texture2Ds[3]);
         }
 
         void OnGUI()
@@ -202,7 +205,6 @@ namespace ARKitStream
                 Shader.PropertyToID("_textureCbCr")
             };
 
-
             lock (packetLock)
             {
                 if (packet != null)
@@ -210,12 +212,6 @@ namespace ARKitStream
                     args.timestampNs = packet.cameraFrame.timestampNs;
                     args.displayMatrix = packet.cameraFrame.displayMatrix;
                     args.projectionMatrix = packet.cameraFrame.projectionMatrix;
-
-                    Debug.Log("the packet");
-                }
-                else
-                {
-                    Debug.Log("the packet is null");
                 }
             }
 
@@ -230,16 +226,24 @@ namespace ARKitStream
             {
                 handler.Method.Invoke(handler.Target, new object[] { args });
             }
+
+            // humanBodyManager.            
         }
 
         void OnWebsocketMessage(object sender, MessageEventArgs e)
         {
-            lock (packetLock)
+            try
             {
-                Debug.Log(e.RawData.Length);
-                packet = ARKitRemotePacket.Deserialize(e.RawData);
-                Debug.Log("packet is :" + packet);
+                lock (packetLock)
+                {
+                    packet = ARKitRemotePacket.Deserialize(e.RawData);
+                }
             }
+            catch (Exception ex)
+            {
+                Debug.LogWarning(ex);
+            }
+
         }
     }
 }

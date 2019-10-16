@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
-using UnityEngine.XR.ARFoundation;
 using Unity.Mathematics;
 
 namespace ARKitStream.Internal
@@ -34,27 +32,34 @@ namespace ARKitStream.Internal
                 return $"[time: {timestampNs}, projection: {projectionMatrix}, display: {displayMatrix}]";
             }
 
-            public static int DataSize => sizeof(long) + Marshal.SizeOf(typeof(Matrix4x4)) * 2;
+            // public static int DataSize => sizeof(long) + Marshal.SizeOf(typeof(Matrix4x4)) * 2;
         }
 
         public CameraFrameEvent cameraFrame;
 
-        static BinaryFormatter formatter = new BinaryFormatter();
-        static MemoryStream stream = new MemoryStream();
+        static readonly BinaryFormatter formatter = new BinaryFormatter();
+        static readonly MemoryStream stream = new MemoryStream();
+        // static readonly byte[] buffer = new byte[CameraFrameEvent.DataSize];
 
-        readonly static byte[] buffer = new byte[CameraFrameEvent.DataSize];
         public byte[] Serialize()
         {
-            stream.Seek(0, SeekOrigin.Begin);
-            formatter.Serialize(stream, this);
-            return stream.ToArray();
+            lock (stream)
+            {
+                stream.Position = 0;
+                formatter.Serialize(stream, this);
+                return stream.ToArray();
+            }
         }
 
         public static ARKitRemotePacket Deserialize(byte[] data)
         {
-            // Debug.AssertFormat(data.Length == buffer.Length, $"data length: {data.Length} is not collect size of {buffer.Length}");
-            stream.Seek(0, SeekOrigin.Begin);
-            return formatter.Deserialize(stream) as ARKitRemotePacket;
+            lock (stream)
+            {
+                stream.Position = 0;
+                stream.Write(data, 0, data.Length);
+                stream.Position = 0;
+                return formatter.Deserialize(stream) as ARKitRemotePacket;
+            }
         }
     }
 

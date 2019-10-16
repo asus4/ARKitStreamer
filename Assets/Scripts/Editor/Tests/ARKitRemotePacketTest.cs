@@ -72,6 +72,7 @@ namespace ARKitStream.Internal
 
             Assert.AreEqual(a.cameraFrame, b.cameraFrame);
 
+            Debug.Log("binary size is : " + data.Length);
 
             var c = new ARKitRemotePacket()
             {
