@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 906813954}
   - component: {fileID: 906813953}
   - component: {fileID: 906813952}
+  - component: {fileID: 906813956}
   m_Layer: 0
   m_Name: AR Camera
   m_TagString: MainCamera
@@ -288,7 +289,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 906813950}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 816b289ef451e094f9ae174fb4cf8db0, type: 3}
   m_Name: 
@@ -341,6 +342,20 @@ Transform:
   m_Father: {fileID: 1358651964}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &906813956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906813950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8d36a24351f4bbd81e6cd1e9879562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UseCustomMaterial: 1
+  m_CustomMaterial: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
 --- !u!1 &1358651961
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +577,7 @@ MonoBehaviour:
   cameraManager: {fileID: 906813953}
   humanBodyManager: {fileID: 1358651962}
   isDrawGUI: 0
+  testMaterial: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
 --- !u!4 &2014463253
 Transform:
   m_ObjectHideFlags: 0
@@ -588,7 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cadade9d79e66642a6893ac902ddf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceName: IBUXS (ARKit Stream 0170)
+  _sourceName: IBUXS (ARKit Stream 6167)
   _targetTexture: {fileID: 0}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: 

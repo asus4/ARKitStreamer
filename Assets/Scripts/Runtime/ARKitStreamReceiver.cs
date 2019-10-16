@@ -14,6 +14,7 @@ namespace ARKitStream
         [SerializeField] ARCameraManager cameraManager = null;
         [SerializeField] ARHumanBodyManager humanBodyManager = null;
         [SerializeField] bool isDrawGUI = false;
+        [SerializeField] Material testMaterial;
 
         NdiReceiver ndiReceiver = null;
         Vector2Int ndiSourceSize = Vector2Int.zero;
@@ -166,6 +167,7 @@ namespace ARKitStream
 
         void InvokeTextures()
         {
+
             // HACK: Invoke another class's event from refrection
             // https://stackoverflow.com/questions/198543/how-do-i-raise-an-event-via-reflection-in-net-c
             // cameraManager.frameReceived(args);
@@ -181,17 +183,17 @@ namespace ARKitStream
             };
             args.displayMatrix = Matrix4x4.identity;
 
-            var eventDelegate = (MulticastDelegate)cameraManager.GetType().GetField("frameReceived", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(cameraManager);
-            if (eventDelegate != null)
-            {
-                foreach (var handler in eventDelegate.GetInvocationList())
-                {
-                    handler.Method.Invoke(handler.Target, new object[] { args });
+            // Call private event field
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var type = cameraManager.GetType();
+            var eventDelegate = (MulticastDelegate)type.GetField("frameReceived", flags).GetValue(cameraManager);
+            Debug.AssertFormat(eventDelegate != null, "Check field name is collect.");
 
-                    Debug.Log("invoikinggg");
-                }
+            var handlers = eventDelegate.GetInvocationList();
+            foreach (var handler in handlers)
+            {
+                handler.Method.Invoke(handler.Target, new object[] { args });
             }
         }
-
     }
 }
