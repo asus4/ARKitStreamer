@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
 using Klak.Ndi;
 using WebSocketSharp;
+using ARKitStream.Internal;
 
 namespace ARKitStream
 {
@@ -29,6 +30,9 @@ namespace ARKitStream
         RenderTexture[] renderTextures;
         Texture2D[] texture2Ds;
         WebSocket client;
+
+        object packetLock = new object();
+        ARKitRemotePacket packet;
 
         void Start()
         {
@@ -112,9 +116,7 @@ namespace ARKitStream
                 Graphics.CopyTexture(renderTextures[i], texture2Ds[i]);
             }
 
-            InvokeTextures();
-
-
+            InvokeEvents();
         }
 
         void OnGUI()
@@ -184,7 +186,7 @@ namespace ARKitStream
             }
         }
 
-        void InvokeTextures()
+        void InvokeEvents()
         {
             // HACK: Invoke another class's event from refrection
             // https://stackoverflow.com/questions/198543/how-do-i-raise-an-event-via-reflection-in-net-c
@@ -199,7 +201,23 @@ namespace ARKitStream
                 Shader.PropertyToID("_textureY"),
                 Shader.PropertyToID("_textureCbCr")
             };
-            args.displayMatrix = Matrix4x4.identity;
+
+
+            lock (packetLock)
+            {
+                if (packet != null)
+                {
+                    args.timestampNs = packet.cameraFrame.timestampNs;
+                    args.displayMatrix = packet.cameraFrame.displayMatrix;
+                    args.projectionMatrix = packet.cameraFrame.projectionMatrix;
+
+                    Debug.Log("the packet");
+                }
+                else
+                {
+                    Debug.Log("the packet is null");
+                }
+            }
 
             // Call private event field
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
@@ -216,14 +234,12 @@ namespace ARKitStream
 
         void OnWebsocketMessage(object sender, MessageEventArgs e)
         {
-            if (e.IsText)
+            lock (packetLock)
             {
-                Debug.Log(e.Data);
+                Debug.Log(e.RawData.Length);
+                packet = ARKitRemotePacket.FromData(e.RawData);
+                Debug.Log("packet is :" + packet);
             }
-            {
-                Debug.Log(e.Data);
-            }
-
         }
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine.Scripting;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-namespace ARKitStream
+namespace ARKitStream.Internal
 {
     public class ARKitCameraRemoteSubsystem : XRCameraSubsystem
     {

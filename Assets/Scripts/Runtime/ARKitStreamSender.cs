@@ -10,6 +10,7 @@ using UnityEngine.XR.ARFoundation;
 using Klak.Ndi;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using ARKitStream.Internal;
 
 namespace ARKitStream
 {
@@ -91,8 +92,16 @@ namespace ARKitStream
 
             if (service != null)
             {
-                string hoge = args.displayMatrix.ToString();
-                service.ExternalSend(hoge);
+                var packet = new ARKitRemotePacket()
+                {
+                    cameraFrame = new ARKitRemotePacket.CameraFrameEvent()
+                    {
+                        timestampNs = args.timestampNs.Value,
+                        projectionMatrix = args.projectionMatrix.Value,
+                        displayMatrix = args.displayMatrix.Value
+                    }
+                };
+                service.ExternalSend(packet.ToData());
             }
 
             // ShowTextureInfo(ref args);
