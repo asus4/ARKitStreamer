@@ -237,7 +237,7 @@ namespace ARKitStream
             lock (packetLock)
             {
                 Debug.Log(e.RawData.Length);
-                packet = ARKitRemotePacket.FromData(e.RawData);
+                packet = ARKitRemotePacket.Deserialize(e.RawData);
                 Debug.Log("packet is :" + packet);
             }
         }

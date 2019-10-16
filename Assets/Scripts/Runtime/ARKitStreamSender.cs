@@ -101,7 +101,7 @@ namespace ARKitStream
                         displayMatrix = args.displayMatrix.Value
                     }
                 };
-                service.ExternalSend(packet.ToData());
+                service.ExternalSend(packet.Serialize());
             }
 
             // ShowTextureInfo(ref args);

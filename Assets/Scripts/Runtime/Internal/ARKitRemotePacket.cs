@@ -1,43 +1,60 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using Unity.Mathematics;
-using MessagePack;
 
 namespace ARKitStream.Internal
 {
-    [MessagePackObject]
+    [Serializable]
     public class ARKitRemotePacket
     {
-        [MessagePackObject]
-        public struct CameraFrameEvent
+        [Serializable]
+        public struct CameraFrameEvent : IEquatable<CameraFrameEvent>
         {
             // public ARLightEstimationData lightEstimationl;
-            [Key(0)]
             public long timestampNs;
-            [Key(1)]
             public float4x4 projectionMatrix;
-            [Key(2)]
             public float4x4 displayMatrix;
             // public double? exposureDuration;
             // public float? exposureOffset;
+
+            public bool Equals(CameraFrameEvent o)
+            {
+                return timestampNs.Equals(o.timestampNs)
+                    && projectionMatrix.Equals(o.projectionMatrix)
+                    && displayMatrix.Equals(o.displayMatrix);
+            }
+
+            public override string ToString()
+            {
+                return $"[time: {timestampNs}, projection: {projectionMatrix}, display: {displayMatrix}]";
+            }
+
+            public static int DataSize => sizeof(long) + Marshal.SizeOf(typeof(Matrix4x4)) * 2;
         }
 
-        [Key(0)]
         public CameraFrameEvent cameraFrame;
 
+        static BinaryFormatter formatter = new BinaryFormatter();
+        static MemoryStream stream = new MemoryStream();
 
-        public byte[] ToData()
+        readonly static byte[] buffer = new byte[CameraFrameEvent.DataSize];
+        public byte[] Serialize()
         {
-            return MessagePackSerializer.Serialize<ARKitRemotePacket>(this);
+            stream.Seek(0, SeekOrigin.Begin);
+            formatter.Serialize(stream, this);
+            return stream.ToArray();
         }
 
-        public static ARKitRemotePacket FromData(byte[] data)
+        public static ARKitRemotePacket Deserialize(byte[] data)
         {
-            return MessagePackSerializer.Deserialize<ARKitRemotePacket>(data);
+            // Debug.AssertFormat(data.Length == buffer.Length, $"data length: {data.Length} is not collect size of {buffer.Length}");
+            stream.Seek(0, SeekOrigin.Begin);
+            return formatter.Deserialize(stream) as ARKitRemotePacket;
         }
     }
 
