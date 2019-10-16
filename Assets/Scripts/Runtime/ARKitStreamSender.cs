@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,15 +8,40 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using Klak.Ndi;
+using WebSocketSharp;
+using WebSocketSharp.Server;
 
 namespace ARKitStream
 {
     public class ARKitStreamSender : MonoBehaviour
     {
+        public class ARKitService : WebSocketBehavior
+        {
+            public ARKitService()
+            {
+
+            }
+            protected override void OnMessage(MessageEventArgs e)
+            {
+                Debug.Log(e);
+            }
+
+            public void ExternalSend(byte[] data)
+            {
+                Send(data);
+            }
+
+            public void ExternalSend(string data)
+            {
+                Send(data);
+            }
+        }
+
         [SerializeField] ARCameraManager cameraManager = null;
         [SerializeField] ARHumanBodyManager humanBodyManager = null;
         [SerializeField] Material previewMaterial = null;
         [SerializeField] RawImage debugImage = null;
+        [SerializeField] uint port = 8888;
 
         static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
         static readonly int _textureDepth = Shader.PropertyToID("_textureDepth");
@@ -26,6 +52,8 @@ namespace ARKitStream
         RenderTexture renderTexture;
         NdiSender ndiSender;
         CommandBuffer commandBuffer;
+        WebSocketServer server;
+        ARKitService service;
 
         void Start()
         {
@@ -33,6 +61,13 @@ namespace ARKitStream
             commandBuffer.name = "ARKitStreamSender";
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamSender"));
             cameraManager.frameReceived += OnCameraFarameReceived;
+
+            server = new WebSocketServer((int)port);
+            server.AddWebSocketService<ARKitService>("/arkit", (behaviour) =>
+            {
+                this.service = behaviour;
+            });
+            server.Start();
         }
 
         void OnDestroy()
@@ -41,6 +76,8 @@ namespace ARKitStream
 
             Destroy(bufferMaterial);
             bufferMaterial = null;
+
+            server.Stop();
         }
 
         void OnCameraFarameReceived(ARCameraFrameEventArgs args)
@@ -52,7 +89,13 @@ namespace ARKitStream
                 return;
             }
 
-            ShowTextureInfo(ref args);
+            if (service != null)
+            {
+                string hoge = args.displayMatrix.ToString();
+                service.ExternalSend(hoge);
+            }
+
+            // ShowTextureInfo(ref args);
 
             previewMaterial.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
             previewMaterial.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);

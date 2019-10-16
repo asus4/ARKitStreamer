@@ -559,6 +559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de82a7adff9864b74b4760c2ae53f06a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ipAddress: 172.20.10.1
   cameraManager: {fileID: 906813953}
   humanBodyManager: {fileID: 1358651962}
   isDrawGUI: 0

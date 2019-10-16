@@ -5,12 +5,15 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
 using Klak.Ndi;
+using WebSocketSharp;
 
 namespace ARKitStream
 {
     [RequireComponent(typeof(NdiReceiver))]
     public class ARKitStreamReceiver : MonoBehaviour
     {
+        [SerializeField] string ipAddress = "";
+        [SerializeField] uint port = 8888;
         [SerializeField] ARCameraManager cameraManager = null;
         [SerializeField] ARHumanBodyManager humanBodyManager = null;
         [SerializeField] bool isDrawGUI = false;
@@ -25,7 +28,7 @@ namespace ARKitStream
 
         RenderTexture[] renderTextures;
         Texture2D[] texture2Ds;
-
+        WebSocket client;
 
         void Start()
         {
@@ -41,6 +44,15 @@ namespace ARKitStream
             commandBuffer.name = "ARKitStreamReceiver";
 
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamReceiver"));
+
+            // 
+            client = new WebSocket($"ws://{ipAddress}:{port}/arkit");
+            client.OnOpen += (sender, e) =>
+            {
+                Debug.Log(e);
+            };
+            client.OnMessage += OnWebsocketMessage;
+            client.ConnectAsync();
         }
 
         void OnDestroy()
@@ -62,6 +74,13 @@ namespace ARKitStream
                 foreach (var tex in texture2Ds)
                 {
                     Release(tex);
+                }
+            }
+            if (client != null)
+            {
+                if (client.IsAlive)
+                {
+                    client.CloseAsync();
                 }
             }
         }
@@ -193,6 +212,18 @@ namespace ARKitStream
             {
                 handler.Method.Invoke(handler.Target, new object[] { args });
             }
+        }
+
+        void OnWebsocketMessage(object sender, MessageEventArgs e)
+        {
+            if (e.IsText)
+            {
+                Debug.Log(e.Data);
+            }
+            {
+                Debug.Log(e.Data);
+            }
+
         }
     }
 }
