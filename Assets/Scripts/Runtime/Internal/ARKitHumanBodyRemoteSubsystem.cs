@@ -77,15 +77,7 @@ namespace ARKitStream.Internal
                     return false;
                 }
 
-                humanStencilDescriptor = new TextureDescriptor()
-                {
-                    nativeTexture = tex.GetNativeTexturePtr(),
-                    width = tex.width,
-                    height = tex.height,
-                    mipmapCount = tex.mipmapCount,
-                    format = tex.format,
-                    propertyNameId = 0 // ??
-                };
+                humanStencilDescriptor = new TextureDescriptor(tex, 0);
                 return true;
             }
 
@@ -104,15 +96,7 @@ namespace ARKitStream.Internal
                     return false;
                 }
 
-                humanDepthDescriptor = new TextureDescriptor()
-                {
-                    nativeTexture = tex.GetNativeTexturePtr(),
-                    width = tex.width,
-                    height = tex.height,
-                    mipmapCount = tex.mipmapCount,
-                    format = tex.format,
-                    propertyNameId = 0 // ??
-                };
+                humanDepthDescriptor = new TextureDescriptor(tex, 0);
                 return true;
             }
         }
