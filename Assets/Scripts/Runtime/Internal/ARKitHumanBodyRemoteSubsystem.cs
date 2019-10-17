@@ -47,8 +47,6 @@ namespace ARKitStream.Internal
 
         class ARKitProvider : XRHumanBodySubsystem.Provider
         {
-            ARKitStreamReceiver receiver = null;
-
             public override TrackableChanges<XRHumanBody> GetChanges(XRHumanBody defaultHumanBody, Unity.Collections.Allocator allocator)
             {
                 return new TrackableChanges<XRHumanBody>();
@@ -68,14 +66,14 @@ namespace ARKitStream.Internal
             {
                 if (ARKitStreamReceiver.Instance == null)
                 {
-                    humanStencilDescriptor = new XRTextureDescriptor();
+                    humanStencilDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 
                 var tex = ARKitStreamReceiver.Instance.StencilTexture;
                 if (tex == null)
                 {
-                    humanStencilDescriptor = new XRTextureDescriptor();
+                    humanStencilDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 
@@ -95,14 +93,14 @@ namespace ARKitStream.Internal
             {
                 if (ARKitStreamReceiver.Instance == null)
                 {
-                    humanDepthDescriptor = new XRTextureDescriptor();
+                    humanDepthDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 
                 var tex = ARKitStreamReceiver.Instance.DepthTexture;
                 if (tex == null)
                 {
-                    humanDepthDescriptor = new XRTextureDescriptor();
+                    humanDepthDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 

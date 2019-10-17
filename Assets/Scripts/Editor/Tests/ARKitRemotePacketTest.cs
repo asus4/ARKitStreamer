@@ -12,34 +12,14 @@ namespace ARKitStream.Internal
             var a = new ARKitRemotePacket.CameraFrameEvent()
             {
                 timestampNs = 123,
-                projectionMatrix = new Matrix4x4(
-                    new Vector4(1, 2, 3, 4),
-                    new Vector4(5, 6, 7, 8),
-                    new Vector4(9, 10, 11, 12),
-                    new Vector4(13, 14, 15, 16)
-                ),
-                displayMatrix = new Matrix4x4(
-                    new Vector4(17, 18, 19, 20),
-                    new Vector4(21, 22, 23, 24),
-                    new Vector4(25, 26, 27, 28),
-                    new Vector4(29, 30, 31, 32)
-                )
+                projectionMatrix = TestUtil.MockMatrix(1),
+                displayMatrix = TestUtil.MockMatrix(17),
             };
             var b = new ARKitRemotePacket.CameraFrameEvent()
             {
                 timestampNs = 123,
-                projectionMatrix = new Matrix4x4(
-                    new Vector4(1, 2, 3, 4),
-                    new Vector4(5, 6, 7, 8),
-                    new Vector4(9, 10, 11, 12),
-                    new Vector4(13, 14, 15, 16)
-                ),
-                displayMatrix = new Matrix4x4(
-                    new Vector4(17, 18, 19, 20),
-                    new Vector4(21, 22, 23, 24),
-                    new Vector4(25, 26, 27, 28),
-                    new Vector4(29, 30, 31, 32)
-                )
+                projectionMatrix = TestUtil.MockMatrix(1),
+                displayMatrix = TestUtil.MockMatrix(17),
             };
             Assert.AreEqual(a, b);
         }
@@ -52,18 +32,8 @@ namespace ARKitStream.Internal
                 cameraFrame = new ARKitRemotePacket.CameraFrameEvent()
                 {
                     timestampNs = 123,
-                    projectionMatrix = new Matrix4x4(
-                        new Vector4(1, 2, 3, 4),
-                        new Vector4(5, 6, 7, 8),
-                        new Vector4(9, 10, 11, 12),
-                        new Vector4(13, 14, 15, 16)
-                    ),
-                    displayMatrix = new Matrix4x4(
-                        new Vector4(17, 18, 19, 20),
-                        new Vector4(21, 22, 23, 24),
-                        new Vector4(25, 26, 27, 28),
-                        new Vector4(29, 30, 31, 32)
-                    )
+                    projectionMatrix = TestUtil.MockMatrix(1),
+                    displayMatrix = TestUtil.MockMatrix(17),
                 }
             };
             var data = a.Serialize();
@@ -78,18 +48,8 @@ namespace ARKitStream.Internal
                 cameraFrame = new ARKitRemotePacket.CameraFrameEvent()
                 {
                     timestampNs = 123,
-                    projectionMatrix = new Matrix4x4(
-                        new Vector4(1, 2, 3, 4),
-                        new Vector4(5, 6, 7, 8),
-                        new Vector4(9, 10, 11, 12),
-                        new Vector4(13, 14, 15, 16)
-                    ),
-                    displayMatrix = new Matrix4x4(
-                        new Vector4(17, 18, 19, 20),
-                        new Vector4(21, 22, 23, 24),
-                        new Vector4(25, 26, 27, 28),
-                        new Vector4(29, 30, 31, 32)
-                    )
+                    projectionMatrix = TestUtil.MockMatrix(1),
+                    displayMatrix = TestUtil.MockMatrix(17),
                 }
             };
 

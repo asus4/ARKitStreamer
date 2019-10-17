@@ -20,6 +20,16 @@ namespace ARKitStream.Internal
         public TextureFormat format;
         public int propertyNameId;
 
+        public TextureDescriptor(Texture2D tex, int propertyNameId)
+        {
+            nativeTexture = tex.GetNativeTexturePtr();
+            width = tex.width;
+            height = tex.height;
+            mipmapCount = tex.mipmapCount;
+            format = tex.format;
+            this.propertyNameId = propertyNameId;
+        }
+
         public bool Equals(TextureDescriptor other)
         {
             return nativeTexture.Equals(other.nativeTexture)

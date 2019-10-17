@@ -16,7 +16,6 @@ namespace ARKitStream
     {
         [SerializeField] string ipAddress = "";
         [SerializeField] uint port = 8888;
-        [SerializeField] ARCameraManager cameraManager = null;
         [SerializeField] bool isDrawGUI = false;
 
         NdiReceiver ndiReceiver = null;
@@ -37,6 +36,20 @@ namespace ARKitStream
         public Texture2D CbCrTexture => texture2Ds == null ? null : texture2Ds[1];
         public Texture2D StencilTexture => texture2Ds == null ? null : texture2Ds[2];
         public Texture2D DepthTexture => texture2Ds == null ? null : texture2Ds[3];
+        public ARKitRemotePacket.CameraFrameEvent CameraFrame
+        {
+            get
+            {
+                lock (packetLock)
+                {
+                    if (packet != null)
+                    {
+                        return packet.cameraFrame;
+                    }
+                }
+                return default(ARKitRemotePacket.CameraFrameEvent);
+            }
+        }
 
         public static ARKitStreamReceiver Instance { get; private set; } = null;
 
@@ -133,7 +146,6 @@ namespace ARKitStream
                 Graphics.CopyTexture(renderTextures[i], texture2Ds[i]);
             }
 
-            InvokeEvents();
         }
 
         void OnGUI()
@@ -201,47 +213,6 @@ namespace ARKitStream
                 renderTextures[i] = new RenderTexture(width, height, 0, rformat[i]);
                 texture2Ds[i] = new Texture2D(width, height, tformat[i], 1, false);
             }
-        }
-
-        void InvokeEvents()
-        {
-            // HACK: Invoke another class's event from refrection
-            // https://stackoverflow.com/questions/198543/how-do-i-raise-an-event-via-reflection-in-net-c
-            // cameraManager.frameReceived(args);
-
-            var args = new ARCameraFrameEventArgs();
-            args.textures = new List<Texture2D>() {
-                texture2Ds[0],
-                texture2Ds[1],
-            };
-            args.propertyNameIds = new List<int>() {
-                Shader.PropertyToID("_textureY"),
-                Shader.PropertyToID("_textureCbCr")
-            };
-
-            lock (packetLock)
-            {
-                if (packet != null)
-                {
-                    args.timestampNs = packet.cameraFrame.timestampNs;
-                    args.displayMatrix = packet.cameraFrame.displayMatrix;
-                    args.projectionMatrix = packet.cameraFrame.projectionMatrix;
-                }
-            }
-
-            // Call private event field
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
-            var type = cameraManager.GetType();
-            var eventDelegate = (MulticastDelegate)type.GetField("frameReceived", flags).GetValue(cameraManager);
-            Debug.AssertFormat(eventDelegate != null, "Check field name is collect.");
-
-            var handlers = eventDelegate.GetInvocationList();
-            foreach (var handler in handlers)
-            {
-                handler.Method.Invoke(handler.Target, new object[] { args });
-            }
-
-            // humanBodyManager.            
         }
 
         void OnWebsocketMessage(object sender, MessageEventArgs e)

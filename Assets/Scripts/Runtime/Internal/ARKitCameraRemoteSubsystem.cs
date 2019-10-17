@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Unity.Collections;
 using UnityEngine.Scripting;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+
+
 
 namespace ARKitStream.Internal
 {
@@ -34,6 +38,10 @@ namespace ARKitStream.Internal
             {
                 Debug.LogErrorFormat("Cannot register the {0} subsystem", id);
             }
+            else
+            {
+                Debug.LogFormat("Registered the {0} subsystem", id);
+            }
 #endif // UNITY_EDITOR
         }
 
@@ -51,6 +59,72 @@ namespace ARKitStream.Internal
             {
                 m_CameraMaterial = CreateCameraMaterial("Unlit/ARKitBackground");
             }
+
+            public override bool TryGetFrame(XRCameraParams cameraParams, out XRCameraFrame cameraFrame)
+            {
+                var remote = ARKitStreamReceiver.Instance;
+                if (remote == null)
+                {
+                    cameraFrame = default(XRCameraFrame);
+                    return false;
+                }
+
+
+                var remoteFrame = ARKitStreamReceiver.Instance.CameraFrame;
+                if (remoteFrame.timestampNs == default(long))
+                {
+                    cameraFrame = default(XRCameraFrame);
+                    return false;
+                }
+
+                const XRCameraFrameProperties properties =
+                    XRCameraFrameProperties.Timestamp
+                    | XRCameraFrameProperties.ProjectionMatrix
+                    | XRCameraFrameProperties.DisplayMatrix;
+
+                cameraFrame = new CameraFrame()
+                {
+                    timestampNs = remoteFrame.timestampNs,
+                    averageBrightness = 0,
+                    averageColorTemperature = 0,
+                    colorCorrection = default(Color),
+                    projectionMatrix = remoteFrame.projectionMatrix,
+                    displayMatrix = remoteFrame.displayMatrix,
+                    trackingState = TrackingState.Tracking,
+                    nativePtr = new IntPtr(0),
+                    properties = properties,
+                    averageIntensityInLumens = 0,
+                    exposureDuration = 0,
+                    exposureOffset = 0
+                };
+                return true;
+            }
+
+            public override NativeArray<XRTextureDescriptor> GetTextureDescriptors(XRTextureDescriptor defaultDescriptor, Allocator allocator)
+            {
+                var remote = ARKitStreamReceiver.Instance;
+                if (remote == null)
+                {
+                    return new NativeArray<XRTextureDescriptor>(0, allocator);
+                }
+
+                var yTex = remote.YTextrue;
+                var cbcrTex = remote.CbCrTexture;
+                if (yTex == null || cbcrTex == null)
+                {
+                    return new NativeArray<XRTextureDescriptor>(0, allocator);
+                }
+
+
+                var arr = new NativeArray<XRTextureDescriptor>(2, allocator);
+                arr[0] = new TextureDescriptor(yTex, _TEXTURE_Y);
+                arr[1] = new TextureDescriptor(cbcrTex, _TEXTURE_CB_CR);
+
+                return arr;
+            }
+
+            static readonly int _TEXTURE_Y = Shader.PropertyToID("_textureY");
+            static readonly int _TEXTURE_CB_CR = Shader.PropertyToID("_textureCbCr");
         }
     }
 }
