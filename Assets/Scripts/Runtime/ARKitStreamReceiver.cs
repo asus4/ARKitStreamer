@@ -10,15 +10,14 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(NdiReceiver))]
     public class ARKitStreamReceiver : MonoBehaviour
     {
         [SerializeField] string ipAddress = "";
         [SerializeField] uint port = 8888;
         [SerializeField] ARCameraManager cameraManager = null;
-        [SerializeField] ARHumanBodyManager humanBodyManager = null;
         [SerializeField] bool isDrawGUI = false;
-        [SerializeField] Material testMaterial;
 
         NdiReceiver ndiReceiver = null;
         Vector2Int ndiSourceSize = Vector2Int.zero;
@@ -33,6 +32,22 @@ namespace ARKitStream
 
         object packetLock = new object();
         ARKitRemotePacket packet;
+
+        public Texture2D YTextrue => texture2Ds == null ? null : texture2Ds[0];
+        public Texture2D CbCrTexture => texture2Ds == null ? null : texture2Ds[1];
+        public Texture2D StencilTexture => texture2Ds == null ? null : texture2Ds[2];
+        public Texture2D DepthTexture => texture2Ds == null ? null : texture2Ds[3];
+
+        public static ARKitStreamReceiver Instance { get; private set; } = null;
+
+        void Awake()
+        {
+            if (Instance != null)
+            {
+                Debug.LogError("ARKitStreamReceiver must be only one in the scene.");
+            }
+            Instance = this;
+        }
 
         void Start()
         {
@@ -50,11 +65,12 @@ namespace ARKitStream
 
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamReceiver"));
 
-            // 
-            client = new WebSocket($"ws://{ipAddress}:{port}/arkit");
+            // Start WebSocket
+            string wsAddress = $"ws://{ipAddress}:{port}/arkit";
+            client = new WebSocket(wsAddress);
             client.OnOpen += (sender, e) =>
             {
-                Debug.Log(e);
+                Debug.Log($"WebSocket Open: {wsAddress}");
             };
             client.OnMessage += OnWebsocketMessage;
             client.ConnectAsync();
@@ -118,9 +134,6 @@ namespace ARKitStream
             }
 
             InvokeEvents();
-
-            testMaterial.SetTexture("_textureStencil", texture2Ds[2]);
-            testMaterial.SetTexture("_textureDepth", texture2Ds[3]);
         }
 
         void OnGUI()

@@ -129,6 +129,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 158654523}
+  - component: {fileID: 158654524}
   m_Layer: 0
   m_Name: Script
   m_TagString: Untagged
@@ -150,6 +151,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &158654524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158654522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939e458439e3c43f9bd24f53f5d690d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  humanBodyManager: {fileID: 1358651962}
+  material: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
 --- !u!1 &227311375
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,9 +607,7 @@ MonoBehaviour:
   ipAddress: 172.20.10.1
   port: 8888
   cameraManager: {fileID: 906813953}
-  humanBodyManager: {fileID: 1358651962}
   isDrawGUI: 0
-  testMaterial: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
 --- !u!4 &2014463253
 Transform:
   m_ObjectHideFlags: 0
@@ -621,7 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cadade9d79e66642a6893ac902ddf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceName: IBUXS (ARKit Stream 6097)
+  _sourceName: IBUXS (ARKit Stream 7522)
   _targetTexture: {fileID: 0}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: 

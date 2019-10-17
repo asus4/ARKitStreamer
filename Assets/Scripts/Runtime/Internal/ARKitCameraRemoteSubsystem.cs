@@ -1,15 +1,12 @@
-﻿using System.Runtime.InteropServices;
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
 {
-    public class ARKitCameraRemoteSubsystem : XRCameraSubsystem
+    [Preserve]
+    public sealed class ARKitCameraRemoteSubsystem : XRCameraSubsystem
     {
         protected override Provider CreateProvider() => new ARKitRemoteProvider();
 
