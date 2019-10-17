@@ -39,16 +39,24 @@ namespace ARKitStream.Internal
 
         static readonly BinaryFormatter formatter = new BinaryFormatter();
         static readonly MemoryStream stream = new MemoryStream();
-        // static readonly byte[] buffer = new byte[CameraFrameEvent.DataSize];
+        static byte[] buffer = new byte[0];
 
         public byte[] Serialize()
         {
+            // BinaryFormatter is slow. shold make custom serialization?
             lock (stream)
             {
                 stream.Position = 0;
                 formatter.Serialize(stream, this);
-                return stream.ToArray();
+                int length = (int)stream.Position;
+                if (buffer.Length != length)
+                {
+                    buffer = new byte[length];
+                }
+                stream.Position = 0;
+                stream.Read(buffer, 0, length);
             }
+            return buffer;
         }
 
         public static ARKitRemotePacket Deserialize(byte[] data)

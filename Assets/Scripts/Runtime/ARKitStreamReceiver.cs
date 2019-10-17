@@ -36,6 +36,7 @@ namespace ARKitStream
 
         void Start()
         {
+            // It works only in Editor!
             if (!Application.isEditor)
             {
                 Destroy(gameObject);
