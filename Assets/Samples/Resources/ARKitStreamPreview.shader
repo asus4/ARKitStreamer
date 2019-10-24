@@ -47,8 +47,6 @@
                 o.texcoord.x = (_UnityDisplayTransform[0].x * texX + _UnityDisplayTransform[1].x * (texY) + _UnityDisplayTransform[2].x);
                 o.texcoord.y = (_UnityDisplayTransform[0].y * texX + _UnityDisplayTransform[1].y * (texY) + (_UnityDisplayTransform[2].y));
 
-                // Just for test
-                //o.texcoord = vertex.texcoord;
                 return o;
             }
 
