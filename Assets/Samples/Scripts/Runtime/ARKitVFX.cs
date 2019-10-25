@@ -20,6 +20,7 @@ namespace ARKitStream
 
         static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
         static readonly int _texutreDepth = Shader.PropertyToID("_texutreDepth");
+        static readonly int _UnityDisplayTransform = Shader.PropertyToID("_UnityDisplayTransform");
 
         void OnEnable()
         {
@@ -55,23 +56,35 @@ namespace ARKitStream
             convertMat.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
             convertMat.SetTexture(_texutreDepth, humanBodyManager.humanDepthTexture);
 
+            if (args.projectionMatrix.HasValue)
+            {
+                convertMat.SetMatrix(_UnityDisplayTransform, args.projectionMatrix.Value);
+            }
+
             commandBuffer.Blit(null, colorTexture, convertMat, 0);
             commandBuffer.Blit(null, positionTexture, convertMat, 1);
 
             Graphics.ExecuteCommandBuffer(commandBuffer);
 
-            if (args.displayMatrix.HasValue)
+            if (args.projectionMatrix.HasValue)
             {
-                SetEffectTransform(args.displayMatrix.Value);
+                // TODO calc matrix
+                var planes = args.projectionMatrix.Value.decomposeProjection;
+
+
+                var tex = args.textures[0];
+                float aspect = (float)tex.width / tex.height;
+                var scale = new Vector3(aspect, -1, 1) * 5f;
+                var t = visualEffect.transform;
+                t.localScale = scale;
+                t.localRotation = Quaternion.Euler(0, 0, -90);
+                t.localPosition = new Vector3(0, 0, 10); // TODO
+
+
             }
 
         }
 
-        void SetEffectTransform(Matrix4x4 mtx)
-        {
-            // visualEffect.transform.localScale = mtx.lossyScale;
-            // visualEffect.transform.localRotation = mtx.rotation;
-        }
 
     }
 }

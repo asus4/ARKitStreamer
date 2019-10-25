@@ -12,9 +12,11 @@
 
     #include "UnityCG.cginc"
 
+    float4x4 _UnityDisplayTransform;
+
     sampler2D _textureY;
     sampler2D _textureCbCr;
-     sampler2D _textureStencil;
+    sampler2D _textureStencil;
     sampler2D _texutreDepth;
 
     fixed4 colorConvert(v2f_img i) : SV_Target
@@ -42,9 +44,14 @@
 
     float4 positionConvert(v2f_img i) : SV_TARGET
     {
-        float x = (i.uv.x - 0.5) * 2.0;
-        float y = (i.uv.y - 0.5) * 2.0;
-        float z = tex2D(_texutreDepth, i.uv).r;
+        float2 uv = i.uv;
+        
+        //uv.x = (_UnityDisplayTransform[0].x * uv.x + _UnityDisplayTransform[1].x * (uv.y) + _UnityDisplayTransform[2].x);
+        //uv.y = (_UnityDisplayTransform[0].y * uv.x + _UnityDisplayTransform[1].y * (uv.y) + (_UnityDisplayTransform[2].y));
+
+        float x = (uv.x - 0.5) * 2.0;
+        float y = (uv.y - 0.5) * 2.0;
+        float z = 1.0 - tex2D(_texutreDepth, uv).r;
 
         return float4(x, y, z, 1.0);
     }
