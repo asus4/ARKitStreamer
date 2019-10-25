@@ -1,6 +1,12 @@
 ﻿using System;
 using UnityEngine;
 using Unity.Collections;
+using UnityEngine.Rendering;
+#if MODULE_URP_ENABLED
+using UnityEngine.Rendering.Universal;
+#elif MODULE_LWRP_ENABLED
+using UnityEngine.Rendering.LWRP;
+#endif
 using UnityEngine.Scripting;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -47,17 +53,43 @@ namespace ARKitStream.Internal
 
         class ARKitRemoteProvider : Provider
         {
-            static readonly int k_TextureYPropertyNameId = Shader.PropertyToID("_textureY");
-            static readonly int k_TextureCbCrPropertyNameId = Shader.PropertyToID("_textureCbCr");
+            static readonly int _TEXTURE_Y = Shader.PropertyToID("_textureY");
+            static readonly int _TEXTURE_CB_CR = Shader.PropertyToID("_textureCbCr");
 
             Material m_CameraMaterial;
             public override Material cameraMaterial => m_CameraMaterial;
 
             public override bool permissionGranted => true;
 
+            string ShaderName
+            {
+                get
+                {
+                    var pipeline = GraphicsSettings.renderPipelineAsset;
+                    if (pipeline == null)
+                    {
+                        return "Unlit/ARKitBackground";
+                    }
+#if MODULE_URP_ENABLED
+                    else if (pipeline is UniversalRenderPipelineAsset)
+                    {
+                        return "Unlit/ARKitURPBackground";
+                    }
+#elif MODULE_LWRP_ENABLED
+                    else if (pipeline is LightweightRenderPipelineAsset)
+                    {
+                        return "Unlit/ARKitLWRPBackground";
+                    }
+#endif
+                    Debug.LogError($"{pipeline} is not supported in ARKit");
+                    return "Unlit/ARKitBackground";
+                }
+            }
+
             public ARKitRemoteProvider()
             {
-                m_CameraMaterial = CreateCameraMaterial("Unlit/ARKitBackground");
+
+                m_CameraMaterial = CreateCameraMaterial(ShaderName);
             }
 
             public override bool TryGetFrame(XRCameraParams cameraParams, out XRCameraFrame cameraFrame)
@@ -123,8 +155,6 @@ namespace ARKitStream.Internal
                 return arr;
             }
 
-            static readonly int _TEXTURE_Y = Shader.PropertyToID("_textureY");
-            static readonly int _TEXTURE_CB_CR = Shader.PropertyToID("_textureCbCr");
         }
     }
 }

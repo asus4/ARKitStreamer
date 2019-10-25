@@ -7,9 +7,9 @@ using UnityEngine.Experimental.VFX;
 
 namespace ARKitStream
 {
-    [RequireComponent(typeof(VisualEffect))]
     public class ARKitVFX : MonoBehaviour
     {
+        [SerializeField] VisualEffect visualEffect = null;
         [SerializeField] ARCameraManager cameraManager = null;
         [SerializeField] ARHumanBodyManager humanBodyManager = null;
         [SerializeField] RenderTexture positionTexture = null;
@@ -28,9 +28,7 @@ namespace ARKitStream
 
             cameraManager.frameReceived += OnFrameReceived;
 
-
-            var effect = GetComponent<VisualEffect>();
-            effect.Play();
+            visualEffect.Play();
         }
 
         void OnDisable()
@@ -61,6 +59,18 @@ namespace ARKitStream
             commandBuffer.Blit(null, positionTexture, convertMat, 1);
 
             Graphics.ExecuteCommandBuffer(commandBuffer);
+
+            if (args.displayMatrix.HasValue)
+            {
+                SetEffectTransform(args.displayMatrix.Value);
+            }
+
+        }
+
+        void SetEffectTransform(Matrix4x4 mtx)
+        {
+            // visualEffect.transform.localScale = mtx.lossyScale;
+            // visualEffect.transform.localRotation = mtx.rotation;
         }
 
     }
