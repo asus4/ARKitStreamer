@@ -3,6 +3,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
 using Unity.Mathematics;
+using Unity.Collections;
+using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
 {
@@ -34,7 +36,28 @@ namespace ARKitStream.Internal
             // public static int DataSize => sizeof(long) + Marshal.SizeOf(typeof(Matrix4x4)) * 2;
         }
 
+        [Serializable]
+        public class FaceMesh
+        {
+            public uint2 id;
+            public float3[] vertices;
+            public float3[] normals;
+            public int[] indices;
+            public float2[] uvs;
+        }
+
+        [Serializable]
+        public class FaceInfo
+        {
+            public XRFace[] added;
+            public XRFace[] updated;
+            public XRFace[] removed;
+            public FaceMesh[] meshes;
+        }
+
         public CameraFrameEvent cameraFrame;
+        public FaceInfo face;
+
 
         static readonly BinaryFormatter formatter = new BinaryFormatter();
         static readonly MemoryStream stream = new MemoryStream();

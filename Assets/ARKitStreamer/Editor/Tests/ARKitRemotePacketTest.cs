@@ -27,6 +27,7 @@ namespace ARKitStream.Internal
         [Test]
         public static void SerializeDeserialize()
         {
+
             var a = new ARKitRemotePacket()
             {
                 cameraFrame = new ARKitRemotePacket.CameraFrameEvent()
@@ -34,7 +35,29 @@ namespace ARKitStream.Internal
                     timestampNs = 123,
                     projectionMatrix = TestUtil.MockMatrix(1),
                     displayMatrix = TestUtil.MockMatrix(17),
-                }
+                },
+                face = new ARKitRemotePacket.FaceInfo()
+                {
+                    added = new ARKitStream.Internal.XRFace[] {
+                        new ARKitStream.Internal.XRFace()
+                    },
+                    updated = new ARKitStream.Internal.XRFace[] {
+
+                    },
+                    removed = new ARKitStream.Internal.XRFace[] {
+
+                    },
+                    meshes = new ARKitRemotePacket.FaceMesh[]
+                    {
+                        new ARKitRemotePacket.FaceMesh()
+                        {
+                            vertices = TestUtil.MockFloat3Array(10, 0),
+                            normals = TestUtil.MockFloat3Array(10, 1),
+                            indices = TestUtil.MockIntArray(10, 2),
+                            uvs = TestUtil.MockFloat2Array(10, 3),
+                       }
+                    }
+                },
             };
             var data = a.Serialize();
             var b = ARKitRemotePacket.Deserialize(data);

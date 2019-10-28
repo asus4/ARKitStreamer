@@ -60,13 +60,14 @@ namespace ARKitStream.Internal
 
             public override bool TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor)
             {
-                if (ARKitReceiver.Instance == null)
+                var recevier = ARKitReceiver.Instance;
+                if (recevier == null)
                 {
                     humanStencilDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 
-                var tex = ARKitReceiver.Instance.StencilTexture;
+                var tex = recevier.StencilTexture;
                 if (tex == null)
                 {
                     humanStencilDescriptor = default(XRTextureDescriptor);
