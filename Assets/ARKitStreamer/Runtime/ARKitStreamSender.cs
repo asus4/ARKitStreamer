@@ -129,7 +129,6 @@ namespace ARKitStream
             commandBuffer.Blit(null, renderTexture, bufferMaterial);
             Graphics.ExecuteCommandBuffer(commandBuffer);
             commandBuffer.Clear();
-            //Graphics.Blit(null, renderTexture, bufferMaterial);
         }
 
         void ShowTextureInfo(ref ARCameraFrameEventArgs args)

@@ -9,10 +9,13 @@ EditorBuildSettings:
     path: Assets/Samples/Index.unity
     guid: 0cbd4564ffbc64826858b3dd98a9e035
   - enabled: 1
-    path: Assets/Samples/Sender.unity
+    path: Assets/Samples/Sender Segmentation.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Samples/Receiver.unity
+    path: Assets/Samples/Sender Face.unity
+    guid: ed16ddbdc5f2949688ca556dba44d651
+  - enabled: 1
+    path: Assets/Samples/Receiver Simple.unity
     guid: 8abd9ee58ae2144829992009fb59699a
   - enabled: 1
     path: Assets/Samples/Receiver VFX.unity
