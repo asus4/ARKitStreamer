@@ -41,10 +41,6 @@ namespace ARKitStream.Internal
 #endif // UNITY_EDITOR
         }
 
-        // 
-        // Hack TextureDescriptor can not change from cs.
-
-
         class ARKitProvider : XRHumanBodySubsystem.Provider
         {
             public override TrackableChanges<XRHumanBody> GetChanges(XRHumanBody defaultHumanBody, Unity.Collections.Allocator allocator)
@@ -64,13 +60,13 @@ namespace ARKitStream.Internal
 
             public override bool TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor)
             {
-                if (ARKitStreamReceiver.Instance == null)
+                if (ARKitReceiver.Instance == null)
                 {
                     humanStencilDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 
-                var tex = ARKitStreamReceiver.Instance.StencilTexture;
+                var tex = ARKitReceiver.Instance.StencilTexture;
                 if (tex == null)
                 {
                     humanStencilDescriptor = default(XRTextureDescriptor);
@@ -83,13 +79,14 @@ namespace ARKitStream.Internal
 
             public override bool TryGetHumanDepth(out XRTextureDescriptor humanDepthDescriptor)
             {
-                if (ARKitStreamReceiver.Instance == null)
+                var receiver = ARKitReceiver.Instance;
+                if (receiver == null)
                 {
                     humanDepthDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 
-                var tex = ARKitStreamReceiver.Instance.DepthTexture;
+                var tex = receiver.DepthTexture;
                 if (tex == null)
                 {
                     humanDepthDescriptor = default(XRTextureDescriptor);
@@ -102,3 +99,4 @@ namespace ARKitStream.Internal
         }
     }
 }
+

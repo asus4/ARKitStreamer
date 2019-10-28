@@ -1,10 +1,9 @@
-﻿// using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Experimental.Rendering;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using Klak.Ndi;
@@ -14,7 +13,7 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
-    public class ARKitStreamSender : MonoBehaviour
+    public sealed class ARKitSender : MonoBehaviour
     {
         public class ARKitService : WebSocketBehavior
         {
@@ -39,15 +38,11 @@ namespace ARKitStream
         }
 
         [SerializeField] ARCameraManager cameraManager = null;
-        [SerializeField] ARHumanBodyManager humanBodyManager = null;
-        [SerializeField] Material previewMaterial = null;
         [SerializeField] RawImage debugImage = null;
         [SerializeField] uint port = 8888;
 
-        static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
-        static readonly int _textureDepth = Shader.PropertyToID("_textureDepth");
-
-        static readonly int k_DisplayTransformId = Shader.PropertyToID("_UnityDisplayTransform");
+        internal event Action<ARKitRemotePacket> PacketTransformer;
+        internal event Action<Material> NdiTransformer;
 
         Material bufferMaterial;
         RenderTexture renderTexture;
@@ -83,12 +78,6 @@ namespace ARKitStream
 
         void OnCameraFarameReceived(ARCameraFrameEventArgs args)
         {
-            var subsystem = humanBodyManager.subsystem;
-            if (subsystem == null)
-            {
-                // ARKit is not supported on this device
-                return;
-            }
 
             if (service != null)
             {
@@ -101,13 +90,13 @@ namespace ARKitStream
                         displayMatrix = args.displayMatrix.Value
                     }
                 };
+                if (PacketTransformer != null)
+                {
+                    PacketTransformer(packet);
+                }
                 service.ExternalSend(packet.Serialize());
             }
 
-            // ShowTextureInfo(ref args);
-
-            previewMaterial.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
-            previewMaterial.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
 
 
             if (renderTexture == null)
@@ -123,33 +112,21 @@ namespace ARKitStream
             {
                 bufferMaterial.SetTexture(args.propertyNameIds[i], args.textures[i]);
             }
-            bufferMaterial.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
-            bufferMaterial.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
+
+            if (NdiTransformer != null)
+            {
+                NdiTransformer(bufferMaterial);
+            }
 
             commandBuffer.Blit(null, renderTexture, bufferMaterial);
             Graphics.ExecuteCommandBuffer(commandBuffer);
             commandBuffer.Clear();
         }
 
-        void ShowTextureInfo(ref ARCameraFrameEventArgs args)
-        {
-            var sb = new System.Text.StringBuilder();
-            foreach (var t in args.textures)
-            {
-                sb.AppendFormat("Texture {0}: ({1} , {2}) format: {3}\n", t.name, t.width, t.height, t.format);
-            }
-            var tex = humanBodyManager.humanStencilTexture;
-            sb.AppendFormat("Stencil {0}: ({1} , {2}) format: {3}\n", tex.name, tex.width, tex.height, tex.format);
-            tex = humanBodyManager.humanDepthTexture;
-            sb.AppendFormat("Depth {0}: ({1} , {2}) format: {3}\n", tex.name, tex.width, tex.height, tex.format);
-
-            Debug.Log(sb);
-        }
-
         void InitNDI(int width, int height)
         {
             renderTexture = new RenderTexture(width, height * 2, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-            var name = string.Format("ARKit Stream {0:0000}", Random.Range(100, 9999));
+            var name = string.Format("ARKit Stream {0:0000}", UnityEngine.Random.Range(100, 9999));
             var go = new GameObject(name);
             go.transform.SetParent(transform, false);
             ndiSender = go.AddComponent<NdiSender>();
@@ -157,7 +134,11 @@ namespace ARKitStream
             ndiSender.sourceTexture = renderTexture;
             ndiSender.alphaSupport = false;
 
-            debugImage.texture = renderTexture;
+            if (debugImage != null)
+            {
+                debugImage.texture = renderTexture;
+
+            }
         }
 
     }

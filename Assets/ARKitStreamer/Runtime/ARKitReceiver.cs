@@ -12,7 +12,7 @@ namespace ARKitStream
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NdiReceiver))]
-    public class ARKitStreamReceiver : MonoBehaviour
+    public sealed class ARKitReceiver : MonoBehaviour
     {
         [SerializeField] string ipAddress = "";
         [SerializeField] uint port = 8888;
@@ -36,6 +36,7 @@ namespace ARKitStream
         public Texture2D CbCrTexture => texture2Ds == null ? null : texture2Ds[1];
         public Texture2D StencilTexture => texture2Ds == null ? null : texture2Ds[2];
         public Texture2D DepthTexture => texture2Ds == null ? null : texture2Ds[3];
+
         public ARKitRemotePacket.CameraFrameEvent CameraFrame
         {
             get
@@ -51,7 +52,7 @@ namespace ARKitStream
             }
         }
 
-        public static ARKitStreamReceiver Instance { get; private set; } = null;
+        public static ARKitReceiver Instance { get; private set; } = null;
 
         void Awake()
         {
@@ -138,14 +139,13 @@ namespace ARKitStream
             {
                 commandBuffer.Blit(rt, renderTextures[i], bufferMaterial, i);
             }
-
             Graphics.ExecuteCommandBuffer(commandBuffer);
 
+            // RenderTexture -> Texture2D
             for (int i = 0; i < renderTextures.Length; i++)
             {
                 Graphics.CopyTexture(renderTextures[i], texture2Ds[i]);
             }
-
         }
 
         void OnGUI()

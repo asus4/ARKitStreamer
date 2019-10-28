@@ -94,7 +94,7 @@ namespace ARKitStream.Internal
 
             public override bool TryGetFrame(XRCameraParams cameraParams, out XRCameraFrame cameraFrame)
             {
-                var remote = ARKitStreamReceiver.Instance;
+                var remote = ARKitReceiver.Instance;
                 if (remote == null)
                 {
                     cameraFrame = default(XRCameraFrame);
@@ -102,7 +102,7 @@ namespace ARKitStream.Internal
                 }
 
 
-                var remoteFrame = ARKitStreamReceiver.Instance.CameraFrame;
+                var remoteFrame = ARKitReceiver.Instance.CameraFrame;
                 if (remoteFrame.timestampNs == default(long))
                 {
                     cameraFrame = default(XRCameraFrame);
@@ -134,7 +134,7 @@ namespace ARKitStream.Internal
 
             public override NativeArray<XRTextureDescriptor> GetTextureDescriptors(XRTextureDescriptor defaultDescriptor, Allocator allocator)
             {
-                var remote = ARKitStreamReceiver.Instance;
+                var remote = ARKitReceiver.Instance;
                 if (remote == null)
                 {
                     return new NativeArray<XRTextureDescriptor>(0, allocator);

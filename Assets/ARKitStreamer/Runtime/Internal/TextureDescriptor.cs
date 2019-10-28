@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Scripting;
 using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
