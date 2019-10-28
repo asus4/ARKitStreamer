@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -21,6 +22,18 @@ namespace ARKitStream
         static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
         static readonly int _texutreDepth = Shader.PropertyToID("_texutreDepth");
         static readonly int _UnityDisplayTransform = Shader.PropertyToID("_UnityDisplayTransform");
+
+        void Awake()
+        {
+            // Check supported render texture format
+            var sb = new System.Text.StringBuilder();
+            foreach (RenderTextureFormat format in Enum.GetValues(typeof(RenderTextureFormat)))
+            {
+                bool support = SystemInfo.SupportsRenderTextureFormat(format);
+                sb.AppendLine($"{format}: {support}");
+            }
+            Debug.Log(sb);
+        }
 
         void OnEnable()
         {
@@ -48,7 +61,13 @@ namespace ARKitStream
         {
             commandBuffer.Clear();
 
-            for (int i = 0; i < args.textures.Count; i++)
+            int length = args.textures.Count;
+            if (length <= 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < length; i++)
             {
                 convertMat.SetTexture(args.propertyNameIds[i], args.textures[i]);
             }
@@ -70,7 +89,6 @@ namespace ARKitStream
             {
                 // TODO calc matrix
                 var planes = args.projectionMatrix.Value.decomposeProjection;
-
 
                 var tex = args.textures[0];
                 float aspect = (float)tex.width / tex.height;
