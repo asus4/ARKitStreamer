@@ -52,6 +52,21 @@ namespace ARKitStream
             }
         }
 
+        public ARKitRemotePacket.FaceInfo Face
+        {
+            get
+            {
+                lock (packetLock)
+                {
+                    if (packet != null)
+                    {
+                        return packet.face;
+                    }
+                    return null;
+                }
+            }
+        }
+
         public static ARKitReceiver Instance { get; private set; } = null;
 
         void Awake()

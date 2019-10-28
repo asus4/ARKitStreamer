@@ -39,11 +39,16 @@ namespace ARKitStream.Internal
         [Serializable]
         public class FaceMesh
         {
-            public uint2 id;
+            public TrackableId id;
             public float3[] vertices;
             public float3[] normals;
             public int[] indices;
             public float2[] uvs;
+
+            public override string ToString()
+            {
+                return $"Mesh {id} verts: {vertices.Length} tris: {indices.Length}";
+            }
         }
 
         [Serializable]
@@ -51,8 +56,31 @@ namespace ARKitStream.Internal
         {
             public XRFace[] added;
             public XRFace[] updated;
-            public XRFace[] removed;
+            public TrackableId[] removed;
             public FaceMesh[] meshes;
+
+            public override string ToString()
+            {
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine("FaceInfo");
+                foreach (var f in added)
+                {
+                    sb.AppendLine($"ADD: {f}");
+                }
+                foreach (var f in updated)
+                {
+                    sb.AppendLine($"UPDATE: {f}");
+                }
+                foreach (var f in removed)
+                {
+                    sb.AppendLine($"REMOVE: {f}");
+                }
+                foreach (var m in meshes)
+                {
+                    sb.AppendLine($"MESHED: {m}");
+                }
+                return sb.ToString();
+            }
         }
 
         public CameraFrameEvent cameraFrame;

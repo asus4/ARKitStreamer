@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using NUnit.Framework;
+using Unity.Mathematics;
+using UnityEngine.XR.ARSubsystems;
 
 
 namespace ARKitStream.Internal
@@ -38,14 +41,36 @@ namespace ARKitStream.Internal
                 },
                 face = new ARKitRemotePacket.FaceInfo()
                 {
-                    added = new ARKitStream.Internal.XRFace[] {
+                    added = new ARKitStream.Internal.XRFace[]
+                    {
                         new ARKitStream.Internal.XRFace()
+                        {
+                            trackableId = new TrackableId(5, 8),
+                            pose = TestUtil.MockPose(2),
+                            trackingState = TrackingState.Tracking,
+                            nativePtr = new IntPtr(10),
+                            leftEyePose = TestUtil.MockPose(11),
+                            rightEyePose = TestUtil.MockPose(19),
+                            fixationPoint = new float3(27, 28, 29),
+                        }
                     },
-                    updated = new ARKitStream.Internal.XRFace[] {
-
+                    updated = new ARKitStream.Internal.XRFace[]
+                    {
+                        new ARKitStream.Internal.XRFace()
+                        {
+                            trackableId = new TrackableId(0, 1),
+                            pose = TestUtil.MockPose(2),
+                            trackingState = TrackingState.Tracking,
+                            nativePtr = new IntPtr(10),
+                            leftEyePose = TestUtil.MockPose(11),
+                            rightEyePose = TestUtil.MockPose(19),
+                            fixationPoint = new float3(27, 28, 29),
+                        }
                     },
-                    removed = new ARKitStream.Internal.XRFace[] {
-
+                    removed = new TrackableId[]
+                    {
+                        new TrackableId(1, 2),
+                        new TrackableId(3, 4),
                     },
                     meshes = new ARKitRemotePacket.FaceMesh[]
                     {
@@ -66,20 +91,6 @@ namespace ARKitStream.Internal
 
             Debug.Log("binary size is : " + data.Length);
 
-            var c = new ARKitRemotePacket()
-            {
-                cameraFrame = new ARKitRemotePacket.CameraFrameEvent()
-                {
-                    timestampNs = 123,
-                    projectionMatrix = TestUtil.MockMatrix(1),
-                    displayMatrix = TestUtil.MockMatrix(17),
-                }
-            };
-
-            var data2 = a.Serialize();
-            var d = ARKitRemotePacket.Deserialize(data2);
-
-            Assert.AreEqual(c.cameraFrame, d.cameraFrame);
 
         }
     }

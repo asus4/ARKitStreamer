@@ -12,11 +12,11 @@ namespace ARKitStream.Internal
     public class XRFaceTest
     {
         [Test]
-        public static void XRFaceImplicitTest()
+        public static void ImplicitTest()
         {
             XRFaceA a = new XRFaceA()
             {
-                trackableId = new TrackableId(1, 2),
+                trackableId = new TrackableId(ulong.MaxValue - 1000, ulong.MaxValue / 4),
                 pose = TestUtil.MockPose(3),
                 trackingState = TrackingState.Tracking,
                 nativePtr = new IntPtr(8),
@@ -27,11 +27,18 @@ namespace ARKitStream.Internal
 
             XRFaceB b = a;
 
-            Debug.Log(b);
+
+
+            Assert.AreEqual(a.trackableId.subId1, b.trackableId.subId1);
+            Assert.AreEqual(a.trackableId.subId2, b.trackableId.subId2);
 
             XRFaceA c = b;
 
             Assert.AreEqual(a, c);
+
+            Debug.Log($"A: {a}");
+            Debug.Log($"C: {c}");
+
         }
     }
 }

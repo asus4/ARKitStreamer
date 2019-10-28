@@ -34,12 +34,12 @@ namespace ARKitStream.Internal
         {
             var sb = new System.Text.StringBuilder();
             sb.Append($"[XRFace] id: {trackableId} ");
-            sb.Append($"pose: {pose} ");
+            // sb.Append($"pose: {pose} ");
             sb.Append($"state: {trackingState} ");
-            sb.Append($"ptr: {nativePtr} ");
-            sb.Append($"left: {leftEyePose} ");
-            sb.Append($"right: {rightEyePose} ");
-            sb.Append($"fixa: {fixationPoint} ");
+            // sb.Append($"ptr: {nativePtr} ");
+            // sb.Append($"left: {leftEyePose} ");
+            // sb.Append($"right: {rightEyePose} ");
+            // sb.Append($"fixa: {fixationPoint} ");
 
             return sb.ToString();
         }
