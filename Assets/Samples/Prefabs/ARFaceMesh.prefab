@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4813895432214198898}
   - component: {fileID: 4813895432214198896}
   - component: {fileID: 4813895432214198897}
-  - component: {fileID: 5149590646110728064}
   m_Layer: 0
   m_Name: ARFaceMesh
   m_TagString: Untagged
@@ -104,17 +103,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4aab259b5c35443f9b1d0c15e2ad434, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5149590646110728064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4813895432214198899}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54e565809ad34444abe953d651731c18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

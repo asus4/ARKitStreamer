@@ -45,7 +45,7 @@ namespace ARKitStream.Internal
             var arr1 = new NativeArray<T>(arr, Allocator.Temp);
             var bytes = arr1.ToRawBytes();
 
-            Assert.AreEqual(bytes.Length, arr.Length * UnsafeUtility.SizeOf(typeof(T)));
+            Assert.AreEqual(bytes.Length, arr.Length * UnsafeUtility.SizeOf<T>());
 
             var arr2 = new NativeArray<T>(arr.Length, Allocator.Temp);
             arr2.CopyFromRawBytes(bytes);

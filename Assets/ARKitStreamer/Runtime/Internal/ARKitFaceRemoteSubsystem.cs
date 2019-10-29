@@ -121,28 +121,16 @@ namespace ARKitStream.Internal
 
 
                 XRFaceMesh.Attributes attr = XRFaceMesh.Attributes.UVs;
-                faceMesh.Resize(remoteMesh.vertices.Length / UnsafeUtility.SizeOf(typeof(Vector3)),
+                faceMesh.Resize(remoteMesh.vertices.Length / UnsafeUtility.SizeOf<Vector3>(),
                                 remoteMesh.indices.Length / sizeof(int) / 3, // count of triangles
                                 attr, allocator);
 
-                Debug.Log($"GetFaceMesh; {allocator}");
+                // Debug.Log($"GetFaceMesh; {allocator}");
                 // Debug.Log($"nativearray: vert:{faceMesh.vertices.Length} idx:{faceMesh.indices.Length}, uvs:{faceMesh.uvs.Length}");
 
-                // faceMesh.vertices.CopyFrom(remoteMesh.vertices.Select(v => (Vector3)v).ToArray());
-                // faceMesh.indices.CopyFrom(remoteMesh.indices.Select(i => i).ToArray());
-                // faceMesh.uvs.CopyFrom(remoteMesh.uvs.Select(uv => (Vector2)uv).ToArray());
                 faceMesh.vertices.CopyFromRawBytes(remoteMesh.vertices);
                 faceMesh.indices.CopyFromRawBytes(remoteMesh.indices);
                 faceMesh.uvs.CopyFromRawBytes(remoteMesh.uvs);
-
-
-                // Show values
-                var sb = new System.Text.StringBuilder();
-                foreach (var v in faceMesh.vertices.Take(20))
-                {
-                    sb.AppendFormat("({0:0.0000},{1:0.0000},{2:0.0000}), ", v.x, v.y, v.z);
-                }
-                Debug.Log(sb.ToString());
             }
         }
     }

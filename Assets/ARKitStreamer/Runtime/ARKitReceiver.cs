@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 using Klak.Ndi;
 using WebSocketSharp;
 using ARKitStream.Internal;
@@ -36,6 +36,21 @@ namespace ARKitStream
         public Texture2D CbCrTexture => texture2Ds == null ? null : texture2Ds[1];
         public Texture2D StencilTexture => texture2Ds == null ? null : texture2Ds[2];
         public Texture2D DepthTexture => texture2Ds == null ? null : texture2Ds[3];
+
+        public TrackingState trackingState
+        {
+            get
+            {
+                lock (packetLock)
+                {
+                    if (texture2Ds != null && packet != null)
+                    {
+                        return TrackingState.Tracking;
+                    }
+                    return TrackingState.None;
+                }
+            }
+        }
 
         public ARKitRemotePacket.CameraFrameEvent CameraFrame
         {
