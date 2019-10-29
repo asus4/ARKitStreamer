@@ -47,7 +47,7 @@ namespace ARKitStream.Internal
 
             public override string ToString()
             {
-                return $"Mesh {id} verts: {vertices.Length} tris: {indices.Length}";
+                return $"Mesh {id} verts: {vertices.Length} norms: {normals.Length} indices: {indices.Length} uvs: {uvs.Length}";
             }
         }
 

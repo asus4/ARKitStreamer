@@ -62,7 +62,6 @@ namespace ARKitStream.Internal
                     return new TrackableChanges<UnityXRFace>();
                 }
                 // Debug.Log($"GetChanges: {face}");
-                Debug.Log("GetChanges");
 
                 var added = face.added.Select(f => (UnityXRFace)f).ToList();
                 var updated = face.updated.Select(f => (UnityXRFace)f).ToList();
@@ -86,7 +85,8 @@ namespace ARKitStream.Internal
                     if (!ids.Contains(f.trackableId))
                     {
                         updated.Remove(f);
-                        added.Append(f);
+                        added.Add(f);
+                        ids.Add(f.trackableId);
                     }
                 }
                 foreach (var id in removed.ToArray())
@@ -109,39 +109,41 @@ namespace ARKitStream.Internal
                 return TrackableChanges<UnityXRFace>.CopyFrom(nativeAdded, nativeUpdated, nativeRemoved, allocator);
             }
 
-            public override void GetFaceMesh(UnityEngine.XR.ARSubsystems.TrackableId faceId, Allocator allocator, ref XRFaceMesh faceMesh)
+            public override void GetFaceMesh(UnityTrackableId faceId, Allocator allocator, ref XRFaceMesh faceMesh)
             {
-                Debug.Log("GetFaceMesh");
 
                 var face = ARKitReceiver.Instance?.Face;
-                var mesh = face.meshes.FirstOrDefault(m => (UnityEngine.XR.ARSubsystems.TrackableId)m.id == faceId);
+                var mesh = face.meshes.FirstOrDefault(m => (UnityTrackableId)m.id == faceId);
                 if (mesh == null)
                 {
                     Debug.LogWarning($"Mesh ID:{faceId} not found");
                     return;
                 }
 
-                XRFaceMesh.Attributes attributes = XRFaceMesh.Attributes.Normals | XRFaceMesh.Attributes.UVs;
+                // XRFaceMesh.Attributes attributes = XRFaceMesh.Attributes.Normals | XRFaceMesh.Attributes.UVs;
+                XRFaceMesh.Attributes attributes =  XRFaceMesh.Attributes.UVs;
 
                 faceMesh.Resize(mesh.vertices.Length, mesh.indices.Length, attributes, allocator);
 
+                Debug.Log($"GetFaceMesh; {mesh}");
+
                 var vertices = faceMesh.vertices;
-                for (int i = 0; i < vertices.Length; i++)
+                for (int i = 0; i < mesh.vertices.Length; i++)
                 {
                     vertices[i] = mesh.vertices[i];
                 }
                 var normals = faceMesh.normals;
-                for (int i = 0; i < normals.Length; i++)
+                for (int i = 0; i < mesh.normals.Length; i++)
                 {
                     normals[i] = mesh.normals[i];
                 }
                 var indices = faceMesh.indices;
-                for (int i = 0; i < indices.Length; i++)
+                for (int i = 0; i < mesh.indices.Length; i++)
                 {
                     indices[i] = mesh.indices[i];
                 }
                 var uvs = faceMesh.uvs;
-                for (int i = 0; i < uvs.Length; i++)
+                for (int i = 0; i < mesh.uvs.Length; i++)
                 {
                     uvs[i] = mesh.uvs[i];
                 }
