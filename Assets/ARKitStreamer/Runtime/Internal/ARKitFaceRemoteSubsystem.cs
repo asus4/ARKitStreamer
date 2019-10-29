@@ -113,41 +113,33 @@ namespace ARKitStream.Internal
             {
 
                 var face = ARKitReceiver.Instance?.Face;
-                var mesh = face.meshes.FirstOrDefault(m => (UnityTrackableId)m.id == faceId);
-                if (mesh == null)
+                var remoteMesh = face.meshes.FirstOrDefault(m => (UnityTrackableId)m.id == faceId);
+                if (remoteMesh == null)
                 {
                     Debug.LogWarning($"Mesh ID:{faceId} not found");
                     return;
                 }
 
-                // XRFaceMesh.Attributes attributes = XRFaceMesh.Attributes.Normals | XRFaceMesh.Attributes.UVs;
-                XRFaceMesh.Attributes attributes =  XRFaceMesh.Attributes.UVs;
+              
+                XRFaceMesh.Attributes attr = XRFaceMesh.Attributes.UVs;
+                faceMesh.Resize(remoteMesh.vertices.Length,
+                                remoteMesh.indices.Length / 3, // count of triangles
+                                attr, allocator);
 
-                faceMesh.Resize(mesh.vertices.Length, mesh.indices.Length, attributes, allocator);
+                Debug.Log($"GetFaceMesh; {allocator}");
+                // Debug.Log($"nativearray: vert:{faceMesh.vertices.Length} idx:{faceMesh.indices.Length}, uvs:{faceMesh.uvs.Length}");
 
-                Debug.Log($"GetFaceMesh; {mesh}");
+                faceMesh.vertices.CopyFrom(remoteMesh.vertices.Select(v => (Vector3)v).ToArray());
+                faceMesh.indices.CopyFrom(remoteMesh.indices.Select(i => i).ToArray());
+                faceMesh.uvs.CopyFrom(remoteMesh.uvs.Select(uv => (Vector2)uv).ToArray());
 
-                var vertices = faceMesh.vertices;
-                for (int i = 0; i < mesh.vertices.Length; i++)
+                // Show values
+                var sb = new System.Text.StringBuilder();
+                foreach (var v in faceMesh.vertices.Take(20))
                 {
-                    vertices[i] = mesh.vertices[i];
+                    sb.AppendFormat("({0:0.0000},{1:0.0000},{2:0.0000}), ", v.x, v.y, v.z);
                 }
-                var normals = faceMesh.normals;
-                for (int i = 0; i < mesh.normals.Length; i++)
-                {
-                    normals[i] = mesh.normals[i];
-                }
-                var indices = faceMesh.indices;
-                for (int i = 0; i < mesh.indices.Length; i++)
-                {
-                    indices[i] = mesh.indices[i];
-                }
-                var uvs = faceMesh.uvs;
-                for (int i = 0; i < mesh.uvs.Length; i++)
-                {
-                    uvs[i] = mesh.uvs[i];
-                }
-
+                Debug.Log(sb.ToString());
             }
         }
     }
