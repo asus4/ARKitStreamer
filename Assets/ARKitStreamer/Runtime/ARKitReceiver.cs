@@ -82,6 +82,21 @@ namespace ARKitStream
             }
         }
 
+        public UnityEngine.Pose TrackedPose
+        {
+            get
+            {
+                lock (packetLock)
+                {
+                    if (packet != null)
+                    {
+                        return packet.trackedPose;
+                    }
+                    return default(UnityEngine.Pose);
+                }
+            }
+        }
+
         public static ARKitReceiver Instance { get; private set; } = null;
 
         void Awake()
@@ -118,6 +133,8 @@ namespace ARKitStream
             };
             client.OnMessage += OnWebsocketMessage;
             client.ConnectAsync();
+
+            SetupTrackedPose();
         }
 
         void OnDestroy()
@@ -259,6 +276,21 @@ namespace ARKitStream
                 Debug.LogWarning(ex);
             }
 
+        }
+
+        void SetupTrackedPose()
+        {
+            var driver = FindObjectOfType<UnityEngine.SpatialTracking.TrackedPoseDriver>();
+            if (driver == null)
+            {
+                return;
+            }
+            var provider = GetComponent<ARKitRemotePoseProvider>();
+            if (provider == null)
+            {
+                provider = gameObject.AddComponent<ARKitRemotePoseProvider>();
+            }
+            driver.poseProviderComponent = provider;
         }
     }
 }

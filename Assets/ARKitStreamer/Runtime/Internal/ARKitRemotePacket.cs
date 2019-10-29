@@ -40,7 +40,7 @@ namespace ARKitStream.Internal
         public class FaceMesh
         {
             public TrackableId id;
-            public  byte[] vertices; // NativeArray<Vector3>
+            public byte[] vertices; // NativeArray<Vector3>
             public byte[] normals; // NativeArray<Vector3>
             public byte[] indices; // NativeArray<int>
             public byte[] uvs; // NativeArray<Vector2>
@@ -85,6 +85,7 @@ namespace ARKitStream.Internal
 
         public CameraFrameEvent cameraFrame;
         public FaceInfo face;
+        public Pose trackedPose;
 
 
         static readonly BinaryFormatter formatter = new BinaryFormatter();

@@ -64,6 +64,7 @@ namespace ARKitStream
                 this.service = behaviour;
             });
             server.Start();
+
         }
 
         void OnDestroy()

@@ -699,6 +699,7 @@ GameObject:
   - component: {fileID: 2014463253}
   - component: {fileID: 2014463254}
   - component: {fileID: 2014463252}
+  - component: {fileID: 2014463255}
   m_Layer: 0
   m_Name: Sender
   m_TagString: Untagged
@@ -748,3 +749,16 @@ MonoBehaviour:
   cameraManager: {fileID: 906813953}
   debugImage: {fileID: 1995634016}
   port: 8888
+--- !u!114 &2014463255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014463251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b64729b99ac4baf8732a0a7ff9bf4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  driver: {fileID: 906813954}
