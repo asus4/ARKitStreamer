@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-
 using Unity.Jobs;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -120,18 +119,22 @@ namespace ARKitStream.Internal
                     return;
                 }
 
-              
+
                 XRFaceMesh.Attributes attr = XRFaceMesh.Attributes.UVs;
-                faceMesh.Resize(remoteMesh.vertices.Length,
-                                remoteMesh.indices.Length / 3, // count of triangles
+                faceMesh.Resize(remoteMesh.vertices.Length / UnsafeUtility.SizeOf(typeof(Vector3)),
+                                remoteMesh.indices.Length / sizeof(int) / 3, // count of triangles
                                 attr, allocator);
 
                 Debug.Log($"GetFaceMesh; {allocator}");
                 // Debug.Log($"nativearray: vert:{faceMesh.vertices.Length} idx:{faceMesh.indices.Length}, uvs:{faceMesh.uvs.Length}");
 
-                faceMesh.vertices.CopyFrom(remoteMesh.vertices.Select(v => (Vector3)v).ToArray());
-                faceMesh.indices.CopyFrom(remoteMesh.indices.Select(i => i).ToArray());
-                faceMesh.uvs.CopyFrom(remoteMesh.uvs.Select(uv => (Vector2)uv).ToArray());
+                // faceMesh.vertices.CopyFrom(remoteMesh.vertices.Select(v => (Vector3)v).ToArray());
+                // faceMesh.indices.CopyFrom(remoteMesh.indices.Select(i => i).ToArray());
+                // faceMesh.uvs.CopyFrom(remoteMesh.uvs.Select(uv => (Vector2)uv).ToArray());
+                faceMesh.vertices.CopyFromRawBytes(remoteMesh.vertices);
+                faceMesh.indices.CopyFromRawBytes(remoteMesh.indices);
+                faceMesh.uvs.CopyFromRawBytes(remoteMesh.uvs);
+
 
                 // Show values
                 var sb = new System.Text.StringBuilder();

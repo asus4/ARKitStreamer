@@ -40,10 +40,15 @@ namespace ARKitStream.Internal
         public class FaceMesh
         {
             public TrackableId id;
-            public float3[] vertices;
-            public float3[] normals;
-            public int[] indices;
-            public float2[] uvs;
+            // public float3[] vertices;
+            public  byte[] vertices; // NativeArray<Vector3>
+            // public float3[] normals;
+            public byte[] normals; // NativeArray<Vector3>
+            // public int[] indices;
+            public byte[] indices; // NativeArray<int>
+            // public float2[] uvs;
+            public byte[] uvs; // NativeArray<Vector2>
+            
 
             public override string ToString()
             {

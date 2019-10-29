@@ -76,10 +76,15 @@ namespace ARKitStream.Internal
                     {
                         new ARKitRemotePacket.FaceMesh()
                         {
-                            vertices = TestUtil.MockFloat3Array(10, 0),
-                            normals = TestUtil.MockFloat3Array(10, 1),
-                            indices = TestUtil.MockIntArray(10, 2),
-                            uvs = TestUtil.MockFloat2Array(10, 3),
+                            id= new TrackableId(5, 6),
+                            // vertices = TestUtil.MockFloat3Array(10, 0),
+                            // normals = TestUtil.MockFloat3Array(10, 1),
+                            // indices = TestUtil.MockIntArray(10, 2),
+                            // uvs = TestUtil.MockFloat2Array(10, 3),
+                            vertices = new byte[] {7, 8, 9},
+                            normals = new byte[] {10, 11, 12},
+                            indices = new byte[] {13, 14, 15},
+                            uvs = new byte[] {16, 17, 18},
                        }
                     }
                 },

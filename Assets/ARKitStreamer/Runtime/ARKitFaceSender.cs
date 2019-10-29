@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using Unity.Mathematics;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+
 using ARKitStream.Internal;
 using Pose = ARKitStream.Internal.Pose;
 using XRFace = ARKitStream.Internal.XRFace;
@@ -84,11 +87,17 @@ namespace ARKitStream
             return new ARKitRemotePacket.FaceMesh()
             {
                 id = face.trackableId,
-                vertices = face.vertices.Select(v => (float3)v).ToArray(),
-                normals = face.normals.Select(n => (float3)n).ToArray(),
-                indices = face.indices.ToArray(),
-                uvs = face.uvs.Select(uv => (float2)uv).ToArray()
+                // vertices = face.vertices.Select(v => (float3)v).ToArray(),
+                // normals = face.normals.Select(n => (float3)n).ToArray(),
+                // indices = face.indices.ToArray(),
+                // uvs = face.uvs.Select(uv => (float2)uv).ToArray()
+                vertices = face.vertices.ToRawBytes(),
+                normals = face.normals.ToRawBytes(),
+                indices = face.indices.ToRawBytes(),
+                uvs = face.uvs.ToRawBytes(),
             };
         }
+
+       
     }
 }
