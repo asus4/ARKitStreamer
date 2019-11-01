@@ -185,7 +185,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 20748922}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: f96b70a27e52a4038b0980f15012a629, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 8bb92e33f3f98415aa88e0c1175dbfa2, type: 3}
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
   m_PropertySheet:
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cadade9d79e66642a6893ac902ddf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceName: IBUXS (ARKit Stream 7682)
+  _sourceName: IBUXS (ARKit Stream 2187)
   _targetTexture: {fileID: 0}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: 
