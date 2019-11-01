@@ -240,7 +240,6 @@ MonoBehaviour:
   faceManager: {fileID: 1358651962}
   positionTexture: {fileID: 8400000, guid: dfc945684d3b740ada4b45c179bc4f73, type: 2}
   normalTexture: {fileID: 8400000, guid: 76e3b7c00e36d4bc2b2c711391971e38, type: 2}
-  velocityTexture: {fileID: 8400000, guid: de1d0331b8b7941cd9d481cd55a17fe7, type: 2}
   compute: {fileID: 7200000, guid: 8414c8ab19c4e469db69628b5913a21c, type: 3}
 --- !u!1 &906813950
 GameObject:
@@ -543,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cadade9d79e66642a6893ac902ddf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceName: IBUXS (ARKit Stream 2187)
+  _sourceName: IBUXS (ARKit Stream 4167)
   _targetTexture: {fileID: 0}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: 

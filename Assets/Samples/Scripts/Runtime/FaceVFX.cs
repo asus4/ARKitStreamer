@@ -81,7 +81,8 @@ namespace ARKitStream
             compute.SetFloat("FrameRate", 1 / Time.deltaTime);
 
             positionBuffer.SetData(face.vertices);
-            normalBuffer.SetData(face.GetComponent<MeshFilter>().sharedMesh.normals);
+            var mesh = face.GetComponent<MeshFilter>().sharedMesh;
+            normalBuffer.SetData(mesh?.normals);
 
             compute.SetBuffer(0, "PositionBuffer", positionBuffer);
             compute.SetBuffer(0, "NormalBuffer", normalBuffer);
