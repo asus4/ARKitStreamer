@@ -12,9 +12,10 @@ This library supports Unity Package Manager. Open the file `Packages/manifest.js
 ```json
 "dependencies": {
   ...
-  "com.koki-ibukuro.arkitstream": "https://github.com/asus4/ARKitStreamer.git#upm"
+  "com.koki-ibukuro.arkitstream": "https://github.com/asus4/ARKitStreamer.git#upm",
 }
 ```
+
 
 ## How to Use
 
