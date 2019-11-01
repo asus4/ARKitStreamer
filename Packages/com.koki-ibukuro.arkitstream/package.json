@@ -2,15 +2,6 @@
   "name": "com.koki-ibukuro.arkitstream",
   "displayName": "ARKit Stream",
   "author": "Koki Ibukuro",
-  "scopedRegistries": [
-    {
-      "name": "Keijiro",
-      "url": "https://registry.npmjs.com",
-      "scopes": [
-        "jp.keijiro"
-      ]
-    }
-  ],
   "dependencies": {
     "com.unity.mathematics": "1.1.0",
     "com.unity.xr.arfoundation": "3.0.0-preview.4",
@@ -18,7 +9,7 @@
     "com.unity.xr.arkit-face-tracking": "3.0.0-preview.4",
     "com.unity.xr.arsubsystems": "3.0.0-preview.4",
     "com.unity.xr.legacyinputhelpers": "2.0.6",
-    "jp.keijiro.klak.ndi": "0.2.3"
+    "jp.keijiro.klak.ndi": "https://github.com/keijiro/KlakNDI.git:upm"
   },
   "description": "AR foundation devkit",
   "keywords": [
