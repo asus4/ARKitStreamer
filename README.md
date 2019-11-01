@@ -7,15 +7,24 @@ A remote debugging tool for AR Founndation (tested on `3.0.0-preview.3`) with AR
 
 ## Install
 
-This library supports Unity Package Manager. Open the file `Packages/manifest.json` and add following line into dependencies.
+This library supports Unity Package Manager. Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and  `dependencies` section.
 
 ```json
-"dependencies": {
-  ...
-  "com.koki-ibukuro.arkitstream": "https://github.com/asus4/ARKitStreamer.git#upm",
+{
+  "scopedRegistries": [
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [ "jp.keijiro" ]
+    }
+  ],
+  "dependencies": {
+    "jp.keijiro.klak.ndi": "0.2.3",
+    "com.koki-ibukuro.arkitstream": "https://github.com/asus4/ARKitStreamer.git#upm",
+    ...
+  }
 }
 ```
-
 
 ## How to Use
 
