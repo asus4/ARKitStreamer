@@ -1,11 +1,20 @@
 # ARKit Streamer
 
-![img](https://i.imgur.com/vZoYIs1.gif)
-![Imgur](https://imgur.com/tQbJ1Sl.gif)
+![img](https://i.imgur.com/vZoYIs1.gif)  
+![Imgur](https://imgur.com/tQbJ1Sl.gif)  
 
-A remote debugging tool for AR Founndation (tested on `3.0.0-preview.3`) with ARKit3 featrues. 
+A remote debugging tool for AR Founndation (tested on `3.0.0-preview.3`) with ARKit3 featrues.  
 
-https://github.com/asus4/ARKitStreamer
+## Install
+
+This library supports Unity Package Manager. Open the file `Packages/manifest.json` and add following line into dependencies.
+
+```json
+"dependencies": {
+  ...
+  "com.koki-ibukuro.arkitstream": "https://github.com/asus4/ARKitStreamer.git#upm"
+}
+```
 
 ## How to Use
 
