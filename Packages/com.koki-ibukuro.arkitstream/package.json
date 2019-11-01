@@ -1,0 +1,19 @@
+{
+  "name": "com.koki-ibukuro.arkitstream",
+  "displayName": "ARKit Stream",
+  "author": "Koki Ibukuro",
+  "dependencies": {
+    "com.unity.xr.arkit": "3.0.0-preview.4",
+    "com.unity.xr.arkit-face-tracking": "3.0.0-preview.4",
+    "com.unity.xr.arsubsystems": "3.0.0-preview.4"
+  },
+  "description": "AR foundation devkit",
+  "keywords": [
+    "unity"
+  ],
+  "license": "SEE LICENSE IN LICENSE",
+  "unity": "2019.2",
+  "unityRelease": "0f1",
+  "version": "0.1.0",
+  "type": "library"
+}

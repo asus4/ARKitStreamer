@@ -78,8 +78,7 @@ namespace ARKitStream
         }
 
         void OnCameraFarameReceived(ARCameraFrameEventArgs args)
-        {
-
+        {            
             if (service != null)
             {
                 var packet = new ARKitRemotePacket()
@@ -126,6 +125,7 @@ namespace ARKitStream
 
         void InitNDI(int width, int height)
         {
+            Debug.Log("InitNDI");
             renderTexture = new RenderTexture(width, height * 2, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             var name = string.Format("ARKit Stream {0:0000}", UnityEngine.Random.Range(100, 9999));
             var go = new GameObject(name);
