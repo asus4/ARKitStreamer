@@ -5,6 +5,11 @@
 
 A remote debugging tool for AR Founndation (tested on `3.0.0-preview.3`) with ARKit3 featrues.  
 
+## Environments
+
+- Unity 2019.2 or more
+- iPhone X or more
+
 ## Install
 
 This library supports Unity Package Manager. Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and  `dependencies` section.
