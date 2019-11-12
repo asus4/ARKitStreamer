@@ -38,7 +38,6 @@ namespace ARKitStream
         }
 
         [SerializeField] ARCameraManager cameraManager = null;
-        [SerializeField] RawImage debugImage = null;
         [SerializeField] uint port = 8888;
 
         internal event Action<ARKitRemotePacket> PacketTransformer;
@@ -134,12 +133,6 @@ namespace ARKitStream
 
             ndiSender.sourceTexture = renderTexture;
             ndiSender.alphaSupport = false;
-
-            if (debugImage != null)
-            {
-                debugImage.texture = renderTexture;
-
-            }
         }
 
     }

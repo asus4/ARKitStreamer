@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dfef571b8fb64efcaa7e7c911a655f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Assets/Samples/Sender Face.unity
+  sceneName: Assets/Samples/Scenes/Sender Face.unity
   mode: 0
 --- !u!114 &1382256543
 MonoBehaviour:
@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 1797682330}
   - component: {fileID: 1797682333}
   m_Layer: 5
-  m_Name: Button - Sender Human Segmentation
+  m_Name: Button - Sender Depth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -673,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dfef571b8fb64efcaa7e7c911a655f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Assets/Samples/Sender Segmentation.unity
+  sceneName: Assets/Samples/Scenes/Sender Segmentation.unity
   mode: 0
 --- !u!1 &1909625048
 GameObject:
