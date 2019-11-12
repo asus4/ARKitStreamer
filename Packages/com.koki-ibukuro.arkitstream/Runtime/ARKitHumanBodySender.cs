@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using ARKitStream.Internal;
 
@@ -9,7 +7,6 @@ namespace ARKitStream
     public class ARKitHumanBodySender : ARKitSubSender
     {
         [SerializeField] ARHumanBodyManager humanBodyManager = null;
-        [SerializeField] Material previewMaterial = null;
 
         static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
         static readonly int _textureDepth = Shader.PropertyToID("_textureDepth");
@@ -34,10 +31,6 @@ namespace ARKitStream
             {
                 return;
             }
-
-            previewMaterial.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
-            previewMaterial.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
-
             material.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
             material.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
         }

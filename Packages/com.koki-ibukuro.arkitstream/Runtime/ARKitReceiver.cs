@@ -14,7 +14,7 @@ namespace ARKitStream
     [RequireComponent(typeof(NdiReceiver))]
     public sealed class ARKitReceiver : MonoBehaviour
     {
-        [SerializeField] string ipAddress = "";
+        [SerializeField] string ipAddress = "172.20.10.1";
         [SerializeField] uint port = 8888;
         [SerializeField] bool isDrawGUI = false;
 

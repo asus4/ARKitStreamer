@@ -130,5 +130,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dfef571b8fb64efcaa7e7c911a655f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Assets/Samples/Scenes/Index.unity
+  sceneName: Assets/Samples/Index.unity
   mode: 0

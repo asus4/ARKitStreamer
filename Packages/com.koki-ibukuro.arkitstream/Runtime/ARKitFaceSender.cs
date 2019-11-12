@@ -53,7 +53,7 @@ namespace ARKitStream
 
         void OnFaceChanged(ARFacesChangedEventArgs args)
         {
-            Debug.Log($"Face Changed: {args}");
+            // Debug.Log($"Face Changed: {args}");
             info = new ARKitRemotePacket.FaceInfo();
 
             info.added = args.added.Select(face => ToARFace(face)).ToArray();

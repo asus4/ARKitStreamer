@@ -6,13 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Samples/Scenes/Index.unity
+    path: Assets/Samples/Index.unity
     guid: 0cbd4564ffbc64826858b3dd98a9e035
   - enabled: 1
-    path: Assets/Samples/Scenes/Sender Segmentation.unity
+    path: Assets/Samples/Human Segmentation.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Samples/Scenes/Sender Face.unity
+    path: Assets/Samples/Face.unity
     guid: ed16ddbdc5f2949688ca556dba44d651
   - enabled: 1
     path: Assets/Samples/Scenes/Receiver Depth.unity

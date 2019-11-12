@@ -251,7 +251,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Sender: Face'
+  m_Text: Face
 --- !u!222 &592317047
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -378,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dfef571b8fb64efcaa7e7c911a655f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Assets/Samples/Scenes/Sender Face.unity
+  sceneName: Assets/Samples/Face.unity
   mode: 0
 --- !u!114 &1382256543
 MonoBehaviour:
@@ -673,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dfef571b8fb64efcaa7e7c911a655f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Assets/Samples/Scenes/Sender Segmentation.unity
+  sceneName: Assets/Samples/Human Segmentation.unity
   mode: 0
 --- !u!1 &1909625048
 GameObject:
@@ -842,7 +842,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Sender: Human Segmentation'
+  m_Text: Human Segmentation
 --- !u!222 &2035472937
 CanvasRenderer:
   m_ObjectHideFlags: 0

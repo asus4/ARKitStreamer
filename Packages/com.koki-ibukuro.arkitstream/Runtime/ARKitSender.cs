@@ -50,8 +50,16 @@ namespace ARKitStream
         WebSocketServer server;
         ARKitService service;
 
+
+
         void Start()
         {
+            if (Application.isEditor)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             commandBuffer = new CommandBuffer();
             commandBuffer.name = "ARKitStreamSender";
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamSender"));
@@ -68,16 +76,30 @@ namespace ARKitStream
 
         void OnDestroy()
         {
-            cameraManager.frameReceived -= OnCameraFarameReceived;
+            if (cameraManager != null)
+            {
+                cameraManager.frameReceived -= OnCameraFarameReceived;
+            }
 
-            Destroy(bufferMaterial);
-            bufferMaterial = null;
+            if (bufferMaterial != null)
+            {
+                Destroy(bufferMaterial);
+                bufferMaterial = null;
+            }
 
-            server.Stop();
+            server?.Stop();
+        }
+
+        void OnValidate()
+        {
+            if (cameraManager == null)
+            {
+                cameraManager = FindObjectOfType<ARCameraManager>();
+            }
         }
 
         void OnCameraFarameReceived(ARCameraFrameEventArgs args)
-        {            
+        {
             if (service != null)
             {
                 var packet = new ARKitRemotePacket()
