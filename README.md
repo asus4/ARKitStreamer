@@ -56,6 +56,9 @@ Or you can simply add `ARKitSender` to your custom ARKit scene.
 Recomend using USB connected network instead of Wi-Fi to reduce network delay.  
 ![Imgur](https://imgur.com/4YVbIUP.png)
 
+__NOTE__  
+From __macOS 10.5 Catalina__ , NDI SDK installed path have been changed. See [KlakNDI](https://github.com/keijiro/KlakNDI/pull/44/files) to fix it.
+
 ### Simurate on Editor
 
 Add `ARKitReceiver` to the scene which you want to simuirate on Editor. If sender-iPhone app is running, you can select the NDI source name. also confirm the iPhone's IP Address and port are correct.
