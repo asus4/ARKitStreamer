@@ -39,5 +39,17 @@ namespace ARKitStream
                 rotation = new float4(r.x, r.y, r.z, r.w),
             };
         }
+
+        public static TrackedPoseSender TryCreate(ARKitSender sender)
+        {
+            var driver = FindObjectOfType<TrackedPoseDriver>();
+            if (driver == null)
+            {
+                return null;
+            }
+            var self = sender.gameObject.AddComponent<TrackedPoseSender>();
+            self.driver = driver;
+            return self;
+        }
     }
 }

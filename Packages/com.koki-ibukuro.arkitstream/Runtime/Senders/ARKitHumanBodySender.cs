@@ -34,5 +34,17 @@ namespace ARKitStream
             material.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
             material.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
         }
+
+        public static ARKitHumanBodySender TryCreate(ARKitSender sender)
+        {
+            var manager = FindObjectOfType<ARHumanBodyManager>();
+            if (manager == null)
+            {
+                return null;
+            }
+            var self = sender.gameObject.AddComponent<ARKitHumanBodySender>();
+            self.humanBodyManager = manager;
+            return self;
+        }
     }
 }

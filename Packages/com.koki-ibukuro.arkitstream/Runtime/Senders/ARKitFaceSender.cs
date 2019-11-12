@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using Unity.Mathematics;
-using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 
 using ARKitStream.Internal;
 using Pose = ARKitStream.Internal.Pose;
@@ -20,15 +16,15 @@ namespace ARKitStream
 
         ARKitRemotePacket.FaceInfo info = null;
 
-        protected override void OnEnable()
+        protected override void Start()
         {
-            base.OnEnable();
+            base.Start();
             faceManager.facesChanged += OnFaceChanged;
         }
 
-        protected override void OnDisable()
+        protected override void OnDestroy()
         {
-            base.OnDisable();
+            base.OnDestroy();
             faceManager.facesChanged -= OnFaceChanged;
         }
 
@@ -63,6 +59,7 @@ namespace ARKitStream
             var meshes = new List<ARKitRemotePacket.FaceMesh>();
             meshes.AddRange(args.added.Select(face => ToMesh(face)));
             meshes.AddRange(args.updated.Select(face => ToMesh(face)));
+            // removed meshes are not needed
             // meshes.AddRange(args.removed.Select(face => ToMesh(face)));
             info.meshes = meshes.ToArray();
         }
@@ -87,10 +84,6 @@ namespace ARKitStream
             return new ARKitRemotePacket.FaceMesh()
             {
                 id = face.trackableId,
-                // vertices = face.vertices.Select(v => (float3)v).ToArray(),
-                // normals = face.normals.Select(n => (float3)n).ToArray(),
-                // indices = face.indices.ToArray(),
-                // uvs = face.uvs.Select(uv => (float2)uv).ToArray()
                 vertices = face.vertices.ToRawBytes(),
                 normals = face.normals.ToRawBytes(),
                 indices = face.indices.ToRawBytes(),
@@ -98,6 +91,17 @@ namespace ARKitStream
             };
         }
 
-       
+
+        public static ARKitFaceSender TryCreate(ARKitSender sender)
+        {
+            ARFaceManager faceManager = FindObjectOfType<ARFaceManager>();
+            if (faceManager == null)
+            {
+                return null;
+            }
+            var self = sender.gameObject.AddComponent<ARKitFaceSender>();
+            self.faceManager = faceManager;
+            return self;
+        }
     }
 }

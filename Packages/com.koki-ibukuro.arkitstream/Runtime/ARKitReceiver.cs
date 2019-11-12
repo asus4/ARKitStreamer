@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
@@ -16,7 +15,6 @@ namespace ARKitStream
     {
         [SerializeField] string ipAddress = "172.20.10.1";
         [SerializeField] uint port = 8888;
-        [SerializeField] bool isDrawGUI = false;
 
         NdiReceiver ndiReceiver = null;
         Vector2Int ndiSourceSize = Vector2Int.zero;
@@ -193,26 +191,6 @@ namespace ARKitStream
             {
                 Graphics.CopyTexture(renderTextures[i], texture2Ds[i]);
             }
-        }
-
-        void OnGUI()
-        {
-            if (!isDrawGUI)
-            {
-                return;
-            }
-            if (ndiSourceSize == Vector2Int.zero)
-            {
-                // Wait for connect
-                return;
-            }
-            var w = Screen.width / 2;
-            var h = Screen.height / 2;
-
-            GUI.DrawTexture(new Rect(0, 0, w, h), texture2Ds[0]);
-            GUI.DrawTexture(new Rect(w, 0, w, h), texture2Ds[1]);
-            GUI.DrawTexture(new Rect(0, h, w, h), texture2Ds[2]);
-            GUI.DrawTexture(new Rect(w, h, w, h), texture2Ds[3]);
         }
 
         void Release(RenderTexture tex)

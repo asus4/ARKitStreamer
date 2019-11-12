@@ -309,7 +309,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ipAddress: 172.20.10.1
   port: 8888
-  isDrawGUI: 0
 --- !u!114 &383200695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cadade9d79e66642a6893ac902ddf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceName: IBUXS (ARKit Stream 4277)
+  _sourceName: IBUXS (ARKit Stream)
   _targetTexture: {fileID: 0}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: 
@@ -415,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816b289ef451e094f9ae174fb4cf8db0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UseCustomMaterial: 1
+  m_UseCustomMaterial: 0
   m_CustomMaterial: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
 --- !u!114 &906813953
 MonoBehaviour:
@@ -816,8 +815,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2014463253}
   - component: {fileID: 2014463254}
-  - component: {fileID: 2014463252}
-  - component: {fileID: 2014463255}
   m_Layer: 0
   m_Name: Sender
   m_TagString: Untagged
@@ -825,19 +822,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2014463252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014463251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e498fb75dab044052915fc672547fb17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  faceManager: {fileID: 1358651962}
 --- !u!4 &2014463253
 Transform:
   m_ObjectHideFlags: 0
@@ -866,16 +850,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 906813953}
   port: 8888
---- !u!114 &2014463255
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014463251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7b64729b99ac4baf8732a0a7ff9bf4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  driver: {fileID: 906813954}

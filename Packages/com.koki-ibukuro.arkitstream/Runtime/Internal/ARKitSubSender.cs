@@ -8,14 +8,14 @@ namespace ARKitStream.Internal
     public abstract class ARKitSubSender : MonoBehaviour
     {
 
-        protected virtual void OnEnable()
+        protected virtual void Start()
         {
             var sender = GetComponent<ARKitSender>();
             sender.PacketTransformer += OnPacketTransformer;
             sender.NdiTransformer += OnNdiTransformer;
         }
 
-        protected virtual void OnDisable()
+        protected virtual void OnDestroy()
         {
             var sender = GetComponent<ARKitSender>();
             sender.PacketTransformer -= OnPacketTransformer;

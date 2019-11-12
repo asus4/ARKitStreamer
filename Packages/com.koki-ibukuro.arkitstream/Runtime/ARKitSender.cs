@@ -30,9 +30,9 @@ namespace ARKitStream
                 Send(data);
             }
 
-            public void ExternalSend(string data)
+            public void ExternalSendAsync(byte[] data)
             {
-                Send(data);
+                SendAsync(data, null);
             }
         }
 
@@ -71,6 +71,7 @@ namespace ARKitStream
             });
             server.Start();
 
+            InitSubSenders();
         }
 
         void OnDestroy()
@@ -114,7 +115,8 @@ namespace ARKitStream
                 {
                     PacketTransformer(packet);
                 }
-                service.ExternalSend(packet.Serialize());
+                // service.ExternalSend(packet.Serialize());
+                service.ExternalSendAsync(packet.Serialize());
             }
 
 
@@ -145,15 +147,21 @@ namespace ARKitStream
 
         void InitNDI(int width, int height)
         {
-            Debug.Log("InitNDI");
             renderTexture = new RenderTexture(width, height * 2, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-            var name = string.Format("ARKit Stream {0:0000}", UnityEngine.Random.Range(100, 9999));
+            var name = string.Format("ARKit Stream");
             var go = new GameObject(name);
             go.transform.SetParent(transform, false);
             ndiSender = go.AddComponent<NdiSender>();
 
             ndiSender.sourceTexture = renderTexture;
             ndiSender.alphaSupport = false;
+        }
+
+        void InitSubSenders()
+        {
+            TrackedPoseSender.TryCreate(this);
+            ARKitFaceSender.TryCreate(this);
+            ARKitHumanBodySender.TryCreate(this);
         }
 
     }
