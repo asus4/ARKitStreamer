@@ -33,7 +33,7 @@ This library supports Unity Package Manager. Open the file `Packages/manifest.js
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.1.2",
+    "com.koki-ibukuro.arkitstream": "0.1.3",
     ...// other dependencies
   }
 }
