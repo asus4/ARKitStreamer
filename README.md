@@ -18,7 +18,9 @@ A remote debugging tool for AR Founndation (tested on `3.0.0-preview.4`) with AR
 
 ## Install
 
-This library supports Unity Package Manager. Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and  `dependencies` section.
+- This depends on NDI (Network Device Interface), download and install NDI SDK for iOS from [https://ndi.tv/sdk/](https://ndi.tv/sdk/)
+
+- This supports Unity Package Manager. Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and  `dependencies` section.
 
 ```json
 {
@@ -41,12 +43,28 @@ This library supports Unity Package Manager. Open the file `Packages/manifest.js
 
 ## How to Use
 
-- This depends on NDI, download and install NDI SDK for iOS from [https://ndi.tv/sdk/](https://ndi.tv/sdk/)
+### Set up Sender iPhone
 
-- Recomend using USB connected network instead of Wi-Fi to reduce network delay.  
+Download this reposidoty and install on iPhone. Then run the app on iPhone. Currentry following 2 features are supported.  
+
+- Human Segmentation
+- Face mesh  
+
+Or you can simply add `ARKitSender` to your custom ARKit scene.  
+![Imgur](https://imgur.com/tevPT1n.png)
+
+Recomend using USB connected network instead of Wi-Fi to reduce network delay.  
 ![Imgur](https://imgur.com/4YVbIUP.png)
 
-## Dependences
+### Simurate on Editor
+
+Add `ARKitReceiver` to the scene which you want to simuirate on Editor. If sender-iPhone app is running, you can select the NDI source name. also confirm the iPhone's IP Address and port are correct.
+
+![Imgur](https://imgur.com/u10iUBc.gif)
+
+For more infomation, please check Assets/Sample directory.
+
+## Libraries
 
 - [KlakNDI](https://github.com/keijiro/KlakNDI/)
 - [websocket-sharp](https://github.com/sta/websocket-sharp/)
