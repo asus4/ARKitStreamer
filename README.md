@@ -1,16 +1,20 @@
 # ARKit Streamer
 
+A remote debugging tool for AR Founndation (tested on `3.0.0-preview.4`) with ARKit3 featrues.  
+
 ![img](https://i.imgur.com/vZoYIs1.gif)  
 
 ![Imgur](https://imgur.com/tQbJ1Sl.gif)  
-
-
-A remote debugging tool for AR Founndation (tested on `3.0.0-preview.4`) with ARKit3 featrues.  
 
 ## Environments
 
 - Unity 2019.2 or more
 - iPhone X or more
+
+## Supporting ARKit features
+
+- Depth
+- Face (You have to modify ar-foundation's code a bit. [See issee #2](https://github.com/asus4/ARKitStreamer/issues/2))
 
 ## Install
 
@@ -20,15 +24,17 @@ This library supports Unity Package Manager. Open the file `Packages/manifest.js
 {
   "scopedRegistries": [
     {
-      "name": "Keijiro",
+      "name": "npm",
       "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.keijiro" ]
+      "scopes": [
+        "jp.keijiro",
+        "com.koki-ibukuro"
+      ]
     }
   ],
   "dependencies": {
-    "jp.keijiro.klak.ndi": "0.2.3",
-    "com.koki-ibukuro.arkitstream": "https://github.com/asus4/ARKitStreamer.git#upm",
-    ...
+    "com.koki-ibukuro.arkitstream": "0.1.2",
+    ...// other dependencies
   }
 }
 ```
