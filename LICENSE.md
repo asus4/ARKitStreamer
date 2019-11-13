@@ -1,3 +1,11 @@
+module's licenses
+
+- websocket-sharp: [MIT](https://github.com/sta/websocket-sharp/blob/master/LICENSE.txt)
+- KlakNDI: [MIT](https://github.com/keijiro/KlakNDI/blob/master/LICENSE)
+- [NewTek's NDI](https://ndi.tv/sdk/)
+
+## ARKitStreamer
+
 Copyright (c) 2019 Koki Ibukuro
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
