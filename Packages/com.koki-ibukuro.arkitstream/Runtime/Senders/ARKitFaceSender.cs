@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.ARKit;
+using Unity.Collections;
 
 using ARKitStream.Internal;
 using Pose = ARKitStream.Internal.Pose;
@@ -49,7 +51,7 @@ namespace ARKitStream
 
         void OnFaceChanged(ARFacesChangedEventArgs args)
         {
-            // Debug.Log($"Face Changed: {args}");
+            var subsystem = faceManager.subsystem as ARKitFaceSubsystem;
             info = new ARKitRemotePacket.FaceInfo();
 
             info.added = args.added.Select(face => ToARFace(face)).ToArray();
@@ -57,8 +59,8 @@ namespace ARKitStream
             info.removed = args.removed.Select(face => (ARKitStream.Internal.TrackableId)face.trackableId).ToArray();
 
             var meshes = new List<ARKitRemotePacket.FaceMesh>();
-            meshes.AddRange(args.added.Select(face => ToMesh(face)));
-            meshes.AddRange(args.updated.Select(face => ToMesh(face)));
+            meshes.AddRange(args.added.Select(face => ToMesh(face, subsystem)));
+            meshes.AddRange(args.updated.Select(face => ToMesh(face, subsystem)));
             // removed meshes are not needed
             // meshes.AddRange(args.removed.Select(face => ToMesh(face)));
             info.meshes = meshes.ToArray();
@@ -78,16 +80,17 @@ namespace ARKitStream
             };
         }
 
-        static ARKitRemotePacket.FaceMesh ToMesh(ARFace face)
+        static ARKitRemotePacket.FaceMesh ToMesh(ARFace face, ARKitFaceSubsystem subsystem)
         {
             var id = face.trackableId;
             return new ARKitRemotePacket.FaceMesh()
             {
-                id = face.trackableId,
+                id = id,
                 vertices = face.vertices.ToRawBytes(),
                 normals = face.normals.ToRawBytes(),
                 indices = face.indices.ToRawBytes(),
                 uvs = face.uvs.ToRawBytes(),
+                coefficients = subsystem.GetBlendShapeCoefficients(id, Allocator.Temp).ToRawBytes(),
             };
         }
 

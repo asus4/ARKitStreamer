@@ -45,6 +45,25 @@ namespace ARKitStream.Internal
             return new ARKitRemoteProvider();
         }
 
+        public NativeArray<ARKitBlendShapeCoefficient> GetBlendShapeCoefficients(TrackableId faceId, Allocator allocator)
+        {
+            var face = ARKitReceiver.Instance?.Face;
+            if (face == null)
+            {
+                Debug.LogWarning("face not found");
+                return default(NativeArray<ARKitBlendShapeCoefficient>);
+            }
+
+            var mesh = face.meshes.FirstOrDefault(f => f.id.Equals(faceId));
+            if (mesh == null)
+            {
+                Debug.LogWarning("face not found");
+                return default(NativeArray<ARKitBlendShapeCoefficient>);
+            }
+
+            return NativeArrayExtension.FromRawBytes<ARKitBlendShapeCoefficient>(mesh.coefficients, allocator);
+        }
+
         class ARKitRemoteProvider : Provider
         {
             HashSet<UnityTrackableId> ids = new HashSet<UnityTrackableId>();

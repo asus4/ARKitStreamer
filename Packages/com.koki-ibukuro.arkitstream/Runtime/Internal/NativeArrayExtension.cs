@@ -1,4 +1,5 @@
 ﻿using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace ARKitStream.Internal
 {
@@ -19,6 +20,18 @@ namespace ARKitStream.Internal
 
             UnityEngine.Debug.Assert(arr.Length == slice.Length);
             slice.CopyTo(arr);
+        }
+
+        public static NativeArray<T> FromRawBytes<T>(byte[] bytes, Allocator allocator) where T : struct
+        {
+            int structSize = UnsafeUtility.SizeOf<T>();
+
+            UnityEngine.Debug.Assert(bytes.Length % structSize == 0);
+
+            int length = bytes.Length / UnsafeUtility.SizeOf<T>();
+            var arr = new NativeArray<T>(length, allocator);
+            arr.CopyFromRawBytes(bytes);
+            return arr;
         }
     }
 }

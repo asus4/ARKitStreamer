@@ -44,6 +44,7 @@ namespace ARKitStream.Internal
             public byte[] normals; // NativeArray<Vector3>
             public byte[] indices; // NativeArray<int>
             public byte[] uvs; // NativeArray<Vector2>
+            public byte[] coefficients;
 
             public override string ToString()
             {
