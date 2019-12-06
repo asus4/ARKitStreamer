@@ -161,7 +161,7 @@ namespace ARKitStream
         {
             TrackedPoseSender.TryCreate(this);
             ARKitFaceSender.TryCreate(this);
-            ARKitHumanBodySender.TryCreate(this);
+            ARKitOcclusionSender.TryCreate(this);
         }
 
     }

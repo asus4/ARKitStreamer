@@ -4,11 +4,9 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
-    public class ARKitHumanBodySender : ARKitSubSender
+    public class ARKitOcclusionSender : ARKitSubSender
     {
-        // [SerializeField] ARHumanBodyManager humanBodyManager = null;
         [SerializeField] AROcclusionManager occlusionManager = null;
-
         static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
         static readonly int _textureDepth = Shader.PropertyToID("_textureDepth");
 
@@ -36,14 +34,14 @@ namespace ARKitStream
             material.SetTexture(_textureDepth, occlusionManager.humanDepthTexture);
         }
 
-        public static ARKitHumanBodySender TryCreate(ARKitSender sender)
+        public static ARKitOcclusionSender TryCreate(ARKitSender sender)
         {
             var manager = FindObjectOfType<AROcclusionManager>();
             if (manager == null)
             {
                 return null;
             }
-            var self = sender.gameObject.AddComponent<ARKitHumanBodySender>();
+            var self = sender.gameObject.AddComponent<ARKitOcclusionSender>();
             self.occlusionManager = manager;
             return self;
         }
