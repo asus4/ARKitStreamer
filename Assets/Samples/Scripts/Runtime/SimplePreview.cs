@@ -7,13 +7,13 @@ namespace ARKitStream
 {
     public class SimplePreview : MonoBehaviour
     {
-        [SerializeField] ARHumanBodyManager humanBodyManager = null;
+        [SerializeField] AROcclusionManager occlusionManager = null;
         [SerializeField] Material material = null;
 
         void Update()
         {
-            var stencil = humanBodyManager.humanStencilTexture;
-            var depth = humanBodyManager.humanDepthTexture;
+            var stencil = occlusionManager.humanStencilTexture;
+            var depth = occlusionManager.humanDepthTexture;
 
             material.SetTexture("_textureStencil", stencil);
             material.SetTexture("_textureDepth", depth);

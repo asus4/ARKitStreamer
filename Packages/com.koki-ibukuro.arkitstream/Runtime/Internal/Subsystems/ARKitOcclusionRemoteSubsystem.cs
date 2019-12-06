@@ -6,31 +6,22 @@ using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
 {
-    [Preserve]
-    public class ARKitHumanBodyRemoteSubsystem : XRHumanBodySubsystem
+    internal static class ARKitOcclusionRemoteRegistration
     {
-        protected override Provider CreateProvider()
-        {
-            return new ARKitProvider();
-        }
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
 #if UNITY_EDITOR
-            const string k_SubsystemId = "ARKit-HumanBody-Remote";
-            XRHumanBodySubsystemCinfo info = new XRHumanBodySubsystemCinfo()
+            const string k_SubsystemId = "ARKit-Occlusion-Remote";
+            XROcclusionSubsystemCinfo info = new XROcclusionSubsystemCinfo()
             {
                 id = k_SubsystemId,
-                implementationType = typeof(ARKitHumanBodyRemoteSubsystem),
-                supportsHumanBody2D = false,
-                supportsHumanBody3D = false,
-                supportsHumanBody3DScaleEstimation = false,
-                supportsHumanStencilImage = true,
-                supportsHumanDepthImage = true,
+                implementationType = typeof(ARKitOcclusionRemoteSubsystem),
+                supportsHumanSegmentationStencilImage = true,
+                supportsHumanSegmentationDepthImage = true,
             };
 
-            if (!XRHumanBodySubsystem.Register(info))
+            if (!XROcclusionSubsystem.Register(info))
             {
                 Debug.LogErrorFormat("Cannot register the {0} subsystem", k_SubsystemId);
             }
@@ -40,22 +31,26 @@ namespace ARKitStream.Internal
             }
 #endif // UNITY_EDITOR
         }
+    }
 
-        class ARKitProvider : XRHumanBodySubsystem.Provider
+
+    [Preserve]
+    public class ARKitOcclusionRemoteSubsystem : XROcclusionSubsystem
+    {
+        protected override Provider CreateProvider() => new ARKitProvider();
+
+        class ARKitProvider : XROcclusionSubsystem.Provider
         {
-            public override TrackableChanges<XRHumanBody> GetChanges(XRHumanBody defaultHumanBody, Unity.Collections.Allocator allocator)
+            public override SegmentationStencilMode humanSegmentationStencilMode
             {
-                return new TrackableChanges<XRHumanBody>();
+                get { return SegmentationStencilMode.Best; }
+                set { }
             }
 
-            public override bool TrySetHumanSegmentationStencilMode(HumanSegmentationMode humanSegmentationStencilMode)
+            public override SegmentationDepthMode humanSegmentationDepthMode
             {
-                return true;
-            }
-
-            public override bool TrySetHumanSegmentationDepthMode(HumanSegmentationMode humanSegmentationDepthMode)
-            {
-                return true;
+                get { return SegmentationDepthMode.Best; }
+                set { }
             }
 
             public override bool TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor)

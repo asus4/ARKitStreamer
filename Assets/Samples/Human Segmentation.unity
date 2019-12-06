@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939e458439e3c43f9bd24f53f5d690d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  humanBodyManager: {fileID: 1358651962}
+  occlusionManager: {fileID: 1358651962}
   material: {fileID: 2100000, guid: 95cb7e3dadfe942d6b4625373aa51bfe, type: 2}
 --- !u!4 &522929160
 Transform:
@@ -486,15 +486,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1358651961}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e5861fe4d817477986290fde61dbc8c, type: 3}
+  m_Script: {fileID: 11500000, guid: b15f82cc229284894964d2d30806969d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HumanBodyPose2DEstimationEnabled: 0
-  m_HumanBodyPose3DEstimationEnabled: 0
-  m_HumanBodyPose3DScaleEstimationEnabled: 0
   m_HumanSegmentationStencilMode: 3
   m_HumanSegmentationDepthMode: 2
-  m_HumanBodyPrefab: {fileID: 0}
 --- !u!114 &1358651963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -613,7 +609,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ipAddress: 172.20.10.1
   port: 8888
-  isDrawGUI: 0
 --- !u!114 &1819542994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,7 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cadade9d79e66642a6893ac902ddf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceName: IBUXS (ARKit Stream 7415)
+  _sourceName: IBUXS (ARKit Stream)
   _targetTexture: {fileID: 0}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: 

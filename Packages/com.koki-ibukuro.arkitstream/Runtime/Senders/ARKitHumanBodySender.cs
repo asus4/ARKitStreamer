@@ -6,7 +6,8 @@ namespace ARKitStream
 {
     public class ARKitHumanBodySender : ARKitSubSender
     {
-        [SerializeField] ARHumanBodyManager humanBodyManager = null;
+        // [SerializeField] ARHumanBodyManager humanBodyManager = null;
+        [SerializeField] AROcclusionManager occlusionManager = null;
 
         static readonly int _textureStencil = Shader.PropertyToID("_textureStencil");
         static readonly int _textureDepth = Shader.PropertyToID("_textureDepth");
@@ -14,9 +15,9 @@ namespace ARKitStream
 
         void OnValidate()
         {
-            if (humanBodyManager == null)
+            if (occlusionManager == null)
             {
-                humanBodyManager = FindObjectOfType<ARHumanBodyManager>();
+                occlusionManager = FindObjectOfType<AROcclusionManager>();
             }
         }
 
@@ -27,23 +28,23 @@ namespace ARKitStream
 
         protected override void OnNdiTransformer(Material material)
         {
-            if (humanBodyManager == null || humanBodyManager.subsystem == null)
+            if (occlusionManager == null || occlusionManager.subsystem == null)
             {
                 return;
             }
-            material.SetTexture(_textureStencil, humanBodyManager.humanStencilTexture);
-            material.SetTexture(_textureDepth, humanBodyManager.humanDepthTexture);
+            material.SetTexture(_textureStencil, occlusionManager.humanStencilTexture);
+            material.SetTexture(_textureDepth, occlusionManager.humanDepthTexture);
         }
 
         public static ARKitHumanBodySender TryCreate(ARKitSender sender)
         {
-            var manager = FindObjectOfType<ARHumanBodyManager>();
+            var manager = FindObjectOfType<AROcclusionManager>();
             if (manager == null)
             {
                 return null;
             }
             var self = sender.gameObject.AddComponent<ARKitHumanBodySender>();
-            self.humanBodyManager = manager;
+            self.occlusionManager = manager;
             return self;
         }
     }
