@@ -4,10 +4,10 @@
   "author": "Koki Ibukuro",
   "dependencies": {
     "com.unity.mathematics": "1.1.0",
-    "com.unity.xr.arfoundation": "3.0.0-preview.4",
-    "com.unity.xr.arkit": "3.0.0-preview.4",
-    "com.unity.xr.arkit-face-tracking": "3.0.0-preview.4",
-    "com.unity.xr.arsubsystems": "3.0.0-preview.4",
+    "com.unity.xr.arfoundation": "3.1.0-preview.1",
+    "com.unity.xr.arkit": "3.1.0-preview.1",
+    "com.unity.xr.arkit-face-tracking": "3.1.0-preview.1",
+    "com.unity.xr.arsubsystems": "3.1.0-preview.1",
     "com.unity.xr.legacyinputhelpers": "2.0.6",
     "jp.keijiro.klak.ndi": "0.2.4"
   },
@@ -18,6 +18,6 @@
   "license": "SEE LICENSE IN LICENSE",
   "unity": "2019.2",
   "unityRelease": "0f1",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "type": "library"
 }
