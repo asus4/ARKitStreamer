@@ -1,10 +1,10 @@
 # ARKit Streamer
 
-A remote debugging tool for AR Founndation (tested on `3.1.0-preview.1`) with ARKit3 featrues.  
+A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with ARKit3 featrues.  
 
-![img](https://i.imgur.com/vZoYIs1.gif)  
+![img1](https://i.imgur.com/vZoYIs1.gif)  
 
-![Imgur](https://imgur.com/tQbJ1Sl.gif)  
+![img2](https://imgur.com/tQbJ1Sl.gif)  
 
 ## Environments
 
@@ -48,16 +48,13 @@ A remote debugging tool for AR Founndation (tested on `3.1.0-preview.1`) with AR
 Download this reposidoty and install on iPhone. Then run the app on iPhone. Currentry following 2 features are supported.  
 
 - Human Segmentation
-- Face mesh  
+- Face mesh
 
 Or you can simply add `ARKitSender` to your custom ARKit scene.  
 ![Imgur](https://imgur.com/tevPT1n.png)
 
 Recomend using USB connected network instead of Wi-Fi to reduce network delay.  
 ![Imgur](https://imgur.com/4YVbIUP.png)
-
-__NOTE__  
-From __macOS 10.5 Catalina__ , NDI SDK installed path have been changed. See [KlakNDI](https://github.com/keijiro/KlakNDI/pull/44/files) to fix it.
 
 ### Simurate on Editor
 
