@@ -40,6 +40,7 @@ namespace ARKitStream.Internal
         public class FaceMesh
         {
             public TrackableId id;
+            // Use byte[] for speed
             public byte[] vertices; // NativeArray<Vector3>
             public byte[] normals; // NativeArray<Vector3>
             public byte[] indices; // NativeArray<int>

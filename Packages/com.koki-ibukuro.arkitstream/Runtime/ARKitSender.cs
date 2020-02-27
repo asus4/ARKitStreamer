@@ -162,6 +162,7 @@ namespace ARKitStream
             TrackedPoseSender.TryCreate(this);
             ARKitFaceSender.TryCreate(this);
             ARKitOcclusionSender.TryCreate(this);
+            ARKitPlaneSender.TryCreate(this);
         }
 
     }
