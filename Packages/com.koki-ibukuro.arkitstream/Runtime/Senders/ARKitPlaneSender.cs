@@ -7,12 +7,16 @@ using UnityEngine.XR.ARKit;
 using Unity.Collections;
 
 using ARKitStream.Internal;
+using BoundedPlane = ARKitStream.Internal.BoundedPlane;
+using TrackableId = ARKitStream.Internal.TrackableId;
 
 namespace ARKitStream
 {
     public class ARKitPlaneSender : ARKitSubSender
     {
         [SerializeField] ARPlaneManager planeManager = null;
+
+        ARKitRemotePacket.PlaneInfo planeInfo = null;
 
         protected override void Start()
         {
@@ -37,11 +41,53 @@ namespace ARKitStream
 
         void OnPlaneChanged(ARPlanesChangedEventArgs args)
         {
-            var added = args.added;
-            var updated = args.updated;
-            var removed = args.removed;
+            var added = args.added.Select(plane => ToBoundedPlane(plane)).ToArray();
+            var updated = args.updated.Select(plane => ToBoundedPlane(plane)).ToArray();
+            var removed = args.removed.Select(plane => (TrackableId)plane.trackableId).ToArray();
 
-            Debug.Log($"added: {added.Count}, updated: {updated.Count}, removed: {removed.Count}");
+            var meshes = new List<ARKitRemotePacket.PlaneMesh>();
+            meshes.AddRange(args.added.Select(plane => ToMesh(plane)));
+            meshes.AddRange(args.updated.Select(plane => ToMesh(plane)));
+
+            planeInfo = new ARKitRemotePacket.PlaneInfo()
+            {
+                added = added,
+                updated = updated,
+                removed = removed,
+                meshes = meshes.ToArray(),
+            };
+        }
+
+        protected override void OnPacketTransformer(ARKitRemotePacket packet)
+        {
+            packet.plane = planeInfo;
+            planeInfo = null;
+        }
+
+        static BoundedPlane ToBoundedPlane(ARPlane plane)
+        {
+            return new BoundedPlane()
+            {
+                trackableId = plane.trackableId,
+                subsumedById = plane.subsumedBy.trackableId,
+                center = plane.centerInPlaneSpace,
+                pose = Internal.Pose.FromTransform(plane.transform),
+                size = plane.size,
+                alignment = plane.alignment,
+                trackingState = plane.trackingState,
+                nativePtr = plane.nativePtr,
+                classification = plane.classification,
+
+            };
+        }
+
+        static ARKitRemotePacket.PlaneMesh ToMesh(ARPlane plane)
+        {
+            return new ARKitRemotePacket.PlaneMesh()
+            {
+                id = plane.trackableId,
+                boundary = plane.boundary.ToRawBytes(),
+            };
         }
 
         public static ARKitPlaneSender TryCreate(ARKitSender sender)

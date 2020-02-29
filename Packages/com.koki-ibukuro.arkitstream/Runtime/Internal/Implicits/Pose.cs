@@ -26,7 +26,7 @@ namespace ARKitStream.Internal
             return new Pose()
             {
                 position = p.position,
-                rotation = new float4(p.rotation.x, p.rotation.y, p.rotation.z, p.rotation.w)
+                rotation = p.rotation.ToFloat4(),
             };
         }
 
@@ -41,7 +41,7 @@ namespace ARKitStream.Internal
             return new Pose()
             {
                 position = t.localPosition,
-                rotation = new float4(q.x, q.y, q.z, q.w),
+                rotation = q.ToFloat4(),
             };
         }
     }

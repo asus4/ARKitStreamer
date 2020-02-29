@@ -3,8 +3,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
 using Unity.Mathematics;
-using Unity.Collections;
-using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
 {
@@ -32,15 +30,12 @@ namespace ARKitStream.Internal
             {
                 return $"[time: {timestampNs}, projection: {projectionMatrix}, display: {displayMatrix}]";
             }
-
-            // public static int DataSize => sizeof(long) + Marshal.SizeOf(typeof(Matrix4x4)) * 2;
         }
 
         [Serializable]
         public class FaceMesh
         {
             public TrackableId id;
-            // Use byte[] for speed
             public byte[] vertices; // NativeArray<Vector3>
             public byte[] normals; // NativeArray<Vector3>
             public byte[] indices; // NativeArray<int>
@@ -85,10 +80,49 @@ namespace ARKitStream.Internal
             }
         }
 
+        [Serializable]
+        public class PlaneMesh
+        {
+            public TrackableId id;
+            public byte[] boundary; // NativeArray<Vector2>
+        }
+
+        [Serializable]
+        public class PlaneInfo
+        {
+            public BoundedPlane[] added;
+            public BoundedPlane[] updated;
+            public TrackableId[] removed;
+            public PlaneMesh[] meshes;
+
+            public override string ToString()
+            {
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine("PlaneInfo");
+                foreach (var f in added)
+                {
+                    sb.AppendLine($"ADD: {f}");
+                }
+                foreach (var f in updated)
+                {
+                    sb.AppendLine($"UPDATE: {f}");
+                }
+                foreach (var f in removed)
+                {
+                    sb.AppendLine($"REMOVE: {f}");
+                }
+                foreach (var m in meshes)
+                {
+                    sb.AppendLine($"MESHED: {m}");
+                }
+                return sb.ToString();
+            }
+        }
+
         public CameraFrameEvent cameraFrame;
         public FaceInfo face;
         public Pose trackedPose;
-
+        public PlaneInfo plane;
 
         static readonly BinaryFormatter formatter = new BinaryFormatter();
         static readonly MemoryStream stream = new MemoryStream();

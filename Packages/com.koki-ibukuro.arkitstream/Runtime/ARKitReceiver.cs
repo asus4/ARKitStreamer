@@ -80,6 +80,21 @@ namespace ARKitStream
             }
         }
 
+        public ARKitRemotePacket.PlaneInfo Plane
+        {
+            get
+            {
+                lock (packetLock)
+                {
+                    if (packet != null)
+                    {
+                        return packet.plane;
+                    }
+                    return null;
+                }
+            }
+        }
+
         public UnityEngine.Pose TrackedPose
         {
             get
