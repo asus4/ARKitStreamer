@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
 using Unity.Mathematics;
-using Unity.Collections;
-using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
 {
@@ -32,8 +31,6 @@ namespace ARKitStream.Internal
             {
                 return $"[time: {timestampNs}, projection: {projectionMatrix}, display: {displayMatrix}]";
             }
-
-            // public static int DataSize => sizeof(long) + Marshal.SizeOf(typeof(Matrix4x4)) * 2;
         }
 
         [Serializable]
@@ -84,10 +81,42 @@ namespace ARKitStream.Internal
             }
         }
 
+        [Serializable]
+        public class PlaneInfo
+        {
+            public BoundedPlane[] added;
+            public BoundedPlane[] updated;
+            public TrackableId[] removed;
+            public Dictionary<TrackableId, byte[]> meshes;
+
+            public override string ToString()
+            {
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine("PlaneInfo");
+                foreach (var f in added)
+                {
+                    sb.AppendLine($"ADD: {f}");
+                }
+                foreach (var f in updated)
+                {
+                    sb.AppendLine($"UPDATE: {f}");
+                }
+                foreach (var f in removed)
+                {
+                    sb.AppendLine($"REMOVE: {f}");
+                }
+                foreach (var m in meshes)
+                {
+                    sb.AppendLine($"MESHED: {m}");
+                }
+                return sb.ToString();
+            }
+        }
+
         public CameraFrameEvent cameraFrame;
         public FaceInfo face;
         public Pose trackedPose;
-
+        public PlaneInfo plane;
 
         static readonly BinaryFormatter formatter = new BinaryFormatter();
         static readonly MemoryStream stream = new MemoryStream();
