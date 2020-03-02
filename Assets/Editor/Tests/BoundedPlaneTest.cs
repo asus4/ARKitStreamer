@@ -12,7 +12,6 @@ namespace ARKitStream.Internal
 {
     public class BoundedPlaneTest
     {
-        // Start is called before the first frame update
         [Test]
         public static void ImplicitTest()
         {
@@ -24,7 +23,7 @@ namespace ARKitStream.Internal
                 pose = new Pose()
                 {
                     position = new float3(0.1f, 0.2f, 0.3f),
-                    rotation = Quaternion.EulerAngles(10, 20, 30).ToFloat4(),
+                    rotation = Quaternion.Euler(10, 20, 30).ToFloat4(),
                 },
                 size = new float2(1, 2),
                 alignment = PlaneAlignment.Vertical,

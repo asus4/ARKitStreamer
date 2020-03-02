@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
@@ -81,19 +82,12 @@ namespace ARKitStream.Internal
         }
 
         [Serializable]
-        public class PlaneMesh
-        {
-            public TrackableId id;
-            public byte[] boundary; // NativeArray<Vector2>
-        }
-
-        [Serializable]
         public class PlaneInfo
         {
             public BoundedPlane[] added;
             public BoundedPlane[] updated;
             public TrackableId[] removed;
-            public PlaneMesh[] meshes;
+            public Dictionary<TrackableId, byte[]> meshes;
 
             public override string ToString()
             {

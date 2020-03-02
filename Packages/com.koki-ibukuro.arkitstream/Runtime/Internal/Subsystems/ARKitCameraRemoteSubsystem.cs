@@ -23,8 +23,8 @@ namespace ARKitStream.Internal
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
-            const string id = "ARKit-Camera-Remote";
 #if UNITY_EDITOR
+            const string id = "ARKit-Camera-Remote";
             XRCameraSubsystemCinfo cameraSubsystemCinfo = new XRCameraSubsystemCinfo
             {
                 id = id,

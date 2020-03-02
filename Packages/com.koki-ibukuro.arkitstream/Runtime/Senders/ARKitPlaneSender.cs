@@ -45,16 +45,22 @@ namespace ARKitStream
             var updated = args.updated.Select(plane => ToBoundedPlane(plane)).ToArray();
             var removed = args.removed.Select(plane => (TrackableId)plane.trackableId).ToArray();
 
-            var meshes = new List<ARKitRemotePacket.PlaneMesh>();
-            meshes.AddRange(args.added.Select(plane => ToMesh(plane)));
-            meshes.AddRange(args.updated.Select(plane => ToMesh(plane)));
+            var meshes = new Dictionary<TrackableId, byte[]>();
+            foreach(var plane in args.added)
+            {
+                meshes[plane.trackableId] = plane.boundary.ToRawBytes();
+            }
+            foreach(var plane in args.updated)
+            {
+                meshes[plane.trackableId] = plane.boundary.ToRawBytes();
+            }
 
             planeInfo = new ARKitRemotePacket.PlaneInfo()
             {
                 added = added,
                 updated = updated,
                 removed = removed,
-                meshes = meshes.ToArray(),
+                meshes = meshes,
             };
         }
 
@@ -66,10 +72,13 @@ namespace ARKitStream
 
         static BoundedPlane ToBoundedPlane(ARPlane plane)
         {
+
+            TrackableId subsumedById = plane.subsumedBy == null ? default(TrackableId) : (TrackableId)plane.subsumedBy.trackableId;
+
             return new BoundedPlane()
             {
                 trackableId = plane.trackableId,
-                subsumedById = plane.subsumedBy.trackableId,
+                subsumedById = subsumedById,
                 center = plane.centerInPlaneSpace,
                 pose = Internal.Pose.FromTransform(plane.transform),
                 size = plane.size,
@@ -77,16 +86,6 @@ namespace ARKitStream
                 trackingState = plane.trackingState,
                 nativePtr = plane.nativePtr,
                 classification = plane.classification,
-
-            };
-        }
-
-        static ARKitRemotePacket.PlaneMesh ToMesh(ARPlane plane)
-        {
-            return new ARKitRemotePacket.PlaneMesh()
-            {
-                id = plane.trackableId,
-                boundary = plane.boundary.ToRawBytes(),
             };
         }
 
