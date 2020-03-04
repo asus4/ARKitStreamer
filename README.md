@@ -45,10 +45,11 @@ A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with AR
 
 ### Set up Sender iPhone
 
-Download this reposidoty and install on iPhone. Then run the app on iPhone. Currentry following 2 features are supported.  
+Download this reposidoty and install on iPhone. Then run the app on iPhone. Currentry following features are supported.  
 
 - Human Segmentation
 - Face mesh
+- ARPlane
 
 Or you can simply add `ARKitSender` to your custom ARKit scene.  
 ![Imgur](https://imgur.com/tevPT1n.png)
