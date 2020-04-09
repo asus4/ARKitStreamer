@@ -13,8 +13,9 @@ A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with AR
 
 ## Supporting ARKit features
 
-- Depth
+- Human Segmentation
 - Face (You have to modify ar-foundation's code a bit. [See issee #2](https://github.com/asus4/ARKitStreamer/issues/2))
+- ARPlane
 
 ## Install
 
@@ -45,11 +46,7 @@ A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with AR
 
 ### Set up Sender iPhone
 
-Download this reposidoty and install on iPhone. Then run the app on iPhone. Currentry following features are supported.  
-
-- Human Segmentation
-- Face mesh
-- ARPlane
+Download this reposidoty and install on iPhone. Then run the app on iPhone.
 
 Or you can simply add `ARKitSender` to your custom ARKit scene.  
 ![Imgur](https://imgur.com/tevPT1n.png)
