@@ -8,7 +8,7 @@ A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with AR
 
 ## Environments
 
-- Unity 2019.2 or more
+- Tested on Unity 2019.3.3f1
 - iPhone X or more
 
 ## Supporting ARKit features
