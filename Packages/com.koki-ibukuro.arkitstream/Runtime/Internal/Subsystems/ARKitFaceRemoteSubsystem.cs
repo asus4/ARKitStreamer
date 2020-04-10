@@ -69,7 +69,7 @@ namespace ARKitStream.Internal
             HashSet<UnityTrackableId> ids = new HashSet<UnityTrackableId>();
 
             public override int supportedFaceCount => 1;
-            public override int maximumFaceCount => 1;
+            public override int currentMaximumFaceCount => 1;
 
             public override TrackableChanges<UnityXRFace> GetChanges(UnityXRFace defaultFace, Allocator allocator)
             {

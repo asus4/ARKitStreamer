@@ -1,6 +1,6 @@
 # ARKit Streamer
 
-A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with ARKit3 featrues.  
+A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with ARKit3 featrues.  
 
 ![img1](https://i.imgur.com/vZoYIs1.gif)  
 
@@ -8,7 +8,7 @@ A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with AR
 
 ## Environments
 
-- Unity 2019.2 or more
+- Tested on Unity 2019.3.3f1
 - iPhone X or more
 
 ## Supporting ARKit features
@@ -36,7 +36,7 @@ A remote debugging tool for AR Founndation (tested on `3.1.0-preview.4`) with AR
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.2.2",
+    "com.koki-ibukuro.arkitstream": "0.3.0",
     ...// other dependencies
   }
 }
