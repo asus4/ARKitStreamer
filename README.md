@@ -36,7 +36,7 @@ A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with AR
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.3.0",
+    "com.koki-ibukuro.arkitstream": "0.3.1",
     ...// other dependencies
   }
 }
