@@ -147,7 +147,7 @@ namespace ARKitStream
             client.OnMessage += OnWebsocketMessage;
             client.ConnectAsync();
 
-            SetupTrackedPose();
+            SetupPose();
         }
 
         void OnDestroy()
@@ -271,19 +271,24 @@ namespace ARKitStream
 
         }
 
-        void SetupTrackedPose()
+        void SetupPose()
         {
-            var driver = FindObjectOfType<UnityEngine.SpatialTracking.TrackedPoseDriver>();
-            if (driver == null)
+            var trackedPoseDriver = FindObjectOfType<UnityEngine.SpatialTracking.TrackedPoseDriver>();
+            if (trackedPoseDriver != null)
             {
+                var provider = gameObject.GetComponent<ARKitRemotePoseProvider>()
+                            ?? gameObject.AddComponent<ARKitRemotePoseProvider>();
+                trackedPoseDriver.poseProviderComponent = provider;
                 return;
             }
-            var provider = GetComponent<ARKitRemotePoseProvider>();
-            if (provider == null)
+
+            var arPoseDriver = FindObjectOfType<UnityEngine.XR.ARFoundation.ARPoseDriver>();
+            if (arPoseDriver != null)
             {
-                provider = gameObject.AddComponent<ARKitRemotePoseProvider>();
+                var provider = gameObject.GetComponent<ARKitRemotePoseProvider>()
+                            ?? gameObject.AddComponent<ARKitRemotePoseProvider>();
+                provider.manualTarget = arPoseDriver.transform;
             }
-            driver.poseProviderComponent = provider;
         }
     }
 }
