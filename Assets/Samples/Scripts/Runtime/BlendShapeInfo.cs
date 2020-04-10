@@ -13,8 +13,8 @@ namespace ARKitStream
 {
     public class BlendShapeInfo : MonoBehaviour
     {
-        [SerializeField] ARFaceManager faceManager;
-        [SerializeField] Text label;
+        [SerializeField] ARFaceManager faceManager = null;
+        [SerializeField] Text label = null;
 
         StringBuilder sb;
 
@@ -32,6 +32,11 @@ namespace ARKitStream
 
         void OnFaceChanged(ARFacesChangedEventArgs args)
         {
+            if (args.updated.Count == 0)
+            {
+                return;
+            }
+
             var face = args.updated[0];
 
             var coeffients = GetCoefficients(face.trackableId, faceManager.subsystem);

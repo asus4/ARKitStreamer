@@ -41,17 +41,21 @@ namespace ARKitStream.Internal
 
         class ARKitProvider : XROcclusionSubsystem.Provider
         {
-            public override SegmentationStencilMode humanSegmentationStencilMode
+            public override HumanSegmentationStencilMode requestedHumanStencilMode
             {
-                get { return SegmentationStencilMode.Best; }
+                get => HumanSegmentationStencilMode.Best;
                 set { }
             }
 
-            public override SegmentationDepthMode humanSegmentationDepthMode
+            public override HumanSegmentationStencilMode currentHumanStencilMode => HumanSegmentationStencilMode.Best;
+
+            public override HumanSegmentationDepthMode requestedHumanDepthMode
             {
-                get { return SegmentationDepthMode.Best; }
+                get => HumanSegmentationDepthMode.Best;
                 set { }
             }
+
+            public override HumanSegmentationDepthMode currentHumanDepthMode => HumanSegmentationDepthMode.Best;
 
             public override bool TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor)
             {

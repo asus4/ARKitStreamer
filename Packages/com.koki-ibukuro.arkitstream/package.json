@@ -4,11 +4,11 @@
   "author": "Koki Ibukuro",
   "dependencies": {
     "com.unity.mathematics": "1.1.0",
-    "com.unity.xr.arfoundation": "3.1.0-preview.4",
-    "com.unity.xr.arkit": "3.1.0-preview.4",
-    "com.unity.xr.arkit-face-tracking": "3.1.0-preview.4",
-    "com.unity.xr.arsubsystems": "3.1.0-preview.4",
-    "com.unity.xr.legacyinputhelpers": "2.0.6",
+    "com.unity.xr.arfoundation": "4.0.0-preview.1",
+    "com.unity.xr.arkit": "4.0.0-preview.1",
+    "com.unity.xr.arkit-face-tracking": "4.0.0-preview.1",
+    "com.unity.xr.arsubsystems": "4.0.0-preview.1",
+    "com.unity.xr.legacyinputhelpers": "2.0.8",
     "jp.keijiro.klak.ndi": "0.2.4"
   },
   "description": "AR foundation devkit",
