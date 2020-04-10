@@ -44,7 +44,6 @@ namespace ARKitStream.Internal
         {
             HashSet<UnityTrackableId> ids;
 
-            public override void Destroy() { }
             public override void Start()
             {
                 ids = new HashSet<UnityTrackableId>();
@@ -53,6 +52,8 @@ namespace ARKitStream.Internal
             {
                 ids.Clear();
             }
+            public override void Destroy() { }
+
 
             public override void GetBoundary(
                 UnityTrackableId trackableId,
@@ -127,7 +128,13 @@ namespace ARKitStream.Internal
                 return TrackableChanges<UnityBoundedPlane>.CopyFrom(nativeAdded, nativeUpdated, nativeRemoved, allocator);
             }
 
+            public override PlaneDetectionMode requestedPlaneDetectionMode
+            {
+                get => PlaneDetectionMode.Horizontal | PlaneDetectionMode.Vertical;
+                set { }
+            }
 
+            public override PlaneDetectionMode currentPlaneDetectionMode => PlaneDetectionMode.Horizontal | PlaneDetectionMode.Vertical;
         }
 
     }
