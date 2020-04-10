@@ -5,7 +5,8 @@ using Unity.Mathematics;
 namespace ARKitStream.Internal
 {
     [Serializable]
-    public struct Pose : IEquatable<Pose>
+    public struct Pose : IEquatable<Pose>,
+                         IEquatable<UnityEngine.Pose>
     {
         public float3 position;
         public float4 rotation;
@@ -15,6 +16,14 @@ namespace ARKitStream.Internal
             return position.Equals(o.position)
                 && rotation.Equals(o.rotation);
         }
+
+        public bool Equals(UnityEngine.Pose o)
+        {
+            return position.Equals(o.position)
+                && rotation.Equals(o.rotation);
+        }
+
+        
 
         public override string ToString()
         {

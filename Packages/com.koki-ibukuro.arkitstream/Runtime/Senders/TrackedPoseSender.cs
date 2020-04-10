@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
 using Unity.Mathematics;
+using UnityEngine.XR.ARFoundation;
 using ARKitStream.Internal;
 
 
@@ -11,28 +12,32 @@ namespace ARKitStream
     [RequireComponent(typeof(ARKitSender))]
     public sealed class TrackedPoseSender : ARKitSubSender
     {
-        [SerializeField] TrackedPoseDriver driver = null;
-
-
-        void OnValidate()
-        {
-            if (driver == null)
-            {
-                driver = FindObjectOfType<TrackedPoseDriver>();
-            }
-
-        }
+        [SerializeField] ARPoseDriver arPoseDriver = null;
+        [SerializeField] TrackedPoseDriver trackedPoseDriver = null;
 
         protected override void OnPacketTransformer(ARKitRemotePacket packet)
         {
-            if (driver == null)
+            Transform t = null;
+            bool useRelative = false;
+
+            if (arPoseDriver != null)
+            {
+                t = arPoseDriver.transform;
+                useRelative = true;
+            }
+            else if (trackedPoseDriver != null)
+            {
+                t = trackedPoseDriver.transform;
+                useRelative = trackedPoseDriver.UseRelativeTransform;
+            }
+
+            if (t == null)
             {
                 return;
             }
 
-            var t = driver.transform;
-            var p = driver.UseRelativeTransform ? t.localPosition : t.position;
-            var r = driver.UseRelativeTransform ? t.localRotation : t.rotation;
+            var p = useRelative ? t.localPosition : t.position;
+            var r = useRelative ? t.localRotation : t.rotation;
             packet.trackedPose = new Internal.Pose()
             {
                 position = p,
@@ -42,13 +47,22 @@ namespace ARKitStream
 
         public static TrackedPoseSender TryCreate(ARKitSender sender)
         {
-            var driver = FindObjectOfType<TrackedPoseDriver>();
-            if (driver == null)
+            TrackedPoseSender self = null;
+
+            var trackedPoseDriver = FindObjectOfType<TrackedPoseDriver>();
+            if (trackedPoseDriver != null)
             {
-                return null;
+                self = sender.gameObject.AddComponent<TrackedPoseSender>();
+                self.trackedPoseDriver = trackedPoseDriver;
             }
-            var self = sender.gameObject.AddComponent<TrackedPoseSender>();
-            self.driver = driver;
+
+            var arPoseDriver = FindObjectOfType<ARPoseDriver>();
+            if (arPoseDriver != null)
+            {
+                self = sender.gameObject.AddComponent<TrackedPoseSender>();
+                self.arPoseDriver = arPoseDriver;
+            }
+
             return self;
         }
     }
