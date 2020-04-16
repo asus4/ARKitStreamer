@@ -42,6 +42,19 @@ A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with AR
 }
 ```
 
+- Apply 2 patch files
+  - ARFace.cs see [issue #2](https://github.com/asus4/ARKitStreamer/issues/2)
+
+    ```sh
+    patch -u Library/PackageCache/com.unity.xr.arfoundation@4.0.0-preview.1/Runtime/AR/ARFace.cs < Tools/ARFace.cs.patch
+    ```
+
+  - Klak.Ndi on Unity2019.3 or more [issue #7](https://github.com/asus4/ARKitStreamer/issues/7)
+
+    ```sh
+    patch -u Library/PackageCache/jp.keijiro.klak.ndi@0.2.4/Editor/PbxModifier.cs < Tools/PbxModifier.cs.patch
+    ```
+
 ## How to Use
 
 ### Set up Sender iPhone
