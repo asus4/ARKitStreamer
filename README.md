@@ -1,10 +1,12 @@
 # ARKit Streamer
 
-A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with ARKit3 featrues.  
+A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with ARKit3 featrues. This is temporary until the Unity team has completed the AR remote functionality - [Unity forum link](https://forum.unity.com/threads/ar-remoting-simulation.720575/)
 
 ![img1](https://i.imgur.com/vZoYIs1.gif)  
+Human segmantation  
 
 ![img2](https://imgur.com/tQbJ1Sl.gif)  
+Sample with VFX Graph  
 
 ## Environments
 
@@ -14,7 +16,7 @@ A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with AR
 ## Supporting ARKit features
 
 - Human Segmentation
-- Face (You have to modify ar-foundation's code a bit. [See issee #2](https://github.com/asus4/ARKitStreamer/issues/2))
+- Face (You need to apply the patch ar-foundation's code as described below)
 - Plane tracking
 - 3D body tracking
 
