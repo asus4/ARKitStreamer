@@ -6,7 +6,7 @@ using UnityEngine.XR.ARSubsystems;
 namespace ARKitStream.Internal
 {
     /// <summary>
-    /// HACK: Neet the unsafe struct cast
+    /// HACK: Need the unsafe struct cast
     /// since XRTextureDescriptor is private struct!
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
