@@ -46,7 +46,7 @@ namespace ARKitStream.Internal
 
 
         [StructLayout(LayoutKind.Explicit)]
-        public struct XRFaceUnion
+        private struct XRFaceUnion
         {
             [FieldOffset(0)] public XRFace a;
             [FieldOffset(0)] public UnityEngine.XR.ARSubsystems.XRFace b;
