@@ -163,6 +163,7 @@ namespace ARKitStream
             ARKitFaceSender.TryCreate(this);
             ARKitOcclusionSender.TryCreate(this);
             ARKitPlaneSender.TryCreate(this);
+            ARKitHumanBodySender.TryCreate(this);
         }
 
     }
