@@ -22,18 +22,6 @@ namespace ARKitStream.Internal
             slice.CopyTo(arr);
         }
 
-        public static NativeArray<T> FromRawBytes<T>(byte[] bytes, Allocator allocator) where T : struct
-        {
-            int structSize = UnsafeUtility.SizeOf<T>();
-
-            UnityEngine.Debug.Assert(bytes.Length % structSize == 0);
-
-            int length = bytes.Length / UnsafeUtility.SizeOf<T>();
-            var arr = new NativeArray<T>(length, allocator);
-            arr.CopyFromRawBytes(bytes);
-            return arr;
-        }
-
         public static void CopyFromRawBytes<T>(byte[] bytes, Allocator allocator, ref NativeArray<T> arr) where T : struct
         {
             int length = bytes.Length / UnsafeUtility.SizeOf<T>();
@@ -47,6 +35,18 @@ namespace ARKitStream.Internal
                 arr = new NativeArray<T>(length, allocator);
             }
             arr.CopyFromRawBytes(bytes);
+        }
+        
+        public static NativeArray<T> FromRawBytes<T>(byte[] bytes, Allocator allocator) where T : struct
+        {
+            int structSize = UnsafeUtility.SizeOf<T>();
+
+            UnityEngine.Debug.Assert(bytes.Length % structSize == 0);
+
+            int length = bytes.Length / UnsafeUtility.SizeOf<T>();
+            var arr = new NativeArray<T>(length, allocator);
+            arr.CopyFromRawBytes(bytes);
+            return arr;
         }
     }
 }

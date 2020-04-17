@@ -65,6 +65,7 @@ namespace ARKitStream.Internal
         class ARKitRemoteProvider : Provider
         {
             HashSet<UnityTrackableId> ids = new HashSet<UnityTrackableId>();
+            TrackableChangesModifier<UnityXRFace> modifier = new TrackableChangesModifier<UnityXRFace>();
 
             public override int supportedFaceCount => 1;
             public override int currentMaximumFaceCount => 1;
@@ -83,46 +84,7 @@ namespace ARKitStream.Internal
                 var updated = face.updated.Select(f => (UnityXRFace)f).ToList();
                 var removed = face.removed.Select(id => (UnityTrackableId)id).ToList();
 
-                foreach (var f in added.ToArray())
-                {
-                    if (ids.Contains(f.trackableId))
-                    {
-                        added.Remove(f);
-                    }
-                    else
-                    {
-                        ids.Add(f.trackableId);
-                    }
-                }
-
-                foreach (var f in updated.ToArray())
-                {
-                    // Send as new
-                    if (!ids.Contains(f.trackableId))
-                    {
-                        updated.Remove(f);
-                        added.Add(f);
-                        ids.Add(f.trackableId);
-                    }
-                }
-                foreach (var id in removed.ToArray())
-                {
-                    // Send ad 
-                    if (ids.Contains(id))
-                    {
-                        ids.Remove(id);
-                    }
-                    else
-                    {
-                        removed.Remove(id);
-                    }
-                }
-
-                var nativeAdded = new NativeArray<UnityXRFace>(added.ToArray(), Allocator.Temp);
-                var nativeUpdated = new NativeArray<UnityXRFace>(updated.ToArray(), Allocator.Temp);
-                var nativeRemoved = new NativeArray<UnityTrackableId>(removed.ToArray(), Allocator.Temp);
-
-                return TrackableChanges<UnityXRFace>.CopyFrom(nativeAdded, nativeUpdated, nativeRemoved, allocator);
+                return modifier.Modify(added, updated, removed, allocator);
             }
 
             public override void GetFaceMesh(UnityTrackableId faceId, Allocator allocator, ref XRFaceMesh faceMesh)
