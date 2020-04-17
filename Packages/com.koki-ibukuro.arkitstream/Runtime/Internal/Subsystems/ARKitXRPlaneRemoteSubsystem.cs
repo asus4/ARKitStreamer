@@ -42,18 +42,12 @@ namespace ARKitStream.Internal
 
         class ARKitRemoteProvider : Provider
         {
-            HashSet<UnityTrackableId> ids;
+            TrackableChangesModifier<UnityBoundedPlane> modifier = new TrackableChangesModifier<UnityBoundedPlane>();
 
-            public override void Start()
+            public override void Destroy()
             {
-                ids = new HashSet<UnityTrackableId>();
+                modifier.Dispose();
             }
-            public override void Stop()
-            {
-                ids.Clear();
-            }
-            public override void Destroy() { }
-
 
             public override void GetBoundary(
                 UnityTrackableId trackableId,
@@ -87,45 +81,7 @@ namespace ARKitStream.Internal
                 var updated = plane.updated.Select(p => (UnityBoundedPlane)p).ToList();
                 var removed = plane.removed.Select(p => (UnityTrackableId)p).ToList();
 
-                foreach (var f in added.ToArray())
-                {
-                    if (ids.Contains(f.trackableId))
-                    {
-                        added.Remove(f);
-                    }
-                    else
-                    {
-                        ids.Add(f.trackableId);
-                    }
-                }
-                foreach (var f in updated.ToArray())
-                {
-                    // Send as new
-                    if (!ids.Contains(f.trackableId))
-                    {
-                        updated.Remove(f);
-                        added.Add(f);
-                        ids.Add(f.trackableId);
-                    }
-                }
-                foreach (var id in removed.ToArray())
-                {
-                    // Send ad 
-                    if (ids.Contains(id))
-                    {
-                        ids.Remove(id);
-                    }
-                    else
-                    {
-                        removed.Remove(id);
-                    }
-                }
-
-                var nativeAdded = new NativeArray<UnityBoundedPlane>(added.ToArray(), Allocator.Temp);
-                var nativeUpdated = new NativeArray<UnityBoundedPlane>(updated.ToArray(), Allocator.Temp);
-                var nativeRemoved = new NativeArray<UnityTrackableId>(removed.ToArray(), Allocator.Temp);
-
-                return TrackableChanges<UnityBoundedPlane>.CopyFrom(nativeAdded, nativeUpdated, nativeRemoved, allocator);
+                return modifier.Modify(added, updated, removed, allocator);
             }
 
             public override PlaneDetectionMode requestedPlaneDetectionMode

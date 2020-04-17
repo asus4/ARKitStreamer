@@ -39,9 +39,17 @@ namespace ARKitStream.Internal
 
         class ARKitRemoteProvider : XRHumanBodySubsystem.Provider
         {
+            TrackableChangesModifier<UnityXRHumanBody> modifier = new TrackableChangesModifier<UnityXRHumanBody>();
+
             public ARKitRemoteProvider()
             {
             }
+
+            public override void Destroy()
+            {
+                modifier.Dispose();
+            }
+
 
             public override bool pose2DRequested
             {
@@ -68,16 +76,11 @@ namespace ARKitStream.Internal
                     return new TrackableChanges<UnityXRHumanBody>();
                 }
 
-                Debug.Log(info.ToString());
-
                 var added = info.added.Select(o => (UnityXRHumanBody)o).ToList();
                 var updated = info.updated.Select(o => (UnityXRHumanBody)o).ToList();
                 var removed = info.removed.Select(id => (UnityTrackableId)id).ToList();
 
-                // return TrackableChanges<UnityXRHumanBody>.
-
-                return new TrackableChanges<UnityXRHumanBody>();
-
+                return modifier.Modify(added, updated, removed, allocator);
             }
 
             public override void GetSkeleton(UnityTrackableId trackableId, Allocator allocator, ref NativeArray<XRHumanBodyJoint> skeleton)

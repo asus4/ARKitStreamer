@@ -25,7 +25,7 @@ namespace ARKitStream
 
         [SerializeField] Mesh skeletonMesh = null;
         [SerializeField] Material material = null;
-        [SerializeField] List<Joint> joints = new List<Joint>();
+        List<Joint> joints = new List<Joint>();
 
         void Start()
         {
@@ -33,10 +33,12 @@ namespace ARKitStream
 
         void OnEnable()
         {
+            joints = new List<Joint>();
             humanBodyManager.humanBodiesChanged += OnHumanBodiesChanged;
         }
         void OnDisable()
         {
+            joints.Clear();
             humanBodyManager.humanBodiesChanged -= OnHumanBodiesChanged;
         }
 
@@ -44,8 +46,12 @@ namespace ARKitStream
         {
             foreach (var joint in joints)
             {
-                Debug.DrawLine(joint.start, joint.end, Color.green);
                 float length = Vector3.Distance(joint.start, joint.end);
+                if (length < float.Epsilon)
+                {
+                    continue;
+                }
+                Debug.DrawLine(joint.start, joint.end, Color.green);
                 var m = Matrix4x4.TRS(joint.start,
                                       Quaternion.LookRotation(joint.end - joint.start, Vector3.up),
                                       new Vector3(1, 1, length));

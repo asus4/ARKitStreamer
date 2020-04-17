@@ -64,8 +64,12 @@ namespace ARKitStream.Internal
 
         class ARKitRemoteProvider : Provider
         {
-            HashSet<UnityTrackableId> ids = new HashSet<UnityTrackableId>();
             TrackableChangesModifier<UnityXRFace> modifier = new TrackableChangesModifier<UnityXRFace>();
+
+            public override void Destroy()
+            {
+                modifier.Dispose();
+            }
 
             public override int supportedFaceCount => 1;
             public override int currentMaximumFaceCount => 1;
