@@ -15,7 +15,8 @@ A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with AR
 
 - Human Segmentation
 - Face (You have to modify ar-foundation's code a bit. [See issee #2](https://github.com/asus4/ARKitStreamer/issues/2))
-- ARPlane
+- Plane tracking
+- 3D body tracking
 
 ## Install
 
@@ -36,7 +37,7 @@ A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with AR
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.3.1",
+    "com.koki-ibukuro.arkitstream": "0.3.2",
     ...// other dependencies
   }
 }
