@@ -95,6 +95,21 @@ namespace ARKitStream
             }
         }
 
+        public ARKitRemotePacket.HumanBodyInfo HumanBody
+        {
+            get
+            {
+                lock (packetLock)
+                {
+                    if (packet != null)
+                    {
+                        return packet.humanBody;
+                    }
+                    return null;
+                }
+            }
+        }
+
         public UnityEngine.Pose TrackedPose
         {
             get

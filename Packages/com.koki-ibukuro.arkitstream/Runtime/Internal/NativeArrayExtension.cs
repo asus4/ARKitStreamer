@@ -33,5 +33,20 @@ namespace ARKitStream.Internal
             arr.CopyFromRawBytes(bytes);
             return arr;
         }
+
+        public static void CopyFromRawBytes<T>(byte[] bytes, Allocator allocator, ref NativeArray<T> arr) where T : struct
+        {
+            int length = bytes.Length / UnsafeUtility.SizeOf<T>();
+
+            if (!arr.IsCreated || (arr.Length != length))
+            {
+                if (arr.IsCreated)
+                {
+                    arr.Dispose();
+                }
+                arr = new NativeArray<T>(length, allocator);
+            }
+            arr.CopyFromRawBytes(bytes);
+        }
     }
 }
