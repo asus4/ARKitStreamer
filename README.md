@@ -78,6 +78,12 @@ Add `ARKitReceiver` to the scene which you want to simuirate on Editor. If sende
 
 For more infomation, please check Assets/Sample directory.
 
+### Setting for LWRP / URP
+
+If you use LWRP / URP, you need also add the ARBackgroundRemoteRendererFeature to the list of render features. See [AR Foundation Document](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@4.0/api/UnityEngine.XR.ARFoundation.ARCameraBackground.html) for more information.
+
+![Imgur](https://imgur.com/CRC99iQ.png)
+
 ## Libraries
 
 - [KlakNDI](https://github.com/keijiro/KlakNDI/)

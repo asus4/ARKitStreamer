@@ -1,6 +1,7 @@
 {
     "name": "ARKitStream",
     "references": [
+        "Unity.RenderPipelines.Core.Runtime",
         "Unity.RenderPipelines.Lightweight.Runtime",
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.Mathematics",
@@ -8,6 +9,8 @@
         "Unity.XR.ARSubsystems",
         "Unity.XR.ARKit",
         "Unity.XR.ARKit.FaceTracking",
+        "Unity.XR.Management",
+        "Unity.InputSystem",
         "Klak.Ndi",
         "UnityEngine.XR.LegacyInputHelpers",
         "UnityEngine.SpatialTracking"

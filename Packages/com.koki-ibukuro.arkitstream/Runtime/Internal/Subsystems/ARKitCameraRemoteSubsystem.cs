@@ -37,7 +37,12 @@ namespace ARKitStream.Internal
                 supportsTimestamp = true,
                 supportsCameraConfigurations = true,
                 supportsCameraImage = true,
-                supportsAverageIntensityInLumens = true
+                supportsAverageIntensityInLumens = true,
+                supportsFocusModes = true,
+                supportsFaceTrackingAmbientIntensityLightEstimation = true,
+                supportsFaceTrackingHDRLightEstimation = true,
+                supportsWorldTrackingAmbientIntensityLightEstimation = true,
+                supportsWorldTrackingHDRLightEstimation = false,
             };
 
             if (!XRCameraSubsystem.Register(cameraSubsystemCinfo))
@@ -61,7 +66,7 @@ namespace ARKitStream.Internal
 
             public override bool permissionGranted => true;
 
-            string ShaderName
+            private static string ShaderName
             {
                 get
                 {
@@ -88,8 +93,15 @@ namespace ARKitStream.Internal
 
             public ARKitRemoteProvider()
             {
-
                 m_CameraMaterial = CreateCameraMaterial(ShaderName);
+            }
+
+            public override Feature currentCamera => Feature.AnyCamera;
+
+            public override Feature requestedCamera
+            {
+                get => Feature.AnyCamera;
+                set => Debug.Log($"requestedCamera: {value}");
             }
 
             public override bool TryGetFrame(XRCameraParams cameraParams, out XRCameraFrame cameraFrame)
@@ -129,8 +141,29 @@ namespace ARKitStream.Internal
                     exposureDuration = 0,
                     exposureOffset = 0
                 };
+
+                // Debug.Log(cameraFrame);
                 return true;
             }
+
+            public override bool autoFocusEnabled => true;
+
+            public override bool autoFocusRequested
+            {
+                get => true;
+                set => Debug.Log($"autoFocusRequested: {value}");
+            }
+
+            public override Feature currentLightEstimation => Feature.AnyLightEstimation;
+            public override Feature requestedLightEstimation
+            {
+                get => Feature.AnyLightEstimation;
+                set => Debug.Log($"requestedLightEstimation: {value}");
+            }
+
+
+
+
 
             public override NativeArray<XRTextureDescriptor> GetTextureDescriptors(XRTextureDescriptor defaultDescriptor, Allocator allocator)
             {
