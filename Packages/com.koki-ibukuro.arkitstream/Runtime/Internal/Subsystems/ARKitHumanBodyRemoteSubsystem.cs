@@ -14,6 +14,7 @@ namespace ARKitStream.Internal
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
+#if UNITY_EDITOR
             const string id = "ARKit-HumanBody-Remote";
 
             XRHumanBodySubsystemCinfo humanBodySubsystemCinfo = new XRHumanBodySubsystemCinfo()
@@ -33,6 +34,7 @@ namespace ARKitStream.Internal
             {
                 Debug.LogErrorFormat("Cannot register the {0} subsystem", id);
             }
+#endif // UNITY_EDITOR
         }
 
         protected override Provider CreateProvider() => new ARKitRemoteProvider();
@@ -66,7 +68,11 @@ namespace ARKitStream.Internal
             }
             public override bool pose3DEnabled => true;
 
-            public override bool pose3DScaleEstimationEnabled => true;
+            public override bool pose3DScaleEstimationRequested
+            {
+                get => true;
+                set => Debug.Log($"pose3DScaleEstimationEnabled: {value}");
+            }
 
             public override TrackableChanges<UnityXRHumanBody> GetChanges(UnityXRHumanBody defaultHumanBody, Allocator allocator)
             {
