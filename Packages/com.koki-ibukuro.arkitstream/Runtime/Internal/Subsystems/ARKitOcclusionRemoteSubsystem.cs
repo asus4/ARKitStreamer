@@ -1,6 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Unity.Collections;
 using UnityEngine.Scripting;
 using UnityEngine.XR.ARSubsystems;
 
@@ -37,6 +38,11 @@ namespace ARKitStream.Internal
     [Preserve]
     public class ARKitOcclusionRemoteSubsystem : XROcclusionSubsystem
     {
+        static readonly int _HumanStencil = Shader.PropertyToID("_HumanStencil");
+        static readonly int _HumanDepth = Shader.PropertyToID("_HumanDepth");
+        static readonly int ARKIT_HUMAN_SEGMENTATION_ENABLED = Shader.PropertyToID("ARKIT_HUMAN_SEGMENTATION_ENABLED");
+
+
         protected override Provider CreateProvider() => new ARKitProvider();
 
         class ARKitProvider : XROcclusionSubsystem.Provider
@@ -73,7 +79,7 @@ namespace ARKitStream.Internal
                     return false;
                 }
 
-                humanStencilDescriptor = new TextureDescriptor(tex, 0);
+                humanStencilDescriptor = new TextureDescriptor(tex, _HumanStencil);
                 return true;
             }
 
@@ -93,8 +99,25 @@ namespace ARKitStream.Internal
                     return false;
                 }
 
-                humanDepthDescriptor = new TextureDescriptor(tex, 0);
+                humanDepthDescriptor = new TextureDescriptor(tex, _HumanDepth);
                 return true;
+            }
+
+            public override NativeArray<XRTextureDescriptor> GetTextureDescriptors(XRTextureDescriptor defaultDescriptor,
+                                                                                          Allocator allocator)
+            {
+                var descriptors = new List<XRTextureDescriptor>();
+
+                XRTextureDescriptor descriptor;
+                if (TryGetHumanStencil(out descriptor))
+                {
+                    descriptors.Add(descriptor);
+                }
+                if (TryGetHumanDepth(out descriptor))
+                {
+                    descriptors.Add(descriptor);
+                }
+                return new NativeArray<XRTextureDescriptor>(descriptors.ToArray(), allocator);
             }
         }
     }
