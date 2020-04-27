@@ -43,6 +43,8 @@
         uv.y *= 0.5;
         uv.y += 0.5;
         float depth = tex2D(_MainTex, uv).g;
+        // improve the precision of near point
+        depth = pow(depth * 10.0, 2.0);
         return half4(depth, 0.0, 0.0, 1.0);
     }
     ENDCG

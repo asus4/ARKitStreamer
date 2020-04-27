@@ -58,7 +58,6 @@
                 // B: Cr
                 if(i.texcoord.y < 0.5)
                 {
-                    // sample the texture
                     texcoord.y *= 2.0;
 
                     float y = tex2D(_textureY, texcoord).r;
@@ -66,15 +65,6 @@
                     float4 ycbcr = float4(y, cbcr, 1.0);
 
                     return float4(y, cbcr.x, cbcr.y, 1.0);
-
-                    // const float4x4 ycbcrToRGBTransform = float4x4(
-                    //     float4(1.0, +0.0000, +1.4020, -0.7010),
-                    //     float4(1.0, -0.3441, -0.7141, +0.5291),
-                    //     float4(1.0, +1.7720, +0.0000, -0.8860),
-                    //     float4(0.0, +0.0000, +0.0000, +1.0000)
-                    // );
-
-                    // return mul(ycbcrToRGBTransform, ycbcr);
                 }
                 // else
                 // 0.5 < uv.y < 1.0
@@ -85,6 +75,8 @@
                
                 float stencil = tex2D(_textureStencil, texcoord).r;
                 float depth = tex2D(_textureDepth, texcoord).r;
+                // improve the precision of near point
+                depth = pow(depth, 0.5) * 0.1;
 
                 return float4(stencil, depth, 0.0, 1.0);
             }
