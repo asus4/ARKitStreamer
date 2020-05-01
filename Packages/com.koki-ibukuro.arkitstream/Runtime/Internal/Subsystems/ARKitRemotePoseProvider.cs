@@ -7,6 +7,7 @@ using UnityEngine.XR.ARFoundation;
 
 namespace ARKitStream.Internal
 {
+    [AddComponentMenu("")]
     public class ARKitRemotePoseProvider : BasePoseProvider
     {
         public Transform manualTarget = null;

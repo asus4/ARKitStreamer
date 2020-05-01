@@ -7,7 +7,7 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
-
+    [AddComponentMenu("")]    
     public class ARKitHumanBodySender : ARKitSubSender
     {
         [SerializeField] ARHumanBodyManager humanBodyManager = null;
