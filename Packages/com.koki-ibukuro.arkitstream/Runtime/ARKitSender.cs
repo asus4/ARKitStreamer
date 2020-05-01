@@ -164,6 +164,7 @@ namespace ARKitStream
             ARKitOcclusionSender.TryCreate(this);
             ARKitPlaneSender.TryCreate(this);
             ARKitHumanBodySender.TryCreate(this);
+            ARKitEnvironmentProbeSender.TryCreate(this);
         }
 
     }
