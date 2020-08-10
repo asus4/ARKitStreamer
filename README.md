@@ -5,7 +5,7 @@ A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with AR
 ![img1](https://i.imgur.com/vZoYIs1.gif)  
 Human segmantation  
 
-![img2](https://imgur.com/tQbJ1Sl.gif)  
+![img2](https://user-images.githubusercontent.com/357497/89782917-66e0e680-db16-11ea-856b-fb6782ec0b23.gif)
 Sample with VFX Graph  
 
 ## Environments
