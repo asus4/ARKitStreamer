@@ -12,6 +12,7 @@ using XRFace = ARKitStream.Internal.XRFace;
 
 namespace ARKitStream
 {
+    [AddComponentMenu("")]
     public class ARKitFaceSender : ARKitSubSender
     {
         [SerializeField] ARFaceManager faceManager = null;

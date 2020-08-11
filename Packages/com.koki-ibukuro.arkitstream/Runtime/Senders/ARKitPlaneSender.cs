@@ -12,6 +12,7 @@ using TrackableId = ARKitStream.Internal.TrackableId;
 
 namespace ARKitStream
 {
+    [AddComponentMenu("")]
     public class ARKitPlaneSender : ARKitSubSender
     {
         [SerializeField] ARPlaneManager planeManager = null;

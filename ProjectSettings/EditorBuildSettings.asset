@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Samples/Index.unity
     guid: 0cbd4564ffbc64826858b3dd98a9e035
   - enabled: 1
+    path: Assets/Samples/Environment Probe.unity
+    guid: 49e203600dae748269f34b22860bb86e
+  - enabled: 1
     path: Assets/Samples/Face.unity
     guid: ed16ddbdc5f2949688ca556dba44d651
   - enabled: 1

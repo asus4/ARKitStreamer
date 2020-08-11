@@ -4,6 +4,7 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
+    [AddComponentMenu("")]
     public class ARKitOcclusionSender : ARKitSubSender
     {
         [SerializeField] AROcclusionManager occlusionManager = null;

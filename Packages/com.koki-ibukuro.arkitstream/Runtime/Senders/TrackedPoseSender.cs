@@ -9,6 +9,7 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
+    [AddComponentMenu("")]
     [RequireComponent(typeof(ARKitSender))]
     public sealed class TrackedPoseSender : ARKitSubSender
     {
