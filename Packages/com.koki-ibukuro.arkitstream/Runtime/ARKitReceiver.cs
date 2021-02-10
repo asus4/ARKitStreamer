@@ -197,7 +197,7 @@ namespace ARKitStream
 
         void Update()
         {
-            var rt = ndiReceiver.receivedTexture;
+            var rt = ndiReceiver.texture;
             if (rt == null)
             {
                 return;

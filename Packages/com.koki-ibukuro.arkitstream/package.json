@@ -9,7 +9,7 @@
     "com.unity.xr.arkit-face-tracking": "4.0.0-preview.1",
     "com.unity.xr.arsubsystems": "4.0.0-preview.1",
     "com.unity.xr.legacyinputhelpers": "2.0.8",
-    "jp.keijiro.klak.ndi": "0.2.4"
+    "jp.keijiro.klak.ndi": "1.0.12"
   },
   "description": "AR foundation devkit",
   "keywords": [

@@ -12,18 +12,34 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
+    [RequireComponent(typeof(NdiSender))]
     public sealed class ARKitSender : MonoBehaviour
     {
-        public class ARKitService : WebSocketBehavior
+        public sealed class ARKitService : WebSocketBehavior
         {
-            public ARKitService()
-            {
+            public bool IsOpen { get; private set; }
+            public ARKitService() { }
 
+            protected override void OnOpen()
+            {
+                base.OnOpen();
+                Debug.Log($"Socket opened");
+                IsOpen = true;
             }
+
+            protected override void OnClose(CloseEventArgs e)
+            {
+                base.OnClose(e);
+                Debug.Log($"Socket closed: {e}");
+                IsOpen = false;
+            }
+
             protected override void OnMessage(MessageEventArgs e)
             {
+                base.OnMessage(e);
                 Debug.Log(e);
             }
+
 
             public void ExternalSend(byte[] data)
             {
@@ -72,6 +88,8 @@ namespace ARKitStream
             server.Start();
 
             InitSubSenders();
+
+            ndiSender = GetComponent<NdiSender>();
         }
 
         void OnDestroy()
@@ -96,11 +114,20 @@ namespace ARKitStream
             {
                 cameraManager = FindObjectOfType<ARCameraManager>();
             }
+
+            NdiSender ndiSender;
+            if (!TryGetComponent<NdiSender>(out ndiSender))
+            {
+                ndiSender = gameObject.AddComponent<NdiSender>();
+            }
+            ndiSender.captureMethod = CaptureMethod.Texture;
+            ndiSender.enableAlpha = false;
+            ndiSender.ndiName = name;
         }
 
         void OnCameraFarameReceived(ARCameraFrameEventArgs args)
         {
-            if (service != null)
+            if (service != null && service.IsOpen)
             {
                 var packet = new ARKitRemotePacket()
                 {
@@ -147,14 +174,17 @@ namespace ARKitStream
 
         void InitNDI(int width, int height)
         {
+            Debug.Log($"Init NDI withd: {width} height: {height}");
+            // test override size
+            width = 1920;
+            height = 1080 / 2;
+
             renderTexture = new RenderTexture(width, height * 2, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             var name = string.Format("ARKit Stream");
             var go = new GameObject(name);
             go.transform.SetParent(transform, false);
-            ndiSender = go.AddComponent<NdiSender>();
 
             ndiSender.sourceTexture = renderTexture;
-            ndiSender.alphaSupport = false;
         }
 
         void InitSubSenders()

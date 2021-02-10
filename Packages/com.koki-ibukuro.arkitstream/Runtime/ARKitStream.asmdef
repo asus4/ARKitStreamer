@@ -10,10 +10,9 @@
         "Unity.XR.ARKit",
         "Unity.XR.ARKit.FaceTracking",
         "Unity.XR.Management",
-        "Unity.InputSystem",
-        "Klak.Ndi",
         "UnityEngine.XR.LegacyInputHelpers",
-        "UnityEngine.SpatialTracking"
+        "UnityEngine.SpatialTracking",
+        "Klak.Ndi.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

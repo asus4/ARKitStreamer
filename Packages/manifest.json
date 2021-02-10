@@ -1,11 +1,14 @@
 {
   "scopedRegistries": [
     {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [ "org.nuget" ]
+    },
+    {
       "name": "Keijiro",
       "url": "https://registry.npmjs.com",
-      "scopes": [
-        "jp.keijiro"
-      ]
+      "scopes": [ "jp.keijiro" ]
     }
   ],
   "dependencies": {
@@ -21,7 +24,7 @@
     "com.unity.xr.arkit": "4.0.0-preview.1",
     "com.unity.xr.arkit-face-tracking": "4.0.0-preview.1",
     "com.unity.xr.management": "3.2.16",
-    "jp.keijiro.klak.ndi": "0.2.4",
+    "jp.keijiro.klak.ndi": "1.0.12",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
