@@ -122,7 +122,7 @@ namespace ARKitStream
             }
             ndiSender.captureMethod = CaptureMethod.Texture;
             ndiSender.enableAlpha = false;
-            ndiSender.ndiName = name;
+            ndiSender.ndiName = "ARKit Stream";
         }
 
         void OnCameraFarameReceived(ARCameraFrameEventArgs args)
@@ -176,10 +176,10 @@ namespace ARKitStream
         {
             Debug.Log($"Init NDI withd: {width} height: {height}");
             // test override size
-            width = 1920;
-            height = 1080 / 2;
+            // width = width;
+            // height = height * 2;
 
-            renderTexture = new RenderTexture(width, height * 2, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            renderTexture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             var name = string.Format("ARKit Stream");
             var go = new GameObject(name);
             go.transform.SetParent(transform, false);
