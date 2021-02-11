@@ -75,15 +75,15 @@ namespace ARKitStream
             Debug.Log("ARKitStreamLoader Deinitialize");
 #if UNITY_EDITOR
             DestroySubsystem<XRCameraSubsystem>();
-            DestroySubsystem<XRDepthSubsystem>();
+            // DestroySubsystem<XRDepthSubsystem>();
             DestroySubsystem<XRPlaneSubsystem>();
-            DestroySubsystem<XRAnchorSubsystem>();
-            DestroySubsystem<XRRaycastSubsystem>();
+            // DestroySubsystem<XRAnchorSubsystem>();
+            // DestroySubsystem<XRRaycastSubsystem>();
             DestroySubsystem<XRHumanBodySubsystem>();
-            DestroySubsystem<XREnvironmentProbeSubsystem>();
+            // DestroySubsystem<XREnvironmentProbeSubsystem>();
             // DestroySubsystem<XRInputSubsystem>();
-            DestroySubsystem<XRImageTrackingSubsystem>();
-            DestroySubsystem<XRObjectTrackingSubsystem>();
+            // DestroySubsystem<XRImageTrackingSubsystem>();
+            // DestroySubsystem<XRObjectTrackingSubsystem>();
             DestroySubsystem<XRFaceSubsystem>();
             DestroySubsystem<XROcclusionSubsystem>();
             DestroySubsystem<XRParticipantSubsystem>();
