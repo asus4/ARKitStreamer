@@ -12,7 +12,7 @@ using ARKitStream.Internal;
 
 namespace ARKitStream
 {
-    [RequireComponent(typeof(NdiSender))]
+    [DisallowMultipleComponent]
     public sealed class ARKitSender : MonoBehaviour
     {
         public sealed class ARKitService : WebSocketBehavior
@@ -67,6 +67,8 @@ namespace ARKitStream
 
         [SerializeField] ARCameraManager cameraManager = null;
         [SerializeField] uint port = 8888;
+        [SerializeField] NdiResources resources = null;
+
 
         internal event Action<ARKitRemotePacket> PacketTransformer;
         internal event Action<Material> NdiTransformer;
@@ -102,8 +104,6 @@ namespace ARKitStream
             server.Start();
 
             InitSubSenders();
-
-            ndiSender = GetComponent<NdiSender>();
         }
 
         void OnDestroy()
@@ -129,15 +129,6 @@ namespace ARKitStream
             {
                 cameraManager = FindObjectOfType<ARCameraManager>();
             }
-
-            NdiSender ndiSender;
-            if (!TryGetComponent<NdiSender>(out ndiSender))
-            {
-                ndiSender = gameObject.AddComponent<NdiSender>();
-            }
-            ndiSender.captureMethod = CaptureMethod.Texture;
-            ndiSender.enableAlpha = false;
-            ndiSender.ndiName = "ARKit Stream";
         }
 
         void OnCameraFarameReceived(ARCameraFrameEventArgs args)
@@ -199,6 +190,11 @@ namespace ARKitStream
             var go = new GameObject(name);
             go.transform.SetParent(transform, false);
 
+            ndiSender = go.AddComponent<NdiSender>();
+            ndiSender.SetResources(resources);
+            ndiSender.captureMethod = CaptureMethod.Texture;
+            ndiSender.enableAlpha = false;
+            ndiSender.ndiName = "ARKit Stream";
             ndiSender.sourceTexture = renderTexture;
         }
 

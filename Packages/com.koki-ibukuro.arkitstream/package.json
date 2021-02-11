@@ -18,6 +18,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "unity": "2019.2",
   "unityRelease": "0f1",
-  "version": "0.3.6",
-  "type": "tool"
+  "version": "0.4.0",
+  "type": "library",
+  "hideInEditor": false
 }

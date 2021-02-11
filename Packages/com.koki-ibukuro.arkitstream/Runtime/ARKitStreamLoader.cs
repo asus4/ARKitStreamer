@@ -20,24 +20,24 @@ namespace ARKitStream
     {
         static List<XRSessionSubsystemDescriptor> s_SessionSubsystemDescriptors = new List<XRSessionSubsystemDescriptor>();
         static List<XRCameraSubsystemDescriptor> s_CameraSubsystemDescriptors = new List<XRCameraSubsystemDescriptor>();
-        static List<XRDepthSubsystemDescriptor> s_DepthSubsystemDescriptors = new List<XRDepthSubsystemDescriptor>();
+        // static List<XRDepthSubsystemDescriptor> s_DepthSubsystemDescriptors = new List<XRDepthSubsystemDescriptor>();
         static List<XRPlaneSubsystemDescriptor> s_PlaneSubsystemDescriptors = new List<XRPlaneSubsystemDescriptor>();
-        static List<XRAnchorSubsystemDescriptor> s_AnchorSubsystemDescriptors = new List<XRAnchorSubsystemDescriptor>();
-        static List<XRRaycastSubsystemDescriptor> s_RaycastSubsystemDescriptors = new List<XRRaycastSubsystemDescriptor>();
+        // static List<XRAnchorSubsystemDescriptor> s_AnchorSubsystemDescriptors = new List<XRAnchorSubsystemDescriptor>();
+        // static List<XRRaycastSubsystemDescriptor> s_RaycastSubsystemDescriptors = new List<XRRaycastSubsystemDescriptor>();
         static List<XRHumanBodySubsystemDescriptor> s_HumanBodySubsystemDescriptors = new List<XRHumanBodySubsystemDescriptor>();
-        static List<XREnvironmentProbeSubsystemDescriptor> s_EnvironmentProbeSubsystemDescriptors = new List<XREnvironmentProbeSubsystemDescriptor>();
+        // static List<XREnvironmentProbeSubsystemDescriptor> s_EnvironmentProbeSubsystemDescriptors = new List<XREnvironmentProbeSubsystemDescriptor>();
         // static List<XRInputSubsystemDescriptor> s_InputSubsystemDescriptors = new List<XRInputSubsystemDescriptor>();
-        static List<XRImageTrackingSubsystemDescriptor> s_ImageTrackingSubsystemDescriptors = new List<XRImageTrackingSubsystemDescriptor>();
-        static List<XRObjectTrackingSubsystemDescriptor> s_ObjectTrackingSubsystemDescriptors = new List<XRObjectTrackingSubsystemDescriptor>();
+        // static List<XRImageTrackingSubsystemDescriptor> s_ImageTrackingSubsystemDescriptors = new List<XRImageTrackingSubsystemDescriptor>();
+        // static List<XRObjectTrackingSubsystemDescriptor> s_ObjectTrackingSubsystemDescriptors = new List<XRObjectTrackingSubsystemDescriptor>();
         static List<XRFaceSubsystemDescriptor> s_FaceSubsystemDescriptors = new List<XRFaceSubsystemDescriptor>();
         static List<XROcclusionSubsystemDescriptor> s_OcclusionSubsystemDescriptors = new List<XROcclusionSubsystemDescriptor>();
-        static List<XRParticipantSubsystemDescriptor> s_ParticipantSubsystemDescriptors = new List<XRParticipantSubsystemDescriptor>();
+        // static List<XRParticipantSubsystemDescriptor> s_ParticipantSubsystemDescriptors = new List<XRParticipantSubsystemDescriptor>();
         // static List<XRMeshSubsystemDescriptor> s_MeshSubsystemDescriptors = new List<XRMeshSubsystemDescriptor>();
 
 
         public override bool Initialize()
         {
-            if (!Application.isPlaying) return false;
+            // if (!Application.isPlaying) return false;
 #if UNITY_EDITOR
             CreateSubsystem<XRSessionSubsystemDescriptor, XRSessionSubsystem>(s_SessionSubsystemDescriptors, ARKitSessionRemoteSubsystem.ID);
             CreateSubsystem<XRCameraSubsystemDescriptor, XRCameraSubsystem>(s_CameraSubsystemDescriptors, ARKitCameraRemoteSubsystem.ID);
@@ -82,28 +82,25 @@ namespace ARKitStream
         {
             if (!Application.isPlaying)
             {
-                return base.Deinitialize();
+                // return base.Deinitialize();
             };
 
 #if UNITY_EDITOR
-            if (Application.isPlaying)
-            {
-                DestroySubsystem<XRCameraSubsystem>();
-                // DestroySubsystem<XRDepthSubsystem>();
-                DestroySubsystem<XRPlaneSubsystem>();
-                // DestroySubsystem<XRAnchorSubsystem>();
-                // DestroySubsystem<XRRaycastSubsystem>();
-                DestroySubsystem<XRHumanBodySubsystem>();
-                // DestroySubsystem<XREnvironmentProbeSubsystem>();
-                // DestroySubsystem<XRInputSubsystem>();
-                // DestroySubsystem<XRImageTrackingSubsystem>();
-                // DestroySubsystem<XRObjectTrackingSubsystem>();
-                DestroySubsystem<XRFaceSubsystem>();
-                DestroySubsystem<XROcclusionSubsystem>();
-                // DestroySubsystem<XRParticipantSubsystem>();
-                // DestroySubsystem<XRMeshSubsystem>();
-                DestroySubsystem<XRSessionSubsystem>();
-            }
+            DestroySubsystem<XRCameraSubsystem>();
+            // DestroySubsystem<XRDepthSubsystem>();
+            DestroySubsystem<XRPlaneSubsystem>();
+            // DestroySubsystem<XRAnchorSubsystem>();
+            // DestroySubsystem<XRRaycastSubsystem>();
+            DestroySubsystem<XRHumanBodySubsystem>();
+            // DestroySubsystem<XREnvironmentProbeSubsystem>();
+            // DestroySubsystem<XRInputSubsystem>();
+            // DestroySubsystem<XRImageTrackingSubsystem>();
+            // DestroySubsystem<XRObjectTrackingSubsystem>();
+            DestroySubsystem<XRFaceSubsystem>();
+            DestroySubsystem<XROcclusionSubsystem>();
+            // DestroySubsystem<XRParticipantSubsystem>();
+            // DestroySubsystem<XRMeshSubsystem>();
+            DestroySubsystem<XRSessionSubsystem>();
 #endif
 
             Debug.Log("ARKitStreamLoader Deinitialize");

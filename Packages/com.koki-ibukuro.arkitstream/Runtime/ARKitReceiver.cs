@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.XR.Interaction;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 using Klak.Ndi;
@@ -11,11 +11,11 @@ using ARKitStream.Internal;
 namespace ARKitStream
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(NdiReceiver))]
     public sealed class ARKitReceiver : MonoBehaviour
     {
         [SerializeField] string ipAddress = "172.20.10.1";
         [SerializeField] uint port = 8888;
+        [SerializeField] NdiResources resources = null;
 
         NdiReceiver ndiReceiver = null;
         Vector2Int ndiSourceSize = Vector2Int.zero;
@@ -146,7 +146,13 @@ namespace ARKitStream
 
         void Start()
         {
-            ndiReceiver = GetComponent<NdiReceiver>();
+            ndiReceiver = gameObject.AddComponent<NdiReceiver>();
+            ndiReceiver.SetResources(resources);
+            var ndiName = FindNdiName();
+            if (!string.IsNullOrWhiteSpace(ndiName))
+            {
+                ndiReceiver.ndiName = ndiName;
+            }
 
             commandBuffer = new CommandBuffer();
             commandBuffer.name = "ARKitStreamReceiver";
@@ -203,6 +209,11 @@ namespace ARKitStream
             var rt = ndiReceiver.texture;
             if (rt == null)
             {
+                var ndiName = FindNdiName();
+                if (!string.IsNullOrWhiteSpace(ndiName) && ndiReceiver.ndiName != ndiName)
+                {
+                    ndiReceiver.ndiName = ndiName;
+                }
                 return;
             }
             if (ndiSourceSize.x != rt.width || ndiSourceSize.y != rt.height)
@@ -310,6 +321,12 @@ namespace ARKitStream
             }
 
             Debug.LogWarning("Pose Provider didn't found");
+        }
+
+
+        static string FindNdiName()
+        {
+            return NdiFinder.sourceNames.FirstOrDefault();
         }
     }
 }
