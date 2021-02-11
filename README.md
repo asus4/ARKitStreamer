@@ -10,13 +10,15 @@ Sample with VFX Graph
 
 ## Environments
 
-- Tested on Unity 2019.3.3f1
+- Tested on Unity 2019.4.17f1
 - iPhone X or more
 
 ## Supporting ARKit features
 
-- Human Segmentation
-- Face (You need to apply the patch ar-foundation's code as described below)
+- Basic camera position tracking
+- Send camera image via NDI
+- Human Segmentation / Depth
+- Face (Need to apply the patch ar-foundation's code as described below)
 - Plane tracking
 - 3D body tracking
 
@@ -29,6 +31,11 @@ Sample with VFX Graph
 ```json
 {
   "scopedRegistries": [
+    {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [ "org.nuget" ]
+    },
     {
       "name": "npm",
       "url": "https://registry.npmjs.com",
@@ -46,11 +53,13 @@ Sample with VFX Graph
 ```
 
 - Apply a patch file
-  - ARFace.cs see [issue #2](https://github.com/asus4/ARKitStreamer/issues/2)
 
-    ```sh
-    patch -u Library/PackageCache/com.unity.xr.arfoundation@4.0.0-preview.1/Runtime/AR/ARFace.cs < Tools/ARFace.cs.patch
-    ```
+If you use the face tracking, apply the patch to suppress exceptions on Editor in the ARFace class. See [issue #2](https://github.com/asus4/ARKitStreamer/issues/2) for more descriptions.
+
+```sh
+# Sample command for patch
+patch -u Library/PackageCache/com.unity.xr.arfoundation@4.0.0-preview.1/Runtime/AR/ARFace.cs < Tools/ARFace.cs.patch
+```
 
 ## How to Use
 
