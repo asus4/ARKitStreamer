@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
@@ -18,6 +19,8 @@ namespace ARKitStream.Internal
         public int mipmapCount;
         public TextureFormat format;
         public int propertyNameId;
+        public int depth;
+        public TextureDimension dimension;
 
         public TextureDescriptor(Texture2D tex, int propertyNameId)
         {
@@ -26,6 +29,8 @@ namespace ARKitStream.Internal
             height = tex.height;
             mipmapCount = tex.mipmapCount;
             format = tex.format;
+            depth = 0;
+            dimension = tex.dimension;
             this.propertyNameId = propertyNameId;
         }
 
@@ -36,7 +41,9 @@ namespace ARKitStream.Internal
                 && height.Equals(other.height)
                 && mipmapCount.Equals(other.mipmapCount)
                 && format.Equals(other.format)
-                && propertyNameId.Equals(other.propertyNameId);
+                && propertyNameId.Equals(other.propertyNameId)
+                && depth.Equals(other.depth)
+                && dimension.Equals(other.dimension);
         }
 
 

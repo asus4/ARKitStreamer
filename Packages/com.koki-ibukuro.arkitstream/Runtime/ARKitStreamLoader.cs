@@ -37,7 +37,6 @@ namespace ARKitStream
 
         public override bool Initialize()
         {
-            Debug.Log("ARKitStreamLoader Initialize");
 #if UNITY_EDITOR
             CreateSubsystem<XRSessionSubsystemDescriptor, XRSessionSubsystem>(s_SessionSubsystemDescriptors, ARKitSessionRemoteSubsystem.ID);
             CreateSubsystem<XRCameraSubsystemDescriptor, XRCameraSubsystem>(s_CameraSubsystemDescriptors, ARKitCameraRemoteSubsystem.ID);
@@ -57,6 +56,8 @@ namespace ARKitStream
             // CreateSubsystem<XRParticipantSubsystemDescriptor, XRParticipantSubsystem>(s_ParticipantSubsystemDescriptors, "ARKit-Participant");
             // CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, "ARKit-Meshing");
 #endif
+            Debug.Log("ARKitStreamLoader Initialize");
+
             return true;
         }
 
@@ -72,7 +73,6 @@ namespace ARKitStream
 
         public override bool Deinitialize()
         {
-            Debug.Log("ARKitStreamLoader Deinitialize");
 #if UNITY_EDITOR
             DestroySubsystem<XRCameraSubsystem>();
             // DestroySubsystem<XRDepthSubsystem>();
@@ -86,10 +86,12 @@ namespace ARKitStream
             // DestroySubsystem<XRObjectTrackingSubsystem>();
             DestroySubsystem<XRFaceSubsystem>();
             DestroySubsystem<XROcclusionSubsystem>();
-            DestroySubsystem<XRParticipantSubsystem>();
+            // DestroySubsystem<XRParticipantSubsystem>();
             // DestroySubsystem<XRMeshSubsystem>();
             DestroySubsystem<XRSessionSubsystem>();
 #endif
+            Debug.Log("ARKitStreamLoader Deinitialize");
+
             return base.Deinitialize();
         }
     }

@@ -126,7 +126,7 @@ namespace ARKitStream.Internal
                     | XRCameraFrameProperties.ProjectionMatrix
                     | XRCameraFrameProperties.DisplayMatrix;
 
-                cameraFrame = new CameraFrame()
+                cameraFrame = (XRCameraFrame) new CameraFrame()
                 {
                     timestampNs = remoteFrame.timestampNs,
                     averageBrightness = 0,
@@ -139,7 +139,12 @@ namespace ARKitStream.Internal
                     properties = properties,
                     averageIntensityInLumens = 0,
                     exposureDuration = 0,
-                    exposureOffset = 0
+                    exposureOffset = 0,
+                    mainLightIntensityLumens = 0,
+                    mainLightColor = default(Color),
+                    ambientSphericalHarmonics = default(SphericalHarmonicsL2),
+                    cameraGrain = default(XRTextureDescriptor),
+                    noiseIntensity = 0,
                 };
 
                 // Debug.Log(cameraFrame);
@@ -180,6 +185,7 @@ namespace ARKitStream.Internal
                     return new NativeArray<XRTextureDescriptor>(0, allocator);
                 }
 
+                Debug.Log($"GetTextureDescriptors: {yTex}, {cbcrTex}");
 
                 var arr = new NativeArray<XRTextureDescriptor>(2, allocator);
                 arr[0] = new TextureDescriptor(yTex, _TEXTURE_Y);
