@@ -37,6 +37,7 @@ namespace ARKitStream
 
         public override bool Initialize()
         {
+            if (!Application.isPlaying) return false;
 #if UNITY_EDITOR
             CreateSubsystem<XRSessionSubsystemDescriptor, XRSessionSubsystem>(s_SessionSubsystemDescriptors, ARKitSessionRemoteSubsystem.ID);
             CreateSubsystem<XRCameraSubsystemDescriptor, XRCameraSubsystem>(s_CameraSubsystemDescriptors, ARKitCameraRemoteSubsystem.ID);
@@ -56,9 +57,15 @@ namespace ARKitStream
             // CreateSubsystem<XRParticipantSubsystemDescriptor, XRParticipantSubsystem>(s_ParticipantSubsystemDescriptors, "ARKit-Participant");
             // CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, "ARKit-Meshing");
 #endif
+
             Debug.Log("ARKitStreamLoader Initialize");
 
-            return true;
+            var sessionSubsystem = GetLoadedSubsystem<XRSessionSubsystem>();
+            if (sessionSubsystem == null)
+            {
+                Debug.LogError("Failed to load session subsystem.");
+            }
+            return sessionSubsystem != null;
         }
 
         public override bool Start()
@@ -73,25 +80,33 @@ namespace ARKitStream
 
         public override bool Deinitialize()
         {
-#if UNITY_EDITOR
-            DestroySubsystem<XRCameraSubsystem>();
-            // DestroySubsystem<XRDepthSubsystem>();
-            DestroySubsystem<XRPlaneSubsystem>();
-            // DestroySubsystem<XRAnchorSubsystem>();
-            // DestroySubsystem<XRRaycastSubsystem>();
-            DestroySubsystem<XRHumanBodySubsystem>();
-            // DestroySubsystem<XREnvironmentProbeSubsystem>();
-            // DestroySubsystem<XRInputSubsystem>();
-            // DestroySubsystem<XRImageTrackingSubsystem>();
-            // DestroySubsystem<XRObjectTrackingSubsystem>();
-            DestroySubsystem<XRFaceSubsystem>();
-            DestroySubsystem<XROcclusionSubsystem>();
-            // DestroySubsystem<XRParticipantSubsystem>();
-            // DestroySubsystem<XRMeshSubsystem>();
-            DestroySubsystem<XRSessionSubsystem>();
-#endif
-            Debug.Log("ARKitStreamLoader Deinitialize");
+            if (!Application.isPlaying)
+            {
+                return base.Deinitialize();
+            };
 
+#if UNITY_EDITOR
+            if (Application.isPlaying)
+            {
+                DestroySubsystem<XRCameraSubsystem>();
+                // DestroySubsystem<XRDepthSubsystem>();
+                DestroySubsystem<XRPlaneSubsystem>();
+                // DestroySubsystem<XRAnchorSubsystem>();
+                // DestroySubsystem<XRRaycastSubsystem>();
+                DestroySubsystem<XRHumanBodySubsystem>();
+                // DestroySubsystem<XREnvironmentProbeSubsystem>();
+                // DestroySubsystem<XRInputSubsystem>();
+                // DestroySubsystem<XRImageTrackingSubsystem>();
+                // DestroySubsystem<XRObjectTrackingSubsystem>();
+                DestroySubsystem<XRFaceSubsystem>();
+                DestroySubsystem<XROcclusionSubsystem>();
+                // DestroySubsystem<XRParticipantSubsystem>();
+                // DestroySubsystem<XRMeshSubsystem>();
+                DestroySubsystem<XRSessionSubsystem>();
+            }
+#endif
+
+            Debug.Log("ARKitStreamLoader Deinitialize");
             return base.Deinitialize();
         }
     }

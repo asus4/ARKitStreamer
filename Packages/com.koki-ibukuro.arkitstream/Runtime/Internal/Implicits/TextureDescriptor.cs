@@ -29,9 +29,9 @@ namespace ARKitStream.Internal
             height = tex.height;
             mipmapCount = tex.mipmapCount;
             format = tex.format;
+            this.propertyNameId = propertyNameId;
             depth = 0;
             dimension = tex.dimension;
-            this.propertyNameId = propertyNameId;
         }
 
         public bool Equals(TextureDescriptor other)

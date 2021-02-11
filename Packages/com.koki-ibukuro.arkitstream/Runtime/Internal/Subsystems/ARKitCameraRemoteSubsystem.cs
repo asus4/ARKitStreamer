@@ -93,7 +93,26 @@ namespace ARKitStream.Internal
 
             public ARKitRemoteProvider()
             {
-                m_CameraMaterial = CreateCameraMaterial(ShaderName);
+                // m_CameraMaterial = CreateCameraMaterial(ShaderName);
+            }
+
+            public override void Start()
+            {
+                base.Start();
+                if (m_CameraMaterial == null)
+                {
+                    m_CameraMaterial = CreateCameraMaterial(ShaderName);
+                }
+            }
+
+            public override void Destroy()
+            {
+                if (m_CameraMaterial != null)
+                {
+                    UnityEngine.Object.Destroy(m_CameraMaterial);
+                    m_CameraMaterial = null;
+                }
+                base.Destroy();
             }
 
             public override Feature currentCamera => Feature.AnyCamera;
@@ -107,12 +126,11 @@ namespace ARKitStream.Internal
             public override bool TryGetFrame(XRCameraParams cameraParams, out XRCameraFrame cameraFrame)
             {
                 var remote = ARKitReceiver.Instance;
-                if (remote == null)
+                if (!Application.isPlaying || remote == null)
                 {
                     cameraFrame = default(XRCameraFrame);
                     return false;
                 }
-
 
                 var remoteFrame = ARKitReceiver.Instance.CameraFrame;
                 if (remoteFrame.timestampNs == default(long))
@@ -126,7 +144,7 @@ namespace ARKitStream.Internal
                     | XRCameraFrameProperties.ProjectionMatrix
                     | XRCameraFrameProperties.DisplayMatrix;
 
-                cameraFrame = (XRCameraFrame) new CameraFrame()
+                cameraFrame = (XRCameraFrame)new CameraFrame()
                 {
                     timestampNs = remoteFrame.timestampNs,
                     averageBrightness = 0,
@@ -173,7 +191,7 @@ namespace ARKitStream.Internal
             public override NativeArray<XRTextureDescriptor> GetTextureDescriptors(XRTextureDescriptor defaultDescriptor, Allocator allocator)
             {
                 var remote = ARKitReceiver.Instance;
-                if (remote == null)
+                if (!Application.isPlaying || remote == null)
                 {
                     return new NativeArray<XRTextureDescriptor>(0, allocator);
                 }
@@ -184,8 +202,6 @@ namespace ARKitStream.Internal
                 {
                     return new NativeArray<XRTextureDescriptor>(0, allocator);
                 }
-
-                Debug.Log($"GetTextureDescriptors: {yTex}, {cbcrTex}");
 
                 var arr = new NativeArray<XRTextureDescriptor>(2, allocator);
                 arr[0] = new TextureDescriptor(yTex, _TEXTURE_Y);

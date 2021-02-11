@@ -40,7 +40,6 @@ namespace ARKitStream
                 Debug.Log(e);
             }
 
-
             public void ExternalSend(byte[] data)
             {
                 Send(data);
@@ -49,6 +48,20 @@ namespace ARKitStream
             public void ExternalSendAsync(byte[] data)
             {
                 SendAsync(data, null);
+            }
+
+            public void ExternalClose()
+            {
+                if (!IsOpen) return;
+
+                try
+                {
+                    Close();
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(ex);
+                }
             }
         }
 
@@ -65,16 +78,17 @@ namespace ARKitStream
         WebSocketServer server;
         ARKitService service;
 
-
-
-        void Start()
+        void Awake()
         {
             if (Application.isEditor)
             {
                 Destroy(gameObject);
                 return;
             }
+        }
 
+        void Start()
+        {
             commandBuffer = new CommandBuffer();
             commandBuffer.name = "ARKitStreamSender";
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamSender"));
@@ -105,6 +119,7 @@ namespace ARKitStream
                 bufferMaterial = null;
             }
 
+            service?.ExternalClose();
             server?.Stop();
         }
 

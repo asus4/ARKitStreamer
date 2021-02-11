@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.XR.Interaction;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 using Klak.Ndi;
@@ -129,6 +130,13 @@ namespace ARKitStream
 
         void Awake()
         {
+            // It works only in Editor!
+            if (!Application.isEditor)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             if (Instance != null)
             {
                 Debug.LogError("ARKitStreamReceiver must be only one in the scene.");
@@ -138,13 +146,6 @@ namespace ARKitStream
 
         void Start()
         {
-            // It works only in Editor!
-            if (!Application.isEditor)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             ndiReceiver = GetComponent<NdiReceiver>();
 
             commandBuffer = new CommandBuffer();
@@ -160,13 +161,15 @@ namespace ARKitStream
                 Debug.Log($"WebSocket Open: {wsAddress}");
             };
             client.OnMessage += OnWebsocketMessage;
-            client.ConnectAsync();
+            client.Connect();
 
             SetupPose();
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
+            Instance = null;
+
             if (commandBuffer != null)
             {
                 commandBuffer.Dispose();
@@ -190,7 +193,7 @@ namespace ARKitStream
             {
                 if (client.IsAlive)
                 {
-                    client.CloseAsync();
+                    client.Close();
                 }
             }
         }
@@ -303,7 +306,10 @@ namespace ARKitStream
                 var provider = gameObject.GetComponent<ARKitRemotePoseProvider>()
                             ?? gameObject.AddComponent<ARKitRemotePoseProvider>();
                 provider.manualTarget = arPoseDriver.transform;
+                return;
             }
+
+            Debug.LogWarning("Pose Provider didn't found");
         }
     }
 }
