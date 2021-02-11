@@ -53,7 +53,7 @@ namespace ARKitStream
             // CreateSubsystem<XRImageTrackingSubsystemDescriptor, XRImageTrackingSubsystem>(s_ImageTrackingSubsystemDescriptors, "ARKit-ImageTracking");
             // CreateSubsystem<XRObjectTrackingSubsystemDescriptor, XRObjectTrackingSubsystem>(s_ObjectTrackingSubsystemDescriptors, "ARKit-ObjectTracking");
             CreateSubsystem<XRFaceSubsystemDescriptor, XRFaceSubsystem>(s_FaceSubsystemDescriptors, ARKitFaceRemoteSubsystem.ID);
-            CreateSubsystem<XROcclusionSubsystemDescriptor, XROcclusionSubsystem>(s_OcclusionSubsystemDescriptors, ARKitOcclusionRemoteRegistration.ID);
+            CreateSubsystem<XROcclusionSubsystemDescriptor, XROcclusionSubsystem>(s_OcclusionSubsystemDescriptors, ARKitOcclusionRemoteSubsystem.ID);
             // CreateSubsystem<XRParticipantSubsystemDescriptor, XRParticipantSubsystem>(s_ParticipantSubsystemDescriptors, "ARKit-Participant");
             // CreateSubsystem<XRMeshSubsystemDescriptor, XRMeshSubsystem>(s_MeshSubsystemDescriptors, "ARKit-Meshing");
 #endif

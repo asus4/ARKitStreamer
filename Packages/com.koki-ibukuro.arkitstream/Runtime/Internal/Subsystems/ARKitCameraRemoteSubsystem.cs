@@ -19,7 +19,13 @@ namespace ARKitStream.Internal
     public sealed class ARKitCameraRemoteSubsystem : XRCameraSubsystem
     {
         public const string ID = "ARKit-Camera-Remote";
+
+#if !UNITY_2020_2_OR_NEWER
         protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
+
+
+
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
@@ -28,7 +34,13 @@ namespace ARKitStream.Internal
             XRCameraSubsystemCinfo cameraSubsystemCinfo = new XRCameraSubsystemCinfo
             {
                 id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitCameraRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitCameraRemoteSubsystem),
+#else
                 implementationType = typeof(ARKitCameraRemoteSubsystem),
+#endif
+                
                 supportsAverageBrightness = false,
                 supportsAverageColorTemperature = true,
                 supportsColorCorrection = false,

@@ -13,6 +13,10 @@ namespace ARKitStream.Internal
     {
         public const string ID = "ARKit-HumanBody-Remote";
 
+#if !UNITY_2020_2_OR_NEWER
+        protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
@@ -20,7 +24,12 @@ namespace ARKitStream.Internal
             XRHumanBodySubsystemCinfo humanBodySubsystemCinfo = new XRHumanBodySubsystemCinfo()
             {
                 id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitHumanBodyRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitHumanBodyRemoteSubsystem),
+#else
                 implementationType = typeof(ARKitHumanBodyRemoteSubsystem),
+#endif
                 supportsHumanBody2D = true,
                 supportsHumanBody3D = true,
                 supportsHumanBody3DScaleEstimation = true,
@@ -37,15 +46,17 @@ namespace ARKitStream.Internal
 #endif // UNITY_EDITOR
         }
 
-        protected override Provider CreateProvider() => new ARKitRemoteProvider();
+
 
         class ARKitRemoteProvider : XRHumanBodySubsystem.Provider
         {
             TrackableChangesModifier<UnityXRHumanBody> modifier = new TrackableChangesModifier<UnityXRHumanBody>();
 
-            public ARKitRemoteProvider()
-            {
-            }
+            public ARKitRemoteProvider() { }
+
+            public override void Start() { }
+
+            public override void Stop() { }
 
             public override void Destroy()
             {

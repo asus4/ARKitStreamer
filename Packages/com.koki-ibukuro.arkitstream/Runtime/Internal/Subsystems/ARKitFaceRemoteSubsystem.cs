@@ -31,7 +31,12 @@ namespace ARKitStream.Internal
                 supportsFaceMeshUVs = true,
                 supportsEyeTracking = true,
                 id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitFaceRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitFaceRemoteSubsystem)
+#else
                 subsystemImplementationType = typeof(ARKitFaceRemoteSubsystem)
+#endif
             };
             XRFaceSubsystemDescriptor.Create(descriptorParams);
 
@@ -39,10 +44,10 @@ namespace ARKitStream.Internal
 #endif // UNITY_EDITOR
         }
 
-        protected override Provider CreateProvider()
-        {
-            return new ARKitRemoteProvider();
-        }
+#if !UNITY_2020_2_OR_NEWER
+
+        protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
 
         public NativeArray<ARKitBlendShapeCoefficient> GetBlendShapeCoefficients(TrackableId faceId, Allocator allocator)
         {
@@ -67,6 +72,8 @@ namespace ARKitStream.Internal
         {
             TrackableChangesModifier<UnityXRFace> modifier = new TrackableChangesModifier<UnityXRFace>();
 
+            public override void Start() { }
+            public override void Stop() { }
             public override void Destroy()
             {
                 modifier.Dispose();

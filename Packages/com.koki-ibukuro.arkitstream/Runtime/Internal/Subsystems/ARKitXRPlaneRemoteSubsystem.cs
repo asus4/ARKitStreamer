@@ -25,7 +25,12 @@ namespace ARKitStream.Internal
             var cinfo = new XRPlaneSubsystemDescriptor.Cinfo
             {
                 id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitXRPlaneRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitXRPlaneRemoteSubsystem),
+#else
                 subsystemImplementationType = typeof(ARKitXRPlaneRemoteSubsystem),
+#endif
                 supportsHorizontalPlaneDetection = true,
                 supportsVerticalPlaneDetection = true,
                 supportsArbitraryPlaneDetection = false,
@@ -38,12 +43,17 @@ namespace ARKitStream.Internal
 #endif
         }
 
+#if !UNITY_2020_2_OR_NEWER
+
         protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
 
         class ARKitRemoteProvider : Provider
         {
             TrackableChangesModifier<UnityBoundedPlane> modifier = new TrackableChangesModifier<UnityBoundedPlane>();
 
+            public override void Start() { }
+            public override void Stop() { }
             public override void Destroy()
             {
                 modifier.Dispose();
