@@ -11,15 +11,15 @@ namespace ARKitStream.Internal
     [Preserve]
     public class ARKitHumanBodyRemoteSubsystem : XRHumanBodySubsystem
     {
+        public const string ID = "ARKit-HumanBody-Remote";
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-HumanBody-Remote";
-
             XRHumanBodySubsystemCinfo humanBodySubsystemCinfo = new XRHumanBodySubsystemCinfo()
             {
-                id = id,
+                id = ID,
                 implementationType = typeof(ARKitHumanBodyRemoteSubsystem),
                 supportsHumanBody2D = true,
                 supportsHumanBody3D = true,
@@ -28,11 +28,11 @@ namespace ARKitStream.Internal
 
             if (XRHumanBodySubsystem.Register(humanBodySubsystemCinfo))
             {
-                Debug.LogFormat("Registerd the {0} subsystem", id);
+                Debug.LogFormat("Registerd the {0} subsystem", ID);
             }
             else
             {
-                Debug.LogErrorFormat("Cannot register the {0} subsystem", id);
+                Debug.LogErrorFormat("Cannot register the {0} subsystem", ID);
             }
 #endif // UNITY_EDITOR
         }

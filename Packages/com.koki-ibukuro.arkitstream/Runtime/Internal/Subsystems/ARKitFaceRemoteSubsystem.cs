@@ -17,24 +17,25 @@ namespace ARKitStream.Internal
     [Preserve]
     public class ARKitFaceRemoteSubsystem : XRFaceSubsystem
     {
+        public const string ID = "ARKit-Face-Remote";
+
         // this method is run on startup of the app to register this provider with XR Subsystem Manager
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-Face-Remote";
             var descriptorParams = new FaceSubsystemParams
             {
                 supportsFacePose = true,
                 supportsFaceMeshVerticesAndIndices = true,
                 supportsFaceMeshUVs = true,
                 supportsEyeTracking = true,
-                id = id,
+                id = ID,
                 subsystemImplementationType = typeof(ARKitFaceRemoteSubsystem)
             };
             XRFaceSubsystemDescriptor.Create(descriptorParams);
 
-            Debug.LogFormat("Registerd the {0} subsystem", id);
+            Debug.LogFormat("Registerd the {0} subsystem", ID);
 #endif // UNITY_EDITOR
         }
 

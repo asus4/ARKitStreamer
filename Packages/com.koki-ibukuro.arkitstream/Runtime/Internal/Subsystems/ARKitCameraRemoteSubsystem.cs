@@ -18,16 +18,16 @@ namespace ARKitStream.Internal
     [Preserve]
     public sealed class ARKitCameraRemoteSubsystem : XRCameraSubsystem
     {
+        public const string ID = "ARKit-Camera-Remote";
         protected override Provider CreateProvider() => new ARKitRemoteProvider();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-Camera-Remote";
             XRCameraSubsystemCinfo cameraSubsystemCinfo = new XRCameraSubsystemCinfo
             {
-                id = id,
+                id = ID,
                 implementationType = typeof(ARKitCameraRemoteSubsystem),
                 supportsAverageBrightness = false,
                 supportsAverageColorTemperature = true,
@@ -47,11 +47,11 @@ namespace ARKitStream.Internal
 
             if (!XRCameraSubsystem.Register(cameraSubsystemCinfo))
             {
-                Debug.LogErrorFormat("Cannot register the {0} subsystem", id);
+                Debug.LogErrorFormat("Cannot register the {0} subsystem", ID);
             }
             else
             {
-                Debug.LogFormat("Registered the {0} subsystem", id);
+                Debug.LogFormat("Registered the {0} subsystem", ID);
             }
 #endif // UNITY_EDITOR
         }

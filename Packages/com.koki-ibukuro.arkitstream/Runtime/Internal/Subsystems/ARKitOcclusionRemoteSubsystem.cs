@@ -9,14 +9,15 @@ namespace ARKitStream.Internal
 {
     internal static class ARKitOcclusionRemoteRegistration
     {
+        public const string ID = "ARKit-Occlusion-Remote";
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
 #if UNITY_EDITOR
-            const string k_SubsystemId = "ARKit-Occlusion-Remote";
             XROcclusionSubsystemCinfo info = new XROcclusionSubsystemCinfo()
             {
-                id = k_SubsystemId,
+                id = ID,
                 implementationType = typeof(ARKitOcclusionRemoteSubsystem),
                 supportsHumanSegmentationStencilImage = true,
                 supportsHumanSegmentationDepthImage = true,
@@ -24,11 +25,11 @@ namespace ARKitStream.Internal
 
             if (!XROcclusionSubsystem.Register(info))
             {
-                Debug.LogErrorFormat("Cannot register the {0} subsystem", k_SubsystemId);
+                Debug.LogErrorFormat("Cannot register the {0} subsystem", ID);
             }
             else
             {
-                Debug.LogFormat("Registered the {0} subsystem", k_SubsystemId);
+                Debug.LogFormat("Registered the {0} subsystem", ID);
             }
 #endif // UNITY_EDITOR
         }

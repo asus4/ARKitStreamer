@@ -16,15 +16,15 @@ namespace ARKitStream.Internal
     [Preserve]
     public sealed class ARKitXRPlaneRemoteSubsystem : XRPlaneSubsystem
     {
+        public const string ID = "ARKit-Remote-Plane";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-Remote-Plane";
             var cinfo = new XRPlaneSubsystemDescriptor.Cinfo
             {
-                id = id,
+                id = ID,
                 subsystemImplementationType = typeof(ARKitXRPlaneRemoteSubsystem),
                 supportsHorizontalPlaneDetection = true,
                 supportsVerticalPlaneDetection = true,
@@ -34,7 +34,7 @@ namespace ARKitStream.Internal
             };
 
             XRPlaneSubsystemDescriptor.Create(cinfo);
-            Debug.LogFormat("Registered the {0} subsystem", id);
+            Debug.LogFormat("Registered the {0} subsystem", ID);
 #endif
         }
 
