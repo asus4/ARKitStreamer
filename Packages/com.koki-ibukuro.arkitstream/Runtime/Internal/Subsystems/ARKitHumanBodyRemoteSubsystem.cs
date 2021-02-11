@@ -11,16 +11,25 @@ namespace ARKitStream.Internal
     [Preserve]
     public class ARKitHumanBodyRemoteSubsystem : XRHumanBodySubsystem
     {
+        public const string ID = "ARKit-HumanBody-Remote";
+
+#if !UNITY_2020_2_OR_NEWER
+        protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-HumanBody-Remote";
-
             XRHumanBodySubsystemCinfo humanBodySubsystemCinfo = new XRHumanBodySubsystemCinfo()
             {
-                id = id,
+                id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitHumanBodyRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitHumanBodyRemoteSubsystem),
+#else
                 implementationType = typeof(ARKitHumanBodyRemoteSubsystem),
+#endif
                 supportsHumanBody2D = true,
                 supportsHumanBody3D = true,
                 supportsHumanBody3DScaleEstimation = true,
@@ -28,24 +37,26 @@ namespace ARKitStream.Internal
 
             if (XRHumanBodySubsystem.Register(humanBodySubsystemCinfo))
             {
-                Debug.LogFormat("Registerd the {0} subsystem", id);
+                Debug.LogFormat("Registerd the {0} subsystem", ID);
             }
             else
             {
-                Debug.LogErrorFormat("Cannot register the {0} subsystem", id);
+                Debug.LogErrorFormat("Cannot register the {0} subsystem", ID);
             }
 #endif // UNITY_EDITOR
         }
 
-        protected override Provider CreateProvider() => new ARKitRemoteProvider();
+
 
         class ARKitRemoteProvider : XRHumanBodySubsystem.Provider
         {
             TrackableChangesModifier<UnityXRHumanBody> modifier = new TrackableChangesModifier<UnityXRHumanBody>();
 
-            public ARKitRemoteProvider()
-            {
-            }
+            public ARKitRemoteProvider() { }
+
+            public override void Start() { }
+
+            public override void Stop() { }
 
             public override void Destroy()
             {

@@ -7,46 +7,56 @@ using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
 {
-    internal static class ARKitOcclusionRemoteRegistration
+
+
+    [Preserve]
+    public class ARKitOcclusionRemoteSubsystem : XROcclusionSubsystem
     {
+        public const string ID = "ARKit-Occlusion-Remote";
+
+        static readonly int _HumanStencil = Shader.PropertyToID("_HumanStencil");
+        static readonly int _HumanDepth = Shader.PropertyToID("_HumanDepth");
+        static readonly int ARKIT_HUMAN_SEGMENTATION_ENABLED = Shader.PropertyToID("ARKIT_HUMAN_SEGMENTATION_ENABLED");
+
+#if !UNITY_2020_2_OR_NEWER
+
+        protected override Provider CreateProvider() => new ARKitProvider();
+#endif
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
 #if UNITY_EDITOR
-            const string k_SubsystemId = "ARKit-Occlusion-Remote";
             XROcclusionSubsystemCinfo info = new XROcclusionSubsystemCinfo()
             {
-                id = k_SubsystemId,
+                id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitOcclusionRemoteSubsystem.ARKitProvider),
+                subsystemTypeOverride = typeof(ARKitOcclusionRemoteSubsystem),
+#else
                 implementationType = typeof(ARKitOcclusionRemoteSubsystem),
+#endif
                 supportsHumanSegmentationStencilImage = true,
                 supportsHumanSegmentationDepthImage = true,
             };
 
             if (!XROcclusionSubsystem.Register(info))
             {
-                Debug.LogErrorFormat("Cannot register the {0} subsystem", k_SubsystemId);
+                Debug.LogErrorFormat("Cannot register the {0} subsystem", ID);
             }
             else
             {
-                Debug.LogFormat("Registered the {0} subsystem", k_SubsystemId);
+                Debug.LogFormat("Registered the {0} subsystem", ID);
             }
 #endif // UNITY_EDITOR
         }
-    }
-
-
-    [Preserve]
-    public class ARKitOcclusionRemoteSubsystem : XROcclusionSubsystem
-    {
-        static readonly int _HumanStencil = Shader.PropertyToID("_HumanStencil");
-        static readonly int _HumanDepth = Shader.PropertyToID("_HumanDepth");
-        static readonly int ARKIT_HUMAN_SEGMENTATION_ENABLED = Shader.PropertyToID("ARKIT_HUMAN_SEGMENTATION_ENABLED");
-
-
-        protected override Provider CreateProvider() => new ARKitProvider();
 
         class ARKitProvider : XROcclusionSubsystem.Provider
         {
+            public override void Start() { }
+            public override void Stop() { }
+            public override void Destroy() { }
+
             public override HumanSegmentationStencilMode requestedHumanStencilMode
             {
                 get => HumanSegmentationStencilMode.Best;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
 
 namespace ARKitStream.Internal
@@ -20,6 +21,12 @@ namespace ARKitStream.Internal
         public float averageIntensityInLumens;
         public double exposureDuration;
         public float exposureOffset;
+        public float mainLightIntensityLumens;
+        public Color mainLightColor;
+        public Vector3 mainLightDirection;
+        public SphericalHarmonicsL2 ambientSphericalHarmonics;
+        public XRTextureDescriptor cameraGrain;
+        public float noiseIntensity;
 
 
         [StructLayout(LayoutKind.Explicit)]
@@ -42,7 +49,13 @@ namespace ARKitStream.Internal
                 && properties.Equals(o.properties)
                 && averageIntensityInLumens.Equals(o.averageIntensityInLumens)
                 && exposureDuration.Equals(o.exposureDuration)
-                && exposureOffset.Equals(o.exposureOffset);
+                && exposureOffset.Equals(o.exposureOffset)
+                && mainLightIntensityLumens.Equals(o.mainLightIntensityLumens)
+                && mainLightColor.Equals(o.mainLightColor)
+                && mainLightDirection.Equals(o.mainLightDirection)
+                && ambientSphericalHarmonics.Equals(o.ambientSphericalHarmonics)
+                && cameraGrain.Equals(o.cameraGrain)
+                && noiseIntensity.Equals(o.noiseIntensity);
         }
 
         public static implicit operator XRCameraFrame(CameraFrame f)

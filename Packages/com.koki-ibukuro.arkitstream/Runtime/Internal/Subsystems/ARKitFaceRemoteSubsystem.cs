@@ -17,31 +17,37 @@ namespace ARKitStream.Internal
     [Preserve]
     public class ARKitFaceRemoteSubsystem : XRFaceSubsystem
     {
+        public const string ID = "ARKit-Face-Remote";
+
         // this method is run on startup of the app to register this provider with XR Subsystem Manager
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-Face-Remote";
             var descriptorParams = new FaceSubsystemParams
             {
                 supportsFacePose = true,
                 supportsFaceMeshVerticesAndIndices = true,
                 supportsFaceMeshUVs = true,
                 supportsEyeTracking = true,
-                id = id,
+                id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitFaceRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitFaceRemoteSubsystem)
+#else
                 subsystemImplementationType = typeof(ARKitFaceRemoteSubsystem)
+#endif
             };
             XRFaceSubsystemDescriptor.Create(descriptorParams);
 
-            Debug.LogFormat("Registerd the {0} subsystem", id);
+            Debug.LogFormat("Registerd the {0} subsystem", ID);
 #endif // UNITY_EDITOR
         }
 
-        protected override Provider CreateProvider()
-        {
-            return new ARKitRemoteProvider();
-        }
+#if !UNITY_2020_2_OR_NEWER
+
+        protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
 
         public NativeArray<ARKitBlendShapeCoefficient> GetBlendShapeCoefficients(TrackableId faceId, Allocator allocator)
         {
@@ -66,6 +72,8 @@ namespace ARKitStream.Internal
         {
             TrackableChangesModifier<UnityXRFace> modifier = new TrackableChangesModifier<UnityXRFace>();
 
+            public override void Start() { }
+            public override void Stop() { }
             public override void Destroy()
             {
                 modifier.Dispose();

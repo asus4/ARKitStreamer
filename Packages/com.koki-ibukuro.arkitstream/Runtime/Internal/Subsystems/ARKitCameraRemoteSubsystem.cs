@@ -18,17 +18,29 @@ namespace ARKitStream.Internal
     [Preserve]
     public sealed class ARKitCameraRemoteSubsystem : XRCameraSubsystem
     {
+        public const string ID = "ARKit-Camera-Remote";
+
+#if !UNITY_2020_2_OR_NEWER
         protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
+
+
+
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-Camera-Remote";
             XRCameraSubsystemCinfo cameraSubsystemCinfo = new XRCameraSubsystemCinfo
             {
-                id = id,
+                id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitCameraRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitCameraRemoteSubsystem),
+#else
                 implementationType = typeof(ARKitCameraRemoteSubsystem),
+#endif
+                
                 supportsAverageBrightness = false,
                 supportsAverageColorTemperature = true,
                 supportsColorCorrection = false,
@@ -47,11 +59,11 @@ namespace ARKitStream.Internal
 
             if (!XRCameraSubsystem.Register(cameraSubsystemCinfo))
             {
-                Debug.LogErrorFormat("Cannot register the {0} subsystem", id);
+                Debug.LogErrorFormat("Cannot register the {0} subsystem", ID);
             }
             else
             {
-                Debug.LogFormat("Registered the {0} subsystem", id);
+                Debug.LogFormat("Registered the {0} subsystem", ID);
             }
 #endif // UNITY_EDITOR
         }
@@ -93,7 +105,26 @@ namespace ARKitStream.Internal
 
             public ARKitRemoteProvider()
             {
-                m_CameraMaterial = CreateCameraMaterial(ShaderName);
+                // m_CameraMaterial = CreateCameraMaterial(ShaderName);
+            }
+
+            public override void Start()
+            {
+                base.Start();
+                if (m_CameraMaterial == null)
+                {
+                    m_CameraMaterial = CreateCameraMaterial(ShaderName);
+                }
+            }
+
+            public override void Destroy()
+            {
+                if (m_CameraMaterial != null)
+                {
+                    UnityEngine.Object.Destroy(m_CameraMaterial);
+                    m_CameraMaterial = null;
+                }
+                base.Destroy();
             }
 
             public override Feature currentCamera => Feature.AnyCamera;
@@ -107,12 +138,11 @@ namespace ARKitStream.Internal
             public override bool TryGetFrame(XRCameraParams cameraParams, out XRCameraFrame cameraFrame)
             {
                 var remote = ARKitReceiver.Instance;
-                if (remote == null)
+                if (!Application.isPlaying || remote == null)
                 {
                     cameraFrame = default(XRCameraFrame);
                     return false;
                 }
-
 
                 var remoteFrame = ARKitReceiver.Instance.CameraFrame;
                 if (remoteFrame.timestampNs == default(long))
@@ -126,7 +156,7 @@ namespace ARKitStream.Internal
                     | XRCameraFrameProperties.ProjectionMatrix
                     | XRCameraFrameProperties.DisplayMatrix;
 
-                cameraFrame = new CameraFrame()
+                cameraFrame = (XRCameraFrame)new CameraFrame()
                 {
                     timestampNs = remoteFrame.timestampNs,
                     averageBrightness = 0,
@@ -139,7 +169,12 @@ namespace ARKitStream.Internal
                     properties = properties,
                     averageIntensityInLumens = 0,
                     exposureDuration = 0,
-                    exposureOffset = 0
+                    exposureOffset = 0,
+                    mainLightIntensityLumens = 0,
+                    mainLightColor = default(Color),
+                    ambientSphericalHarmonics = default(SphericalHarmonicsL2),
+                    cameraGrain = default(XRTextureDescriptor),
+                    noiseIntensity = 0,
                 };
 
                 // Debug.Log(cameraFrame);
@@ -168,7 +203,7 @@ namespace ARKitStream.Internal
             public override NativeArray<XRTextureDescriptor> GetTextureDescriptors(XRTextureDescriptor defaultDescriptor, Allocator allocator)
             {
                 var remote = ARKitReceiver.Instance;
-                if (remote == null)
+                if (!Application.isPlaying || remote == null)
                 {
                     return new NativeArray<XRTextureDescriptor>(0, allocator);
                 }
@@ -179,7 +214,6 @@ namespace ARKitStream.Internal
                 {
                     return new NativeArray<XRTextureDescriptor>(0, allocator);
                 }
-
 
                 var arr = new NativeArray<XRTextureDescriptor>(2, allocator);
                 arr[0] = new TextureDescriptor(yTex, _TEXTURE_Y);

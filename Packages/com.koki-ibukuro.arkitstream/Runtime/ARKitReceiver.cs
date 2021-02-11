@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -10,11 +11,11 @@ using ARKitStream.Internal;
 namespace ARKitStream
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(NdiReceiver))]
     public sealed class ARKitReceiver : MonoBehaviour
     {
         [SerializeField] string ipAddress = "172.20.10.1";
         [SerializeField] uint port = 8888;
+        [SerializeField] NdiResources resources = null;
 
         NdiReceiver ndiReceiver = null;
         Vector2Int ndiSourceSize = Vector2Int.zero;
@@ -129,6 +130,13 @@ namespace ARKitStream
 
         void Awake()
         {
+            // It works only in Editor!
+            if (!Application.isEditor)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             if (Instance != null)
             {
                 Debug.LogError("ARKitStreamReceiver must be only one in the scene.");
@@ -138,14 +146,13 @@ namespace ARKitStream
 
         void Start()
         {
-            // It works only in Editor!
-            if (!Application.isEditor)
+            ndiReceiver = gameObject.AddComponent<NdiReceiver>();
+            ndiReceiver.SetResources(resources);
+            var ndiName = FindNdiName();
+            if (!string.IsNullOrWhiteSpace(ndiName))
             {
-                Destroy(gameObject);
-                return;
+                ndiReceiver.ndiName = ndiName;
             }
-
-            ndiReceiver = GetComponent<NdiReceiver>();
 
             commandBuffer = new CommandBuffer();
             commandBuffer.name = "ARKitStreamReceiver";
@@ -160,13 +167,15 @@ namespace ARKitStream
                 Debug.Log($"WebSocket Open: {wsAddress}");
             };
             client.OnMessage += OnWebsocketMessage;
-            client.ConnectAsync();
+            client.Connect();
 
             SetupPose();
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
+            Instance = null;
+
             if (commandBuffer != null)
             {
                 commandBuffer.Dispose();
@@ -190,7 +199,7 @@ namespace ARKitStream
             {
                 if (client.IsAlive)
                 {
-                    client.CloseAsync();
+                    client.Close();
                 }
             }
         }
@@ -200,6 +209,11 @@ namespace ARKitStream
             var rt = ndiReceiver.texture;
             if (rt == null)
             {
+                var ndiName = FindNdiName();
+                if (!string.IsNullOrWhiteSpace(ndiName) && ndiReceiver.ndiName != ndiName)
+                {
+                    ndiReceiver.ndiName = ndiName;
+                }
                 return;
             }
             if (ndiSourceSize.x != rt.width || ndiSourceSize.y != rt.height)
@@ -303,7 +317,16 @@ namespace ARKitStream
                 var provider = gameObject.GetComponent<ARKitRemotePoseProvider>()
                             ?? gameObject.AddComponent<ARKitRemotePoseProvider>();
                 provider.manualTarget = arPoseDriver.transform;
+                return;
             }
+
+            Debug.LogWarning("Pose Provider didn't found");
+        }
+
+
+        static string FindNdiName()
+        {
+            return NdiFinder.sourceNames.FirstOrDefault();
         }
     }
 }

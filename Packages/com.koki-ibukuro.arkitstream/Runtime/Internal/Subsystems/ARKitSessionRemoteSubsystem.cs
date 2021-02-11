@@ -8,21 +8,30 @@ namespace ARKitStream.Internal
     [Preserve]
     public class ARKitSessionRemoteSubsystem : XRSessionSubsystem
     {
+        public const string ID = "ARKit-Remote-Session";
+        // protected override Provider CreateProvider() => new ARKitRemoteProvider();
+
+#if !UNITY_2020_2_OR_NEWER
         protected override Provider CreateProvider() => new ARKitRemoteProvider();
+#endif
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void RegisterDescriptor()
         {
 #if UNITY_EDITOR
-            const string id = "ARKit-Remote-Session";
             XRSessionSubsystemDescriptor.RegisterDescriptor(new XRSessionSubsystemDescriptor.Cinfo
             {
-                id = id,
+                id = ID,
+#if UNITY_2020_2_OR_NEWER
+                providerType = typeof(ARKitSessionRemoteSubsystem.ARKitRemoteProvider),
+                subsystemTypeOverride = typeof(ARKitSessionRemoteSubsystem),
+#else
                 subsystemImplementationType = typeof(ARKitSessionRemoteSubsystem),
+#endif
                 supportsInstall = false,
                 supportsMatchFrameRate = false
             });
-            Debug.Log($"Register {id} subsystem");
+            Debug.Log($"Register {ID} subsystem");
 #endif // UNITY_EDITOR
         }
 
