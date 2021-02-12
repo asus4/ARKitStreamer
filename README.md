@@ -5,7 +5,7 @@ A remote debugging tool for AR Founndation (tested on `4.1.3`) with ARKit3 featr
 ![img1](https://i.imgur.com/vZoYIs1.gif)  
 Human segmantation  
 
-![img2](https://user-images.githubusercontent.com/357497/89782917-66e0e680-db16-11ea-856b-fb6782ec0b23.gif)
+![img2](https://user-images.githubusercontent.com/357497/89782917-66e0e680-db16-11ea-856b-fb6782ec0b23.gif)  
 Sample with VFX Graph  
 
 ## Environments
@@ -18,15 +18,15 @@ Sample with VFX Graph
 - Basic camera position tracking
 - Send camera image via NDI
 - Human Segmentation / Depth
-- Face (Need to apply the patch ar-foundation's code as described below)
+- Face
 - Plane tracking
 - 3D body tracking
 
 ## How to Install
 
-- This depends on NDI (Network Device Interface), download and install NDI SDK for iOS from [https://ndi.tv/sdk/](https://ndi.tv/sdk/)
+- Depends on NDI (Network Device Interface), download the NDI SDK for iOS from [https://ndi.tv/sdk/](https://ndi.tv/sdk/)
 
-- This supports Unity Package Manager. Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and  `dependencies` section.
+- Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and  `dependencies` section.
 
 ```json
 {
