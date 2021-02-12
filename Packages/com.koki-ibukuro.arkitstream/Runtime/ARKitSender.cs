@@ -57,6 +57,7 @@ namespace ARKitStream
                 try
                 {
                     Close();
+                    Debug.Log("WebSocket Closed");
                 }
                 catch (System.Exception ex)
                 {
