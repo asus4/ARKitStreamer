@@ -1,6 +1,6 @@
 # ARKit Streamer
 
-A remote debugging tool for AR Founndation (tested on `4.0.0-preview.1`) with ARKit3 featrues. This is temporary until the Unity team has completed the AR remote functionality - [Unity forum link](https://forum.unity.com/threads/ar-remoting-simulation.720575/)
+A remote debugging tool for AR Founndation (tested on `4.1.3`) with ARKit3 featrues. This is temporary until the Unity team has completed the AR remote functionality - [Unity forum link](https://forum.unity.com/threads/ar-remoting-simulation.720575/)
 
 ![img1](https://i.imgur.com/vZoYIs1.gif)  
 Human segmantation  
@@ -22,7 +22,7 @@ Sample with VFX Graph
 - Plane tracking
 - 3D body tracking
 
-## Install
+## How to Install
 
 - This depends on NDI (Network Device Interface), download and install NDI SDK for iOS from [https://ndi.tv/sdk/](https://ndi.tv/sdk/)
 
@@ -54,11 +54,11 @@ Sample with VFX Graph
 
 - Apply a patch file
 
-If you use the face tracking, apply the patch to suppress exceptions on Editor in the ARFace class. See [issue #2](https://github.com/asus4/ARKitStreamer/issues/2) for more descriptions.
+Some source codes in AR foundation packages need to be modified to work with Unity Editor. Apply patch files in the Tools folder.
 
 ```sh
-# Sample command for patch
-patch -u Library/PackageCache/com.unity.xr.arfoundation@4.0.0-preview.1/Runtime/AR/ARFace.cs < Tools/ARFace.cs.patch
+# Sample command on macOS terminal
+sh Tools/apply_patch.sh
 ```
 
 ## How to Use
