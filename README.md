@@ -46,7 +46,7 @@ Sample with VFX Graph
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.3.6",
+    "com.koki-ibukuro.arkitstream": "0.4.0",
     ...// other dependencies
   }
 }
