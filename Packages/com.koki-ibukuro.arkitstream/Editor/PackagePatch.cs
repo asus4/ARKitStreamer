@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -10,17 +9,38 @@ using Debug = UnityEngine.Debug;
 namespace ARKitStream
 {
     [InitializeOnLoad]
-    public class PackagePatch
+    public static class PackagePatch
     {
         static PackagePatch()
         {
+            string packagePath = Path.GetFullPath("Packages/com.unity.xr.arfoundation/Runtime/AR/");
+            string toolsPath = Path.GetFullPath("Packages/com.koki-ibukuro.arkitstream/Tools/");
             string scriptPath = Path.GetFullPath("Packages/com.koki-ibukuro.arkitstream/Tools/apply_patch.sh");
+
+            RunCommand(
+                scriptPath,
+                Path.Combine(packagePath, "ARCameraBackground.cs"),
+                Path.Combine(toolsPath, "ARCameraBackground.cs.patch")
+            );
+
+            RunCommand(
+                scriptPath,
+                Path.Combine(packagePath, "ARFace.cs"),
+                Path.Combine(toolsPath, "ARFace.cs.patch")
+            );
+        }
+
+        private static bool RunCommand(string scriptPath, string filePath, string patchPath)
+        {
+            Debug.Assert(File.Exists(scriptPath), $"File: {scriptPath} not found");
+            Debug.Assert(File.Exists(filePath), $"File: {filePath} not found");
+            Debug.Assert(File.Exists(patchPath), $"File: {patchPath} not found");
 
             var info = new ProcessStartInfo()
             {
-                FileName = "/bin/sh",
+                FileName = "/bin/bash",
                 WorkingDirectory = Environment.CurrentDirectory,
-                Arguments = scriptPath,
+                Arguments = $"{scriptPath} {filePath} {patchPath}",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -30,8 +50,6 @@ namespace ARKitStream
             var stderr = process.StandardError.ReadToEnd();
             process.WaitForExit();
 
-            Debug.Log($"Applied patches: {scriptPath}");
-
             // if (!string.IsNullOrWhiteSpace(stdout))
             // {
             //     Debug.Log($"stdout: {stdout}");
@@ -40,7 +58,11 @@ namespace ARKitStream
             // {
             //     Debug.LogError($"stderr: {stderr}");
             // }
+
+            return true;
         }
 
     }
+
+
 }
