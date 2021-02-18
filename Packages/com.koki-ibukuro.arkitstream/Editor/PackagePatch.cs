@@ -14,12 +14,13 @@ namespace ARKitStream
     {
         static PackagePatch()
         {
+            string scriptPath = Path.GetFullPath("Packages/com.koki-ibukuro.arkitstream/Tools/apply_patch.sh");
 
             var info = new ProcessStartInfo()
             {
                 FileName = "/bin/sh",
                 WorkingDirectory = Environment.CurrentDirectory,
-                Arguments = "Tools/apply_patch.sh",
+                Arguments = scriptPath,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -29,7 +30,7 @@ namespace ARKitStream
             var stderr = process.StandardError.ReadToEnd();
             process.WaitForExit();
 
-            Debug.Log("Applied patches");
+            Debug.Log($"Applied patches: {scriptPath}");
 
             // if (!string.IsNullOrWhiteSpace(stdout))
             // {
@@ -40,5 +41,6 @@ namespace ARKitStream
             //     Debug.LogError($"stderr: {stderr}");
             // }
         }
+
     }
 }
