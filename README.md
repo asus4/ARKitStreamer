@@ -1,6 +1,8 @@
 # ARKit Streamer
 
-A remote debugging tool for AR Founndation (tested on `4.1.3`) with ARKit3 featrues. This is temporary until the Unity team has completed the AR remote functionality - [Unity forum link](https://forum.unity.com/threads/ar-remoting-simulation.720575/)
+[![openupm](https://img.shields.io/npm/v/com.koki-ibukuro.arkitstream?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.koki-ibukuro.arkitstream/)
+
+A remote debugging tool for AR Founndation with ARKit4 featrues. This is temporary solution until the Unity team has completed the AR remote functionality - See [Unity forum](https://forum.unity.com/threads/ar-remoting-simulation.720575/) for more information.
 
 ![img1](https://i.imgur.com/vZoYIs1.gif)  
 Human segmantation  
@@ -10,7 +12,8 @@ Sample with VFX Graph
 
 ## Environments
 
-- Tested on Unity 2019.4.17f1
+- Tested on Unity 2020.3.1f1
+- ARFoundation 4.0.12
 - iPhone X or more
 
 ## Supporting ARKit features
@@ -24,9 +27,13 @@ Sample with VFX Graph
 
 ## How to Install
 
-- Depends on NDI (Network Device Interface), download the NDI SDK for iOS from [https://ndi.tv/sdk/](https://ndi.tv/sdk/)
+### Install NDI SDK
 
-- Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and  `dependencies` section.
+Depends on NDI (Network Device Interface), download the NDI SDK for iOS from [https://ndi.tv/sdk/](https://ndi.tv/sdk/)
+
+### Install dependencies
+
+Open the file `Packages/manifest.json` and add following lines into `scopedRegistries` and `dependencies` section.
 
 ```json
 {
@@ -46,20 +53,17 @@ Sample with VFX Graph
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.4.0",
+    "com.koki-ibukuro.arkitstream": "0.4.2",
     ...// other dependencies
   }
 }
 ```
 
-- Apply a patch file
+### Apply patch files
 
-Some source codes in AR foundation packages need to be modified to work with Unity Editor. Apply patch files in the Tools folder.
+Some sources in the AR foundation packages need to be modified to work with Unity Editor. Apply the patch command from `Window/Tools/ARKit Stream/Apply Patches` in the Unity Editor.  
 
-```sh
-# Sample command on macOS terminal
-sh Tools/apply_patch.sh
-```
+Also you can revert the patches from `Window/Tools/ARKit Stream/Revert Patches`
 
 ## How to Use
 
@@ -70,16 +74,19 @@ Download this reposidoty and install on iPhone. Then run the app on iPhone.
 Or you can simply add `ARKitSender` to your custom ARKit scene.  
 ![Imgur](https://imgur.com/tevPT1n.png)
 
+Open the project settings and enable "ARKit Stream" as an XR plug-in for Unity Editor.
+![fig](https://imgur.com/pVxnPm4.png)
+
 Recomend using USB connected network instead of Wi-Fi to reduce network delay.  
 ![Imgur](https://imgur.com/4YVbIUP.png)
 
 ### Simurate on Editor
 
-Add `ARKitReceiver` to the scene which you want to simuirate on Editor. If sender-iPhone app is running, you can select the NDI source name. also confirm the iPhone's IP Address and port are correct.
+Add `ARKitReceiver` to the scene which you want to simuirate on Editor. Make sure the iPhone's IP Address and port are correct.
 
-![Imgur](https://imgur.com/u10iUBc.gif)
+![fig](https://imgur.com/xzTMJUi.png)
 
-For more infomation, please check Assets/Sample directory.
+See the `Assets/Sample` for more infomation.
 
 ### Setting for LWRP / URP
 

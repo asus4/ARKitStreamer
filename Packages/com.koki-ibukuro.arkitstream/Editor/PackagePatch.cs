@@ -5,55 +5,93 @@ using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace MockARFoundation
+namespace ARKitStream
 {
-    [InitializeOnLoad]
     public static class PackagePatch
     {
-        private const string PACKAGE_PATH = "Packages/com.unity.xr.arfoundation/Runtime/AR/";
+        private const string MENU = "Window/Tools/ARKit Stream/";
+        private const string AR_FOUNDATION_PACKAGE = "Packages/com.unity.xr.arfoundation/";
         private const string PATCHES_PATH = "Packages/com.koki-ibukuro.arkitstream/Tools/";
 
-        static PackagePatch()
+        [MenuItem(MENU + "Apply Patches")]
+        private static void ApplyPatches()
         {
             AssetDatabase.DisallowAutoRefresh();
 
-            bool isApplied = false;
-            isApplied |= ApplyPatch(
-                Path.Combine(PACKAGE_PATH, "ARCameraBackground.cs"),
-                Path.Combine(PATCHES_PATH, "ARCameraBackground.cs.patch")
+            string globalCachePath = GetPackageCachePath(AR_FOUNDATION_PACKAGE);
+            ApplyPatch(
+                Path.Combine(PATCHES_PATH, "ARCameraBackground.cs.patch"),
+                Path.Combine(AR_FOUNDATION_PACKAGE, "Runtime/AR/ARCameraBackground.cs"),
+                Path.Combine(globalCachePath, "Runtime/AR/ARCameraBackground.cs")
             );
-            isApplied |= ApplyPatch(
-                Path.Combine(PACKAGE_PATH, "ARFace.cs"),
-                Path.Combine(PATCHES_PATH, "ARFace.cs.patch")
+            ApplyPatch(
+                Path.Combine(PATCHES_PATH, "ARFace.cs.patch"),
+                Path.Combine(AR_FOUNDATION_PACKAGE, "Runtime/AR/ARFace.cs"),
+                Path.Combine(globalCachePath, "Runtime/AR/ARFace.cs")
             );
 
             AssetDatabase.AllowAutoRefresh();
-            if (isApplied)
+        }
+
+        [MenuItem(MENU + "Revert Patches")]
+        private static void RevertPatches()
+        {
+            var originalCache = GetPackageCachePath(AR_FOUNDATION_PACKAGE);
+            DeleteDirectory(originalCache);
+
+            var projectCache = Path.GetFullPath(AR_FOUNDATION_PACKAGE);
+            DeleteDirectory(projectCache);
+        }
+
+        private static void DeleteDirectory(string path)
+        {
+            if (!Directory.Exists(path)) return;
+            try
             {
-                AssetDatabase.Refresh();
+                Directory.Delete(path, true);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
 
-        private static bool ApplyPatch(string filePath, string patchPath)
+        private static string GetPackageCachePath(string packageName)
         {
-            string patchFullPath = Path.GetFullPath(patchPath);
-            var (originalText, replacingText) = LoadPatch(patchFullPath);
+            if (Application.platform != RuntimePlatform.OSXEditor)
+            {
+                throw new System.NotImplementedException($"Not implemented for platform: {Application.platform}");
+            }
+            var info = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(packageName);
+            if (info == null)
+            {
+                throw new System.ArgumentException($"Package: {packageName} did not find");
+            }
 
-            var sourceAsset = AssetDatabase.LoadAssetAtPath(filePath, typeof(TextAsset)) as TextAsset;
+            // TODO: this only works with macOS. Confirm other platforms.
+            // https://docs.unity3d.com/Manual/upm-cache.html
+            string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            return Path.Combine(home, "Library/Unity/cache/packages/packages.unity.com", info.packageId);
+        }
+
+        private static bool ApplyPatch(string patchPath, string localCachePath, string globalCachePath)
+        {
+            var (originalText, replacingText) = LoadPatch(Path.GetFullPath(patchPath));
+
+            var sourceAsset = AssetDatabase.LoadAssetAtPath(localCachePath, typeof(TextAsset)) as TextAsset;
             Debug.Assert(sourceAsset != null);
 
             var source = sourceAsset.text;
             if (source.Contains(replacingText))
             {
-                Debug.Log($"The patch already applyed: {filePath}");
+                Debug.Log($"The patch already applyed: {localCachePath}");
                 return false;
             }
             var newSource = source.Replace(originalText, replacingText);
             var newAsset = new TextAsset(newSource);
-            // EditorUtility.CopySerialized(newAsset, sourceAsset);
-            // AssetDatabase.CreateAsset(newAsset, filePath);
-            File.WriteAllText(Path.GetFullPath(filePath), newAsset.text);
-            Debug.Log($"A patch applyed : {filePath}");
+            File.WriteAllText(Path.GetFullPath(globalCachePath), newAsset.text);
+            File.WriteAllText(Path.GetFullPath(localCachePath), newAsset.text);
+            Debug.Log($"A patch applyed : {localCachePath}");
             return true;
         }
 
@@ -78,6 +116,5 @@ namespace MockARFoundation
         }
 
     }
-
 
 }
