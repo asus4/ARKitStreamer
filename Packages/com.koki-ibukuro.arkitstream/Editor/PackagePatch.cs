@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 namespace MockARFoundation
@@ -9,43 +10,57 @@ namespace MockARFoundation
     [InitializeOnLoad]
     public static class PackagePatch
     {
+        private const string PACKAGE_PATH = "Packages/com.unity.xr.arfoundation/Runtime/AR/";
+        private const string PATCHES_PATH = "Packages/com.koki-ibukuro.arkitstream/Tools/";
+
         static PackagePatch()
         {
-            string packagePath = Path.GetFullPath("Packages/com.unity.xr.arfoundation/Runtime/AR/");
-            string toolsPath = Path.GetFullPath("Packages/com.koki-ibukuro.arkitstream/Tools/");
-            ApplyPatch(
-                Path.Combine(packagePath, "ARCameraBackground.cs"),
-                Path.Combine(toolsPath, "ARCameraBackground.cs.patch")
+            AssetDatabase.DisallowAutoRefresh();
+
+            bool isApplied = false;
+            isApplied |= ApplyPatch(
+                Path.Combine(PACKAGE_PATH, "ARCameraBackground.cs"),
+                Path.Combine(PATCHES_PATH, "ARCameraBackground.cs.patch")
             );
-            ApplyPatch(
-                Path.Combine(packagePath, "ARFace.cs"),
-                Path.Combine(toolsPath, "ARFace.cs.patch")
+            isApplied |= ApplyPatch(
+                Path.Combine(PACKAGE_PATH, "ARFace.cs"),
+                Path.Combine(PATCHES_PATH, "ARFace.cs.patch")
             );
+
+            AssetDatabase.AllowAutoRefresh();
+            if (isApplied)
+            {
+                AssetDatabase.Refresh();
+            }
         }
 
         private static bool ApplyPatch(string filePath, string patchPath)
         {
-            Debug.Assert(File.Exists(filePath), $"File: {filePath} not found");
-            Debug.Assert(File.Exists(patchPath), $"File: {patchPath} not found");
+            string patchFullPath = Path.GetFullPath(patchPath);
+            var (originalText, replacingText) = LoadPatch(patchFullPath);
 
-            var (originalText, replacingText) = LoadPatch(patchPath);
-            // Debug.Log($"original:\n {originalText}");
-            // Debug.Log($"replace with:\n {replacingText}");
+            var sourceAsset = AssetDatabase.LoadAssetAtPath(filePath, typeof(TextAsset)) as TextAsset;
+            Debug.Assert(sourceAsset != null);
 
-            var source = File.ReadAllText(filePath);
-            if (!source.Contains(originalText))
+            var source = sourceAsset.text;
+            if (source.Contains(replacingText))
             {
+                Debug.Log($"The patch already applyed: {filePath}");
                 return false;
             }
-            Debug.Log($"A patch applyed : {filePath}");
             var newSource = source.Replace(originalText, replacingText);
-            // Debug.Assert(source != newSource);
-            File.WriteAllText(filePath, newSource);
+            var newAsset = new TextAsset(newSource);
+            // EditorUtility.CopySerialized(newAsset, sourceAsset);
+            // AssetDatabase.CreateAsset(newAsset, filePath);
+            File.WriteAllText(Path.GetFullPath(filePath), newAsset.text);
+            Debug.Log($"A patch applyed : {filePath}");
             return true;
         }
 
         private static Tuple<string, string> LoadPatch(string filePath)
         {
+            Debug.Assert(File.Exists(filePath), $"File: {filePath} not found");
+
             var lines = File.ReadAllLines(filePath)
                 .SkipWhile(line => !line.StartsWith("@@"))
                 .Skip(1);
