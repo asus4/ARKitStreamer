@@ -1,5 +1,6 @@
 {
     "name": "ARKitStream",
+    "rootNamespace": "",
     "references": [
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.RenderPipelines.Lightweight.Runtime",
@@ -11,7 +12,6 @@
         "Unity.XR.ARKit.FaceTracking",
         "Unity.XR.Management",
         "Unity.XR.Management.Editor",
-        "UnityEngine.XR.LegacyInputHelpers",
         "UnityEngine.SpatialTracking",
         "Klak.Ndi.Runtime"
     ],
