@@ -71,7 +71,7 @@ namespace ARKitStream
                 {
                     bool invertCulling = cameraBackground.GetComponent<ARCameraManager>()?.subsystem?.invertCulling ?? false;
                     m_ScriptablePass.Setup(m_BackgroundMesh, cameraBackground.material, invertCulling,
-                                           renderer.cameraColorTarget, renderer.cameraDepth);
+                                           renderer.cameraColorTarget, renderer.cameraDepthTarget);
                     renderer.EnqueuePass(m_ScriptablePass);
                 }
             }

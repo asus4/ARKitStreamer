@@ -1,6 +1,5 @@
 {
     "name": "ARKitStream",
-    "rootNamespace": "",
     "references": [
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.RenderPipelines.Lightweight.Runtime",

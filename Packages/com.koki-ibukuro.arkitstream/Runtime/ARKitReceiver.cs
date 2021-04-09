@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using ARKitStream.Internal;
+using Klak.Ndi;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
-using Klak.Ndi;
 using WebSocketSharp;
-using ARKitStream.Internal;
 
 namespace ARKitStream
 {
@@ -235,6 +235,12 @@ namespace ARKitStream
             {
                 Graphics.CopyTexture(renderTextures[i], texture2Ds[i]);
             }
+        }
+
+        void OnGUI()
+        {
+            GUI.DrawTexture(new Rect(0, 0, 256, 256), YTextrue);
+            GUI.DrawTexture(new Rect(0, 256, 256, 256), CbCrTexture);
         }
 
         void Release(RenderTexture tex)

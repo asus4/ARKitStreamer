@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
 using UnityEngine.Rendering;
@@ -40,7 +41,7 @@ namespace ARKitStream.Internal
 #else
                 implementationType = typeof(ARKitCameraRemoteSubsystem),
 #endif
-                
+
                 supportsAverageBrightness = false,
                 supportsAverageColorTemperature = true,
                 supportsColorCorrection = false,
@@ -70,42 +71,48 @@ namespace ARKitStream.Internal
 
         class ARKitRemoteProvider : Provider
         {
-            static readonly int _TEXTURE_Y = Shader.PropertyToID("_textureY");
-            static readonly int _TEXTURE_CB_CR = Shader.PropertyToID("_textureCbCr");
+            private const string ShaderName = "Unlit/ARKitBackground";
+            private static readonly int _TEXTURE_Y = Shader.PropertyToID("_textureY");
+            private static readonly int _TEXTURE_CB_CR = Shader.PropertyToID("_textureCbCr");
 
-            Material m_CameraMaterial;
+            private Material m_CameraMaterial;
+
             public override Material cameraMaterial => m_CameraMaterial;
-
             public override bool permissionGranted => true;
 
-            private static string ShaderName
-            {
-                get
-                {
-                    var pipeline = GraphicsSettings.renderPipelineAsset;
-                    if (pipeline == null)
-                    {
-                        return "Unlit/ARKitBackground";
-                    }
-#if MODULE_URP_ENABLED
-                    else if (pipeline is UniversalRenderPipelineAsset)
-                    {
-                        return "Unlit/ARKitURPBackground";
-                    }
-#elif MODULE_LWRP_ENABLED
-                    else if (pipeline is LightweightRenderPipelineAsset)
-                    {
-                        return "Unlit/ARKitLWRPBackground";
-                    }
-#endif
-                    Debug.LogError($"{pipeline} is not supported in ARKit");
-                    return "Unlit/ARKitBackground";
-                }
-            }
+            private List<string> enabledMaterialKeywords;
+            private List<string> disabledMaterialKeywords;
 
             public ARKitRemoteProvider()
             {
-                // m_CameraMaterial = CreateCameraMaterial(ShaderName);
+                const string kLWRP = "ARKIT_BACKGROUND_LWRP";
+                const string kURP = "ARKIT_BACKGROUND_URP";
+
+                if (GraphicsSettings.currentRenderPipeline == null)
+                {
+                    enabledMaterialKeywords = null;
+                    disabledMaterialKeywords = new List<string>() { kLWRP, kURP };
+                }
+#if MODULE_URP_ENABLED
+                else if (GraphicsSettings.currentRenderPipeline is UniversalRenderPipelineAsset)
+                {
+                    enabledMaterialKeywords = new List<string>() { kURP };
+                    disabledMaterialKeywords = new List<string>() { kLWRP };
+                }
+#endif // MODULE_URP_ENABLED
+#if MODULE_LWRP_ENABLED
+                else if (GraphicsSettings.currentRenderPipeline is LightweightRenderPipelineAsset)
+                {
+                    enabledMaterialKeywords = new List<string>() { kLWRP };
+                    disabledMaterialKeywords = new List<string>() { kURP };
+                }
+#endif // MODULE_LWRP_ENABLED
+                else
+                {
+                    enabledMaterialKeywords = null;
+                    disabledMaterialKeywords = null;
+                }
+
             }
 
             public override void Start()
@@ -222,6 +229,11 @@ namespace ARKitStream.Internal
                 return arr;
             }
 
+            public override void GetMaterialKeywords(out List<string> enabledKeywords, out List<string> disabledKeywords)
+            {
+                enabledKeywords = enabledMaterialKeywords;
+                disabledKeywords = disabledMaterialKeywords;
+            }
         }
     }
 }
