@@ -239,6 +239,10 @@ namespace ARKitStream
 
         void OnGUI()
         {
+            if (YTextrue == null || CbCrTexture == null)
+            {
+                return;
+            }
             GUI.DrawTexture(new Rect(0, 0, 256, 256), YTextrue);
             GUI.DrawTexture(new Rect(0, 256, 256, 256), CbCrTexture);
         }
