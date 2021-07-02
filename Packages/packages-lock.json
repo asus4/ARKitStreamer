@@ -13,6 +13,13 @@
         "jp.keijiro.klak.ndi": "1.0.12"
       }
     },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
       "depth": 0,
@@ -21,7 +28,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.7",
+      "version": "2.0.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -69,7 +76,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.24",
+      "version": "1.1.27",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -80,7 +87,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.4.7",
+      "version": "1.4.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -92,7 +99,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.toolchain.macos-x86_64-linux-x86_64": {
-      "version": "0.1.20-preview",
+      "version": "0.1.21-preview",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -111,52 +118,53 @@
       }
     },
     "com.unity.xr.arcore": {
-      "version": "4.0.12",
+      "version": "4.1.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.xr.arsubsystems": "4.0.12",
+        "com.unity.xr.arsubsystems": "4.1.7",
         "com.unity.xr.management": "4.0.1",
         "com.unity.modules.androidjni": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arfoundation": {
-      "version": "4.0.12",
+      "version": "4.1.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.xr.arsubsystems": "4.0.12",
+        "com.unity.xr.arsubsystems": "4.1.7",
         "com.unity.xr.management": "4.0.1"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arkit": {
-      "version": "4.0.12",
+      "version": "4.1.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.xr.arsubsystems": "4.0.12",
+        "com.unity.editorcoroutines": "1.0.0",
+        "com.unity.xr.arsubsystems": "4.1.7",
         "com.unity.xr.management": "4.0.1"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arkit-face-tracking": {
-      "version": "4.0.12",
+      "version": "4.1.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.xr.arkit": "4.0.12",
-        "com.unity.xr.arsubsystems": "4.0.12"
+        "com.unity.xr.arkit": "4.1.7",
+        "com.unity.xr.arsubsystems": "4.1.7"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arsubsystems": {
-      "version": "4.0.12",
+      "version": "4.1.7",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.subsystemregistration": "1.0.6"
+        "com.unity.subsystemregistration": "1.1.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -171,7 +179,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.0.1",
+      "version": "4.0.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
