@@ -194,7 +194,7 @@ namespace ARKitStream
             ndiSender = go.AddComponent<NdiSender>();
             ndiSender.SetResources(resources);
             ndiSender.captureMethod = CaptureMethod.Texture;
-            ndiSender.enableAlpha = false;
+            ndiSender.keepAlpha = false;
             ndiSender.ndiName = "ARKit Stream";
             ndiSender.sourceTexture = renderTexture;
         }

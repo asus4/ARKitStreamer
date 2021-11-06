@@ -10,7 +10,8 @@
         "com.unity.xr.arkit": "4.1.7",
         "com.unity.xr.arkit-face-tracking": "4.1.7",
         "com.unity.xr.arsubsystems": "4.1.7",
-        "jp.keijiro.klak.ndi": "1.0.12"
+        "jp.keijiro.klak.ndi": "2.0.1",
+        "org.nuget.system.memory": "4.5.3"
       }
     },
     "com.unity.editorcoroutines": {
@@ -192,25 +193,24 @@
       "url": "https://packages.unity.com"
     },
     "jp.keijiro.klak.ndi": {
-      "version": "1.0.12",
-      "depth": 0,
+      "version": "2.0.1",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.screencapture": "1.0.0",
-        "org.nuget.system.memory": "4.5.3"
+        "com.unity.modules.screencapture": "1.0.0"
       },
       "url": "https://registry.npmjs.com"
     },
     "org.nuget.system.buffers": {
       "version": "4.4.0",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.system.memory": {
       "version": "4.5.3",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "org.nuget.system.buffers": "4.4.0",
@@ -221,14 +221,14 @@
     },
     "org.nuget.system.numerics.vectors": {
       "version": "4.4.0",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.system.runtime.compilerservices.unsafe": {
       "version": "4.5.2",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://unitynuget-registry.azurewebsites.net"
