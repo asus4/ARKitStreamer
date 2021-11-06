@@ -13,7 +13,7 @@ Sample with VFX Graph
 ## Environments
 
 - Tested on Unity 2020.3.1f1
-- ARFoundation 4.1.7
+- ARFoundation 4.2.1
 - iPhone X or more
 
 ## Supporting ARKit features
@@ -53,17 +53,11 @@ Open the file `Packages/manifest.json` and add following lines into `scopedRegis
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.4.2",
+    "com.koki-ibukuro.arkitstream": "0.4.5",
     ...// other dependencies
   }
 }
 ```
-
-### Apply patch files
-
-Some sources in the AR foundation packages need to be modified to work with Unity Editor. Apply the patch command from `Window/Tools/ARKit Stream/Apply Patches` in the Unity Editor.  
-
-Also you can revert the patches from `Window/Tools/ARKit Stream/Revert Patches`
 
 ## How to Use
 
