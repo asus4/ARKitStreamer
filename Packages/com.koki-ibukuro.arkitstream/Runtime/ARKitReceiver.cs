@@ -13,23 +13,23 @@ namespace ARKitStream
     [DisallowMultipleComponent]
     public sealed class ARKitReceiver : MonoBehaviour
     {
-        [SerializeField] string ipAddress = "172.20.10.1";
-        [SerializeField] uint port = 8888;
-        [SerializeField] NdiResources resources = null;
+        [SerializeField] private string ipAddress = "172.20.10.1";
+        [SerializeField] private uint port = 8888;
+        [SerializeField] private NdiResources resources = null;
 
-        NdiReceiver ndiReceiver = null;
-        Vector2Int ndiSourceSize = Vector2Int.zero;
+        private NdiReceiver ndiReceiver = null;
+        private Vector2Int ndiSourceSize = Vector2Int.zero;
 
-        CommandBuffer commandBuffer;
-        Material bufferMaterial;
+        private CommandBuffer commandBuffer;
+        private Material bufferMaterial;
 
 
-        RenderTexture[] renderTextures;
-        Texture2D[] texture2Ds;
-        WebSocket client;
+        private RenderTexture[] renderTextures;
+        private Texture2D[] texture2Ds;
+        private WebSocket client;
 
-        object packetLock = new object();
-        ARKitRemotePacket packet;
+        private object packetLock = new object();
+        private ARKitRemotePacket packet;
 
         public Texture2D YTextrue => texture2Ds == null ? null : texture2Ds[0];
         public Texture2D CbCrTexture => texture2Ds == null ? null : texture2Ds[1];
@@ -128,7 +128,7 @@ namespace ARKitStream
 
         public static ARKitReceiver Instance { get; private set; } = null;
 
-        void Awake()
+        private void Awake()
         {
             // It works only in Editor!
             if (!Application.isEditor)
@@ -144,7 +144,7 @@ namespace ARKitStream
             Instance = this;
         }
 
-        void Start()
+        private void Start()
         {
             ndiReceiver = gameObject.AddComponent<NdiReceiver>();
             ndiReceiver.SetResources(resources);
@@ -172,7 +172,7 @@ namespace ARKitStream
             SetupPose();
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             Instance = null;
 
@@ -204,7 +204,7 @@ namespace ARKitStream
             }
         }
 
-        void Update()
+        private void Update()
         {
             var rt = ndiReceiver.texture;
             if (rt == null)
@@ -237,7 +237,7 @@ namespace ARKitStream
             }
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             if (YTextrue == null || CbCrTexture == null)
             {
@@ -247,7 +247,7 @@ namespace ARKitStream
             GUI.DrawTexture(new Rect(0, 256, 256, 256), CbCrTexture);
         }
 
-        void Release(RenderTexture tex)
+        private void Release(RenderTexture tex)
         {
             if (tex == null)
             {
@@ -257,7 +257,7 @@ namespace ARKitStream
             Destroy(tex);
         }
 
-        void Release(Texture tex)
+        private void Release(Texture tex)
         {
             if (tex == null)
             {
@@ -266,7 +266,7 @@ namespace ARKitStream
             Destroy(tex);
         }
 
-        void InitTexture(Texture source)
+        private void InitTexture(Texture source)
         {
             int width = source.width;
             int height = source.height / 2;
@@ -294,7 +294,7 @@ namespace ARKitStream
             }
         }
 
-        void OnWebsocketMessage(object sender, MessageEventArgs e)
+        private void OnWebsocketMessage(object sender, MessageEventArgs e)
         {
             try
             {
@@ -310,7 +310,7 @@ namespace ARKitStream
 
         }
 
-        void SetupPose()
+        private void SetupPose()
         {
             var trackedPoseDriver = FindObjectOfType<UnityEngine.SpatialTracking.TrackedPoseDriver>();
             if (trackedPoseDriver != null)
@@ -333,8 +333,7 @@ namespace ARKitStream
             Debug.LogWarning("Pose Provider didn't found");
         }
 
-
-        static string FindNdiName()
+        private static string FindNdiName()
         {
             return NdiFinder.sourceNames.FirstOrDefault();
         }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -66,22 +64,22 @@ namespace ARKitStream
             }
         }
 
-        [SerializeField] ARCameraManager cameraManager = null;
-        [SerializeField] uint port = 8888;
-        [SerializeField] NdiResources resources = null;
+        [SerializeField] private ARCameraManager cameraManager = null;
+        [SerializeField] private uint port = 8888;
+        [SerializeField] private NdiResources resources = null;
 
 
         internal event Action<ARKitRemotePacket> PacketTransformer;
         internal event Action<Material> NdiTransformer;
 
-        Material bufferMaterial;
-        RenderTexture renderTexture;
-        NdiSender ndiSender;
-        CommandBuffer commandBuffer;
-        WebSocketServer server;
-        ARKitService service;
+        private Material bufferMaterial;
+        private RenderTexture renderTexture;
+        private NdiSender ndiSender;
+        private CommandBuffer commandBuffer;
+        private WebSocketServer server;
+        private ARKitService service;
 
-        void Awake()
+        private void Awake()
         {
             if (Application.isEditor)
             {
@@ -90,7 +88,7 @@ namespace ARKitStream
             }
         }
 
-        void Start()
+        private void Start()
         {
             commandBuffer = new CommandBuffer();
             commandBuffer.name = "ARKitStreamSender";
@@ -107,7 +105,7 @@ namespace ARKitStream
             InitSubSenders();
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (cameraManager != null)
             {
@@ -124,7 +122,7 @@ namespace ARKitStream
             server?.Stop();
         }
 
-        void OnValidate()
+        private void OnValidate()
         {
             if (cameraManager == null)
             {
@@ -132,7 +130,7 @@ namespace ARKitStream
             }
         }
 
-        void OnCameraFarameReceived(ARCameraFrameEventArgs args)
+        private void OnCameraFarameReceived(ARCameraFrameEventArgs args)
         {
             if (service != null && service.IsOpen)
             {
@@ -179,7 +177,7 @@ namespace ARKitStream
             commandBuffer.Clear();
         }
 
-        void InitNDI(int width, int height)
+        private void InitNDI(int width, int height)
         {
             Debug.Log($"Init NDI withd: {width} height: {height}");
             // test override size
@@ -199,7 +197,7 @@ namespace ARKitStream
             ndiSender.sourceTexture = renderTexture;
         }
 
-        void InitSubSenders()
+        private void InitSubSenders()
         {
             TrackedPoseSender.TryCreate(this);
             ARKitFaceSender.TryCreate(this);
