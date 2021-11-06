@@ -4,10 +4,10 @@
   "author": "Koki Ibukuro",
   "dependencies": {
     "com.unity.mathematics": "1.2.4",
-    "com.unity.xr.arfoundation": "4.1.7",
-    "com.unity.xr.arkit": "4.1.7",
-    "com.unity.xr.arkit-face-tracking": "4.1.7",
-    "com.unity.xr.arsubsystems": "4.1.7",
+    "com.unity.xr.arfoundation": "4.2.1",
+    "com.unity.xr.arkit": "4.2.1",
+    "com.unity.xr.arkit-face-tracking": "4.2.1",
+    "com.unity.xr.arsubsystems": "4.2.1",
     "jp.keijiro.klak.ndi": "2.0.1",
     "org.nuget.system.memory": "4.5.3"
   },
@@ -18,7 +18,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "unity": "2020.3",
   "unityRelease": "11f1",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "type": "library",
   "hideInEditor": false
 }
