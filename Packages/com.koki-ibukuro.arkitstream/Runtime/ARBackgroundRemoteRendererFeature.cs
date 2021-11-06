@@ -70,8 +70,7 @@ namespace ARKitStream
                     && (cameraBackground.material != null))
                 {
                     bool invertCulling = cameraBackground.GetComponent<ARCameraManager>()?.subsystem?.invertCulling ?? false;
-                    m_ScriptablePass.Setup(m_BackgroundMesh, cameraBackground.material, invertCulling,
-                                           renderer.cameraColorTarget, renderer.cameraDepthTarget);
+                    m_ScriptablePass.Setup(m_BackgroundMesh, cameraBackground.material, invertCulling);
                     renderer.EnqueuePass(m_ScriptablePass);
                 }
             }
@@ -105,16 +104,6 @@ namespace ARKitStream
             Material m_BackgroundMaterial;
 
             /// <summary>
-            /// The destination render target identifier for rendering the background color.
-            /// </summary>
-            RenderTargetIdentifier m_ColorTargetIdentifier;
-
-            /// <summary>
-            /// The destination render target identifier for rendering the background depth.
-            /// </summary>
-            RenderTargetIdentifier m_DepthTargetIdentifier;
-
-            /// <summary>
             /// Whether the culling mode should be inverted.
             /// ([CommandBuffer.SetInvertCulling](https://docs.unity3d.com/ScriptReference/Rendering.CommandBuffer.SetInvertCulling.html)).
             /// </summary>
@@ -135,18 +124,11 @@ namespace ARKitStream
             /// <param name="backgroundMesh">The mesh used for rendering the device background.</param>
             /// <param name="backgroundMaterial">The material used for rendering the device background.</param>
             /// <param name="invertCulling">Whether the culling mode should be inverted.</param>
-            /// <param name="colorTargetIdentifier">The color target to which to render the background texture.</param>
-            /// <param name="depthTargetIdentifier">The depth target to which to render the background texture.</param>
-
-            public void Setup(Mesh backgroundMesh, Material backgroundMaterial, bool invertCulling,
-                              RenderTargetIdentifier colorTargetIdentifier,
-                              RenderTargetIdentifier depthTargetIdentifier)
+            public void Setup(Mesh backgroundMesh, Material backgroundMaterial, bool invertCulling)
             {
                 m_BackgroundMesh = backgroundMesh;
                 m_BackgroundMaterial = backgroundMaterial;
                 m_InvertCulling = invertCulling;
-                m_ColorTargetIdentifier = colorTargetIdentifier;
-                m_DepthTargetIdentifier = depthTargetIdentifier;
             }
 
             /// <summary>
@@ -156,7 +138,6 @@ namespace ARKitStream
             /// <param name="renderTextureDescriptor">The descriptor of the target render texture.</param>
             public override void Configure(CommandBuffer commandBuffer, RenderTextureDescriptor renderTextureDescriptor)
             {
-                ConfigureTarget(m_ColorTargetIdentifier, m_DepthTargetIdentifier);
                 ConfigureClear(ClearFlag.Depth, Color.clear);
             }
 
