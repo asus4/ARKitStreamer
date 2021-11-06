@@ -5,11 +5,11 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.mathematics": "1.2.1",
-        "com.unity.xr.arfoundation": "4.0.12",
-        "com.unity.xr.arkit": "4.0.12",
-        "com.unity.xr.arkit-face-tracking": "4.0.12",
-        "com.unity.xr.arsubsystems": "4.0.12",
+        "com.unity.mathematics": "1.2.4",
+        "com.unity.xr.arfoundation": "4.1.7",
+        "com.unity.xr.arkit": "4.1.7",
+        "com.unity.xr.arkit-face-tracking": "4.1.7",
+        "com.unity.xr.arsubsystems": "4.1.7",
         "jp.keijiro.klak.ndi": "1.0.12"
       }
     },

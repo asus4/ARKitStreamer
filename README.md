@@ -13,7 +13,7 @@ Sample with VFX Graph
 ## Environments
 
 - Tested on Unity 2020.3.1f1
-- ARFoundation 4.0.12
+- ARFoundation 4.1.7
 - iPhone X or more
 
 ## Supporting ARKit features
