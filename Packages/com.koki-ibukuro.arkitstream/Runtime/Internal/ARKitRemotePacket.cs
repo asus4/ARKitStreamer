@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using UnityEngine;
-using Unity.Mathematics;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ARKitStream.Internal
 {
@@ -47,6 +44,20 @@ namespace ARKitStream.Internal
                 stream.Position = 0;
                 return formatter.Deserialize(stream) as ARKitRemotePacket;
             }
+        }
+
+        public string SerializeAsNdiMetadata()
+        {
+            byte[] data = Serialize();
+            return "<![CDATA[" + Convert.ToBase64String(data) + "]] >";
+        }
+
+        public static ARKitRemotePacket DeserializeFromNdiMetadata(string xml)
+        {
+            // ref: https://github.com/keijiro/Rcam2 (unlicense license)
+            string base64 = xml.Substring(9, xml.Length - 9 - 4);
+            byte[] data = Convert.FromBase64String(base64);
+            return Deserialize(data);
         }
     }
 

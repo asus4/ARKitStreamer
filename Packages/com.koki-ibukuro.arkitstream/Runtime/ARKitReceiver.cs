@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ARKitStream.Internal;
 using Klak.Ndi;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
-using WebSocketSharp;
 
 namespace ARKitStream
 {
     [DisallowMultipleComponent]
     public sealed class ARKitReceiver : MonoBehaviour
     {
-        [SerializeField] private string ipAddress = "172.20.10.1";
-        [SerializeField] private uint port = 8888;
         [SerializeField] private NdiResources resources = null;
 
         private NdiReceiver ndiReceiver = null;
@@ -26,9 +21,8 @@ namespace ARKitStream
 
         private RenderTexture[] renderTextures;
         private Texture2D[] texture2Ds;
-        private WebSocket client;
 
-        private object packetLock = new object();
+        private readonly object packetLock = new object();
         private ARKitRemotePacket packet;
 
         public Texture2D YTextrue => texture2Ds == null ? null : texture2Ds[0];
@@ -62,7 +56,7 @@ namespace ARKitStream
                         return packet.cameraFrame;
                     }
                 }
-                return default(ARKitRemotePacket.CameraFrameEvent);
+                return default;
             }
         }
 
@@ -121,7 +115,7 @@ namespace ARKitStream
                     {
                         return packet.trackedPose;
                     }
-                    return default(UnityEngine.Pose);
+                    return default;
                 }
             }
         }
@@ -159,16 +153,6 @@ namespace ARKitStream
 
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamReceiver"));
 
-            // Start WebSocket
-            string wsAddress = $"ws://{ipAddress}:{port}/arkit";
-            client = new WebSocket(wsAddress);
-            client.OnOpen += (sender, e) =>
-            {
-                Debug.Log($"WebSocket Open: {wsAddress}");
-            };
-            client.OnMessage += OnWebsocketMessage;
-            client.Connect();
-
             SetupPose();
         }
 
@@ -176,11 +160,8 @@ namespace ARKitStream
         {
             Instance = null;
 
-            if (commandBuffer != null)
-            {
-                commandBuffer.Dispose();
-                commandBuffer = null;
-            }
+            commandBuffer?.Dispose();
+
             if (renderTextures != null)
             {
                 foreach (var rt in renderTextures)
@@ -193,13 +174,6 @@ namespace ARKitStream
                 foreach (var tex in texture2Ds)
                 {
                     Release(tex);
-                }
-            }
-            if (client != null)
-            {
-                if (client.IsAlive)
-                {
-                    client.Close();
                 }
             }
         }
@@ -221,6 +195,9 @@ namespace ARKitStream
                 InitTexture(rt);
                 ndiSourceSize = new Vector2Int(rt.width, rt.height);
             }
+
+            // Decode Metadata
+            packet = ARKitRemotePacket.DeserializeFromNdiMetadata(ndiReceiver.metadata);
 
             // Decode Textures
             commandBuffer.Clear();
@@ -292,22 +269,6 @@ namespace ARKitStream
                 renderTextures[i] = new RenderTexture(width, height, 0, rformat[i]);
                 texture2Ds[i] = new Texture2D(width, height, tformat[i], 1, false);
             }
-        }
-
-        private void OnWebsocketMessage(object sender, MessageEventArgs e)
-        {
-            try
-            {
-                lock (packetLock)
-                {
-                    packet = ARKitRemotePacket.Deserialize(e.RawData);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning(ex);
-            }
-
         }
 
         private void SetupPose()
