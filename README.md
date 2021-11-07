@@ -53,7 +53,7 @@ Open the file `Packages/manifest.json` and add following lines into `scopedRegis
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.4.5",
+    "com.koki-ibukuro.arkitstream": "0.5.0",
     ...// other dependencies
   }
 }
@@ -91,4 +91,3 @@ If you use LWRP / URP, you need also add the ARBackgroundRemoteRendererFeature t
 ## Libraries
 
 - [KlakNDI](https://github.com/keijiro/KlakNDI/)
-- [websocket-sharp](https://github.com/sta/websocket-sharp/)
