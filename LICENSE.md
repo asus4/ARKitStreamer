@@ -1,6 +1,5 @@
 module's licenses
 
-- websocket-sharp: [MIT](https://github.com/sta/websocket-sharp/blob/master/LICENSE.txt)
 - KlakNDI: [MIT](https://github.com/keijiro/KlakNDI/blob/master/LICENSE)
 - [NewTek's NDI](https://ndi.tv/sdk/)
 
