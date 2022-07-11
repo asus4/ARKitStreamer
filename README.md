@@ -53,7 +53,7 @@ Open the file `Packages/manifest.json` and add following lines into `scopedRegis
     }
   ],
   "dependencies": {
-    "com.koki-ibukuro.arkitstream": "0.5.1",
+    "com.koki-ibukuro.arkitstream": "0.5.2",
     ...// other dependencies
   }
 }
