@@ -36,7 +36,7 @@ namespace ARKitStream
             commandBuffer = new CommandBuffer();
             commandBuffer.name = "ARKitStreamSender";
             bufferMaterial = new Material(Shader.Find("Unlit/ARKitStreamSender"));
-            cameraManager.frameReceived += OnCameraFarameReceived;
+            cameraManager.frameReceived += OnCameraFrameReceived;
 
             InitSubSenders();
         }
@@ -45,7 +45,7 @@ namespace ARKitStream
         {
             if (cameraManager != null)
             {
-                cameraManager.frameReceived -= OnCameraFarameReceived;
+                cameraManager.frameReceived -= OnCameraFrameReceived;
             }
 
             if (bufferMaterial != null)
@@ -64,7 +64,7 @@ namespace ARKitStream
             }
         }
 
-        private void OnCameraFarameReceived(ARCameraFrameEventArgs args)
+        private void OnCameraFrameReceived(ARCameraFrameEventArgs args)
         {
             if (renderTexture == null)
             {
@@ -100,7 +100,7 @@ namespace ARKitStream
 
         private void InitNDI(int width, int height)
         {
-            Debug.Log($"Init NDI withd: {width} height: {height}");
+            Debug.Log($"Init NDI width: {width} height: {height}");
             // test override size
             // width = width;
             // height = height * 2;

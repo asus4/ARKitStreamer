@@ -1,4 +1,4 @@
-name: UPM on npsjs.com
+name: UPM on npmjs.com
 on:
   release:
     types: [created]

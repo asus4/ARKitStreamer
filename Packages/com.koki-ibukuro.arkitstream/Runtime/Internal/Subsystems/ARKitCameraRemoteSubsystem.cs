@@ -215,7 +215,7 @@ namespace ARKitStream.Internal
                     return new NativeArray<XRTextureDescriptor>(0, allocator);
                 }
 
-                var yTex = remote.YTextrue;
+                var yTex = remote.YTexture;
                 var cbcrTex = remote.CbCrTexture;
                 if (yTex == null || cbcrTex == null)
                 {
