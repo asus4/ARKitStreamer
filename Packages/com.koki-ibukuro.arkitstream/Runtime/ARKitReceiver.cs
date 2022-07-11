@@ -25,7 +25,7 @@ namespace ARKitStream
         private readonly object packetLock = new object();
         private ARKitRemotePacket packet;
 
-        public Texture2D YTextrue => texture2Ds == null ? null : texture2Ds[0];
+        public Texture2D YTexture => texture2Ds == null ? null : texture2Ds[0];
         public Texture2D CbCrTexture => texture2Ds == null ? null : texture2Ds[1];
         public Texture2D StencilTexture => texture2Ds == null ? null : texture2Ds[2];
         public Texture2D DepthTexture => texture2Ds == null ? null : texture2Ds[3];
@@ -216,11 +216,11 @@ namespace ARKitStream
 
         private void OnGUI()
         {
-            if (YTextrue == null || CbCrTexture == null)
+            if (YTexture == null || CbCrTexture == null)
             {
                 return;
             }
-            GUI.DrawTexture(new Rect(0, 0, 256, 256), YTextrue);
+            GUI.DrawTexture(new Rect(0, 0, 256, 256), YTexture);
             GUI.DrawTexture(new Rect(0, 256, 256, 256), CbCrTexture);
         }
 
@@ -248,26 +248,26 @@ namespace ARKitStream
             int width = source.width;
             int height = source.height / 2;
 
-            var rformat = new RenderTextureFormat[] {
+            var renderTexFormat = new RenderTextureFormat[] {
                 RenderTextureFormat.R8, // Camera Y
                 RenderTextureFormat.RG16, // Camera CbCr
                 RenderTextureFormat.R8, // Stencil
                 RenderTextureFormat.RHalf, // Depth
             };
-            var tformat = new TextureFormat[] {
+            var texFormat = new TextureFormat[] {
                 TextureFormat.R8,
                 TextureFormat.RG16,
                 TextureFormat.R8,
                 TextureFormat.RHalf,
             };
 
-            renderTextures = new RenderTexture[rformat.Length];
-            texture2Ds = new Texture2D[rformat.Length];
+            renderTextures = new RenderTexture[renderTexFormat.Length];
+            texture2Ds = new Texture2D[renderTexFormat.Length];
 
-            for (int i = 0; i < rformat.Length; i++)
+            for (int i = 0; i < renderTexFormat.Length; i++)
             {
-                renderTextures[i] = new RenderTexture(width, height, 0, rformat[i]);
-                texture2Ds[i] = new Texture2D(width, height, tformat[i], 1, false);
+                renderTextures[i] = new RenderTexture(width, height, 0, renderTexFormat[i]);
+                texture2Ds[i] = new Texture2D(width, height, texFormat[i], 1, false);
             }
         }
 

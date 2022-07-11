@@ -3,13 +3,13 @@
   "displayName": "ARKit Stream",
   "author": "Koki Ibukuro",
   "dependencies": {
-    "com.unity.mathematics": "1.2.4",
-    "com.unity.xr.arfoundation": "4.2.1",
-    "com.unity.xr.arkit": "4.2.1",
-    "com.unity.xr.arkit-face-tracking": "4.2.1",
-    "com.unity.xr.arsubsystems": "4.2.1",
-    "jp.keijiro.klak.ndi": "2.0.1",
-    "org.nuget.system.memory": "4.5.3"
+    "com.unity.mathematics": "1.2.6",
+    "com.unity.xr.arfoundation": "4.2.3",
+    "com.unity.xr.arkit": "4.2.3",
+    "com.unity.xr.arkit-face-tracking": "4.2.3",
+    "com.unity.xr.arsubsystems": "4.2.3",
+    "com.unity.xr.management": "4.2.1",
+    "jp.keijiro.klak.ndi": "2.0.3"
   },
   "description": "AR foundation devkit",
   "keywords": [
@@ -18,7 +18,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "unity": "2020.3",
   "unityRelease": "11f1",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "library",
   "hideInEditor": false
 }
