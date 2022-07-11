@@ -8,7 +8,7 @@
     "com.unity.xr.arkit": "4.2.3",
     "com.unity.xr.arkit-face-tracking": "4.2.3",
     "com.unity.xr.arsubsystems": "4.2.3",
-    "com.unity.xr.management": "4.0.7",
+    "com.unity.xr.management": "4.2.1",
     "jp.keijiro.klak.ndi": "2.0.3"
   },
   "description": "AR foundation devkit",
