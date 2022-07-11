@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Unity.Collections;
 using UnityEngine.Scripting;
@@ -16,12 +15,9 @@ namespace ARKitStream.Internal
 
         static readonly int _HumanStencil = Shader.PropertyToID("_HumanStencil");
         static readonly int _HumanDepth = Shader.PropertyToID("_HumanDepth");
-        static readonly int ARKIT_HUMAN_SEGMENTATION_ENABLED = Shader.PropertyToID("ARKIT_HUMAN_SEGMENTATION_ENABLED");
+        // static readonly int ARKIT_HUMAN_SEGMENTATION_ENABLED = Shader.PropertyToID("ARKIT_HUMAN_SEGMENTATION_ENABLED");
 
-#if !UNITY_2020_2_OR_NEWER
-
-        protected override Provider CreateProvider() => new ARKitProvider();
-#endif
+        private static Supported DoesSupport() => Supported.Supported;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Register()
@@ -30,14 +26,10 @@ namespace ARKitStream.Internal
             XROcclusionSubsystemCinfo info = new XROcclusionSubsystemCinfo()
             {
                 id = ID,
-#if UNITY_2020_2_OR_NEWER
                 providerType = typeof(ARKitOcclusionRemoteSubsystem.ARKitProvider),
                 subsystemTypeOverride = typeof(ARKitOcclusionRemoteSubsystem),
-#else
-                implementationType = typeof(ARKitOcclusionRemoteSubsystem),
-#endif
-                supportsHumanSegmentationStencilImage = true,
-                supportsHumanSegmentationDepthImage = true,
+                humanSegmentationStencilImageSupportedDelegate = DoesSupport,
+                humanSegmentationDepthImageSupportedDelegate = DoesSupport,
             };
 
             if (!XROcclusionSubsystem.Register(info))
@@ -75,14 +67,14 @@ namespace ARKitStream.Internal
 
             public override bool TryGetHumanStencil(out XRTextureDescriptor humanStencilDescriptor)
             {
-                var recevier = ARKitReceiver.Instance;
-                if (recevier == null)
+                var receiver = ARKitReceiver.Instance;
+                if (receiver == null)
                 {
                     humanStencilDescriptor = default(XRTextureDescriptor);
                     return false;
                 }
 
-                var tex = recevier.StencilTexture;
+                var tex = receiver.StencilTexture;
                 if (tex == null)
                 {
                     humanStencilDescriptor = default(XRTextureDescriptor);
