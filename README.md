@@ -1,3 +1,8 @@
+
+## Check out the next project **[ARFoundationReplay](https://github.com/asus4/ARFoundationReplay)**, which supports URP, Record/Replay and Google Geospatial.
+
+---
+
 # ARKit Streamer
 
 [![OpenUPM](https://img.shields.io/npm/v/com.koki-ibukuro.arkitstream?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.koki-ibukuro.arkitstream/)
